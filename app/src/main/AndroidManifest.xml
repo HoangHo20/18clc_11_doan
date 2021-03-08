@@ -9,10 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ImageAlbum">
+        <activity android:name=".decrypt"></activity>
+        <activity android:name=".Encrypt" />
         <activity
             android:name=".showAlbum"
             android:label="@string/title_activity_show_album"
-            android:theme="@style/Theme.ImageAlbum.NoActionBar"></activity>
+            android:theme="@style/Theme.ImageAlbum.NoActionBar" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

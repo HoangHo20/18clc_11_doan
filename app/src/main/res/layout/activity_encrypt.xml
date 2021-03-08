@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:minWidth="200dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="10dp"
+    android:background="@android:color/transparent"
+    tools:context=".Encrypt">
+
+
+    <EditText
+        android:id="@+id/password1"
+        android:password="true"
+        android:layout_width="match_parent"
+        android:minWidth="200dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter password"
+        android:layout_marginVertical="10dp"
+        android:textSize="30dp"/>
+
+    <EditText
+        android:id="@+id/password2"
+        android:password="true"
+        android:layout_width="match_parent"
+        android:minWidth="200dp"
+        android:layout_height="wrap_content"
+        android:hint="Type password again"
+        android:textSize="30dp"
+        android:layout_below="@id/password1" />
+
+    <Button
+        android:id="@+id/confirm_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confirm"
+        android:layout_below="@id/password2"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
