@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    <include
+        layout="@layout/activity_show_image"
+        />
+    <TextView
+        android:id="@+id/detail_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="Created date: March 20, 2021"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="25dp"
+        />
+
+    <TextView
+        android:id="@+id/detail_revolution"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="Resolution: 1024x512"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        />
+
+    <TextView
+        android:id="@+id/detail_size"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="Size: 12MB"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        />
+
+    <TextView
+        android:id="@+id/detail_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="Name: Paris.png"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        />
+
+</LinearLayout>

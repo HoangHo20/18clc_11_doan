@@ -6,7 +6,7 @@
 - [x] album + mục yêu thích
 - [ ] ảnh theo người
 - [x] ảnh/ videos
-- [ ] thông tin
+- [x] thông tin
 - [x] nhập mã pin
 - [ ] trình chiếu
 - [ ] chụp/ quay video
