@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
 
         <RelativeLayout
             android:id="@+id/header1_layout"
@@ -38,201 +35,21 @@ android:layout_height="match_parent">
                 android:textSize="20sp" />
         </RelativeLayout>
 
-
-        <GridLayout
+        <GridView
+            android:id="@+id/albumList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:rowCount="2"
-            android:layout_marginBottom="20dp">
+            android:layout_height="match_parent"
+            android:numColumns="2">
 
-            <RelativeLayout
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                android:minHeight="150dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+        </GridView>
 
-                <ImageButton
-                    android:id="@+id/imageButton1"
-                    android:layout_width="175dp"
-                    android:layout_height="175dp"
-                    android:layout_centerInParent="true"
-                    android:layout_marginBottom="10dp"
-                    android:clickable="true"
-                    android:onClick="onClick"
-                    app:srcCompat="@android:drawable/ic_menu_gallery" />
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Other"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:layout_marginLeft="10dp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="30sp" />-->
 
-                <TextView
-                    android:id="@+id/imageButton1_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/imageButton1"
-                    android:layout_below="@id/imageButton1"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:text="Camera roll"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                android:minHeight="150dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageButton
-                    android:id="@+id/imageButton2"
-                    android:layout_width="175dp"
-                    android:layout_height="175dp"
-                    app:srcCompat="@android:drawable/ic_menu_gallery"
-                    android:layout_marginBottom="10dp"
-                    android:layout_centerInParent="true"/>
-
-                <TextView
-                    android:id="@+id/imageButton2_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/imageButton2"
-                    android:layout_below="@id/imageButton2"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:text="Family"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                android:minHeight="150dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageButton
-                    android:id="@+id/imageButton3"
-                    android:layout_width="175dp"
-                    android:layout_height="175dp"
-                    app:srcCompat="@android:drawable/ic_menu_gallery"
-                    android:layout_marginBottom="10dp"
-                    android:layout_centerInParent="true"/>
-
-                <TextView
-                    android:id="@+id/imageButton3_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/imageButton3"
-                    android:layout_below="@id/imageButton3"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:text="Work"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                android:minHeight="150dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageButton
-                    android:id="@+id/imageButton4"
-                    android:layout_width="175dp"
-                    android:layout_height="175dp"
-                    app:srcCompat="@android:drawable/ic_menu_gallery"
-                    android:layout_marginBottom="10dp"
-                    android:layout_centerInParent="true"/>
-
-                <TextView
-                    android:id="@+id/imageButton4_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/imageButton4"
-                    android:layout_below="@id/imageButton4"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:text="Daily life"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
-            </RelativeLayout>
-        </GridLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Other"
-            android:textColor="@color/black"
-            android:layout_marginLeft="10dp"
-            android:textStyle="bold"
-            android:textSize="30sp" />
-
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="2"
-            android:rowCount="1"
-            android:layout_marginBottom="20dp">
-
-            <RelativeLayout
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                android:minHeight="150dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageButton
-                    android:id="@+id/imageButton5"
-                    android:layout_width="175dp"
-                    android:layout_height="175dp"
-                    android:layout_centerInParent="true"
-                    android:layout_marginBottom="10dp"
-                    app:srcCompat="@android:drawable/ic_media_play" />
-
-                <TextView
-                    android:id="@+id/imageButton5_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/imageButton5"
-                    android:layout_below="@id/imageButton5"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:text="Video"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                android:minHeight="150dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-
-                <ImageButton
-                    android:id="@+id/imageButton6"
-                    android:layout_width="175dp"
-                    android:layout_height="175dp"
-                    android:layout_centerInParent="true"
-                    android:layout_marginBottom="10dp"
-                    app:srcCompat="@android:drawable/ic_lock_idle_lock" />
-
-                <TextView
-                    android:id="@+id/imageButton6_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/imageButton6"
-                    android:layout_below="@id/imageButton6"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:text="Private"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
-            </RelativeLayout>
-        </GridLayout>
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

@@ -1,0 +1,94 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+ * Project
+   two-way-gridview:D:\Study\Android\Lib\two-way-gridview-master\.classpath:
+   Could not resolve source path src in project two-way-gridview: ignored. The
+   project may not compile if the given source path provided source code.
+
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+* .gitignore
+* README.md
+* lib\
+* lib\AndroidManifest.xml
+* lib\project.properties
+* lib\res\
+* lib\res\drawable-hdpi\
+* lib\res\drawable-hdpi\icon.png
+* lib\res\drawable-hdpi\spinner_black_76.png
+* lib\res\drawable-ldpi\
+* lib\res\drawable-ldpi\icon.png
+* lib\res\drawable-xhdpi\
+* lib\res\drawable-xhdpi\spinner_black_76.png
+* lib\res\drawable\
+* lib\res\drawable\icon.png
+* lib\res\drawable\spinner_black_76.png
+* lib\res\layout\
+* lib\res\layout\main.xml
+* lib\res\values\
+* lib\res\values\attrs.xml
+* lib\res\values\strings.xml
+* lib\src\
+* lib\src\com\
+* lib\src\com\jess\
+* lib\src\com\jess\ui\
+* lib\src\com\jess\ui\ScrollBarDrawable.java
+* lib\src\com\jess\ui\TwoWayAbsListView.java
+* lib\src\com\jess\ui\TwoWayAdapterView.java
+* lib\src\com\jess\ui\TwoWayGridView.java
+* sample\
+* sample\AndroidManifest.xml
+* sample\ant.properties
+* sample\proguard-project.txt
+* sample\project.properties
+* sample\res\
+* sample\res\drawable-hdpi\
+* sample\res\drawable-hdpi\icon.png
+* sample\res\drawable-hdpi\spinner_black_76.png
+* sample\res\drawable-ldpi\
+* sample\res\drawable-ldpi\icon.png
+* sample\res\drawable-xhdpi\
+* sample\res\drawable-xhdpi\spinner_black_76.png
+* sample\res\drawable\
+* sample\res\drawable\icon.png
+* sample\res\drawable\spinner_black_76.png
+* sample\res\layout\
+* sample\res\layout\main.xml
+* sample\res\values\
+* sample\res\values\strings.xml
+* sample\src\
+* sample\src\com\
+* sample\src\com\jess\
+* sample\src\com\jess\demo\
+* sample\src\com\jess\demo\BetterImageView.java
+* sample\src\com\jess\demo\ImageThumbnailAdapter.java
+* sample\src\com\jess\demo\MainActivity.java
+* sample\src\com\jess\demo\ReplaceableBitmapDrawable.java
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => twowaygridview\src\main\AndroidManifest.xml
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)

@@ -7,10 +7,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.ImageButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ImageButton imgBtn1, imgBtn2, imgBtn3, imgBtn4, imgBtn5, imgBtn6;
+    private GridView gridView;
+    private List<Album> albumList;
+    private CustomGridView adapter;
+
+    String[] albumNames = {"Album1", "Album2", "Album3", "Album4", "Album5", "Album6", "Album7", "Album8"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,55 +29,15 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Main Menu");
         String title = actionBar.getTitle().toString();
+        gridView = findViewById(R.id.albumList);
+        albumList = new ArrayList<Album>();
 
-        imgBtn1 = findViewById(R.id.imageButton1);
-        imgBtn2 = findViewById(R.id.imageButton2);
-        imgBtn3 = findViewById(R.id.imageButton3);
-        imgBtn4 = findViewById(R.id.imageButton4);
-        imgBtn5 = findViewById(R.id.imageButton5);
-        imgBtn6 = findViewById(R.id.imageButton6);
+        for(String str: albumNames){
+            albumList.add(new Album(str));
+        }
 
-        imgBtn1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showGallery();
-            }
-        });
-
-        imgBtn2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showGallery();
-            }
-        });
-
-        imgBtn3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showGallery();
-            }
-        });
-
-        imgBtn4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showGallery();
-            }
-        });
-
-        imgBtn5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showGallery();
-            }
-        });
-
-        imgBtn6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showGallery();
-            }
-        });
+        adapter = new CustomGridView(this, R.layout.custom_gridview_item, albumList);
+        gridView.setAdapter(adapter);
 
     }
 

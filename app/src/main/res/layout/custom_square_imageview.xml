@@ -1,0 +1,12 @@
+<com.example.imagealbum.SquareImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_image"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scaleType="centerCrop"
+    android:layout_centerInParent="true"
+    android:layout_marginBottom="10dp"
+    android:clickable="true"
+    android:onClick="onClick">
+
+
+</com.example.imagealbum.SquareImageView>
