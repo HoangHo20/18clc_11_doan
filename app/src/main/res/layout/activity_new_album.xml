@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="top|center"
+    android:layout_margin="10dp"
+    android:background="@android:color/transparent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ff0000ff"
+        android:text="@string/newAlbum_activity_name"
+        android:textColor="#ffffffff"
+        android:textSize="30sp" />
+    <EditText
+        android:id="@+id/newAlbum_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/textHint_name" />
+    <Button
+        android:id="@+id/newAlbum_createBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/createBtn" />
+</LinearLayout>
