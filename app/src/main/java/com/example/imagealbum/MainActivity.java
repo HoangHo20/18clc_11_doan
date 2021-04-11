@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
 
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Album> albumList;
     private CustomGridView adapter;
     private static int CREATE_ALBUM_CODE = 1;
+    private boolean inDeleteMode = false;
 
     String[] albumNames = {"Album1", "Album2", "Album3", "Album4", "Album5", "Album6", "Album7", "Album8"};
 
@@ -44,6 +46,17 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new CustomGridView(this, R.layout.custom_gridview_item, albumList);
         gridView.setAdapter(adapter);
+
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(inDeleteMode){
+                    albumList.remove(position);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     @Override
@@ -53,20 +66,25 @@ public class MainActivity extends AppCompatActivity {
         try{
             if (requestCode == CREATE_ALBUM_CODE && resultCode == Activity.RESULT_OK){
                 Album newAlb = new Album(data.getStringExtra("NAME"));
-                if (albumList.contains(newAlb)){
-                    new AlertDialog.Builder(MainActivity.this).
-                            setIcon(android.R.drawable.ic_delete)
-                            .setTitle("Can't create new Album")
-                            .setMessage("Duplicate name")
-                            .setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which)
-                                {
-                                }
-                            })
-                            .show();
+                boolean flag = true;
+                for(Album album: albumList){
+                    if (album.checkDuplicate(newAlb)){
+                        new AlertDialog.Builder(MainActivity.this).
+                                setIcon(android.R.drawable.ic_delete)
+                                .setTitle("Can't create new Album")
+                                .setMessage("Duplicate name")
+                                .setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                    }
+                                })
+                                .show();
+                        flag = false;
+                        break;
+                    }
                 }
-                else{
+                if(flag){
                     albumList.add(newAlb);
                     adapter.notifyDataSetChanged();
                     System.out.println(albumList.size());
@@ -94,7 +112,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, CREATE_ALBUM_CODE);
                 break;
             case R.id.actionBar_mainActi_deleteBtn:
-                //code xử lý khi bấm menu2
+                inDeleteMode = !inDeleteMode;
+                adapter.changeDeleteMode();
                 break;
             default:break;
         }

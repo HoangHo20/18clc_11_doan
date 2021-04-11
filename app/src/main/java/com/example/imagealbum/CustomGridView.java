@@ -21,11 +21,16 @@ public class CustomGridView extends BaseAdapter {
     private int idLayout;
     private List<Album> listAlbum;
     private int positionSelect = -1;
+    private boolean inDeleteMode = false;
 
     public CustomGridView(Context context, int idLayout, List<Album> listAlbum) {
         this.context = context;
         this.idLayout = idLayout;
         this.listAlbum= listAlbum;
+    }
+
+    public void changeDeleteMode(){
+        this.inDeleteMode = !this.inDeleteMode;
     }
 
     @Override
@@ -57,6 +62,15 @@ public class CustomGridView extends BaseAdapter {
 
         TextView albumName = (TextView) convertView.findViewById(R.id.imageButton_text);
         ImageButton imageBtn = (ImageButton) convertView.findViewById(R.id.imageButton);
+        imageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(inDeleteMode){
+                    listAlbum.remove(position);
+                    notifyDataSetChanged();
+                }
+            }
+        });
         albumName.setText(listAlbum.get(position).getName());
 
         return convertView;
