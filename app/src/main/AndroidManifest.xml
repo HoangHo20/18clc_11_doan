@@ -14,8 +14,7 @@
         <activity android:name=".Encrypt" />
         <activity
             android:name=".showAlbum"
-            android:label="@string/title_activity_show_album"
-            android:theme="@style/Theme.ImageAlbum.NoActionBar" />
+            android:label="@string/title_activity_show_album" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
