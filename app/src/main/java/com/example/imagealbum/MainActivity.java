@@ -2,12 +2,16 @@ package com.example.imagealbum;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,7 +29,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static int CREATE_ALBUM_CODE = 1;
-//    private static int SHOW_ALBUM_DETAIL = 2;
+    public static final int STORAGE_PERMISSION = 100;
 
     private ImageButton imgBtn1, imgBtn2, imgBtn3, imgBtn4, imgBtn5, imgBtn6;
     private GridView gridView;
@@ -40,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(!this.isStoragePermissionGranted()){
+            this.finish();
+        }
+
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("Main Menu");
@@ -53,6 +61,22 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new CustomGridView(this, R.layout.custom_gridview_item, albumList);
         gridView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == STORAGE_PERMISSION && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        }
+    }
+
+    public boolean isStoragePermissionGranted() {
+        int ACCESS_EXTERNAL_STORAGE = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if ((ACCESS_EXTERNAL_STORAGE != PackageManager.PERMISSION_GRANTED)) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION);
+            return false;
+        }
+        return true;
     }
 
     @Override

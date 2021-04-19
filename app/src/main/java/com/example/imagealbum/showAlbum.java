@@ -37,7 +37,6 @@ public class showAlbum extends AppCompatActivity {
     ArrayList<image> imageList = new ArrayList<>();
     RecyclerView recyclerView;
     RecyclerAdapter adapter;
-    public static final int STORAGE_PERMISSION = 100;
     private static int SEND_IMAGE = 1;
 
     @Override
@@ -46,9 +45,7 @@ public class showAlbum extends AppCompatActivity {
         setContentView(R.layout.activity_show_album);
         Intent intent = getIntent();
 
-        if(!this.isStoragePermissionGranted()){
-            this.finish();
-        }
+
         recyclerView = findViewById(R.id.imagegallery);
 
         adapter = new RecyclerAdapter(imageList, showAlbum.this);
@@ -115,21 +112,7 @@ public class showAlbum extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == STORAGE_PERMISSION && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-        }
-    }
 
-    public boolean isStoragePermissionGranted() {
-        int ACCESS_EXTERNAL_STORAGE = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if ((ACCESS_EXTERNAL_STORAGE != PackageManager.PERMISSION_GRANTED)) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION);
-            return false;
-        }
-        return true;
-    }
 
 
 
