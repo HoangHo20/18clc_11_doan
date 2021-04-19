@@ -18,8 +18,7 @@
             android:layout_centerInParent="true"
             android:layout_marginBottom="10dp"
             android:clickable="true"
-            app:srcCompat="@drawable/pic"
-            />
+            app:srcCompat="@drawable/pic" />
 
         <TextView
             android:id="@+id/imageButton_text"
