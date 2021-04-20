@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -34,10 +35,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class showAlbum extends AppCompatActivity {
-    ArrayList<image> imageList = new ArrayList<>();
-    RecyclerView recyclerView;
-    RecyclerAdapter adapter;
+    private ArrayList<image> imageList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private RecyclerAdapter adapter;
     private static int SEND_IMAGE = 1;
+    private static int SLIDE_SHOW = 3;
+    private ImageView addBtn;
+    private ImageView deleteBtn;
+    private ImageView slideShowBtn;
+    private ImageView doneBtn;
+    private boolean inSlideShow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,38 +54,71 @@ public class showAlbum extends AppCompatActivity {
 
 
         recyclerView = findViewById(R.id.imagegallery);
+        addBtn = findViewById(R.id.actionBar_showAlbum_addBtn);
+        deleteBtn = findViewById(R.id.actionBar_showAlbum_deleteBtn);
+        slideShowBtn = findViewById(R.id.actionBar_showAlbum_slideShowBtn);
+        doneBtn = findViewById(R.id.actionBar_showAlbum_doneBtn);
 
         adapter = new RecyclerAdapter(imageList, showAlbum.this);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 4));
         recyclerView.setAdapter(adapter);
 
-    }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_showalbum, menu);
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
-            case R.id.actionBar_showAlbum_addBtn:
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 startActivityForResult(intent, 2);
-                break;
-            case R.id.actionBar_showAlbum_deleteBtn:
-                break;
-            default:break;
-        }
+            }
+        });
 
-        return super.onOptionsItemSelected(item);
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        slideShowBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!inSlideShow){
+                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_gray);
+                    addBtn.setVisibility(View.INVISIBLE);
+                    deleteBtn.setVisibility(View.INVISIBLE);
+                    doneBtn.setVisibility(View.VISIBLE);
+                    inSlideShow = !inSlideShow;
+                    adapter.setSelectionMode(3);
+                }
+                else{
+                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_blue);
+                    addBtn.setVisibility(View.VISIBLE);
+                    deleteBtn.setVisibility(View.VISIBLE);
+                    doneBtn.setVisibility(View.INVISIBLE);
+                    inSlideShow = !inSlideShow;
+                    adapter.setSelectionMode(1);
+                    adapter.deSelectedAll();
+                }
+
+            }
+        });
+
+        doneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String json = new Gson().toJson(imageList);
+                Intent intent = new Intent(showAlbum.this, slideShow.class);
+                intent.putExtra("IMAGE", json);
+                startActivity(intent);
+                adapter.deSelectedAll();
+            }
+        });
+
     }
+
+
 
 
     @Override
@@ -155,7 +195,6 @@ public class showAlbum extends AppCompatActivity {
         LocalDate localDate = LocalDate.now();
         String date = dtf.format(localDate);
 
-        System.out.println(date);
 
         boolean isDuplicate = false;
 
