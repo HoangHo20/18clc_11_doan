@@ -5,10 +5,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -20,12 +23,24 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Horizo
     private static int SEND_IMAGE = 1;
     private ArrayList<image> imagelist;
     private Context context;
+    private int selectionMode = 1;          // 1: to viewImage, 2: delete, 3: multiple select for slideshow
+    private DisplayMetrics displayMetrics;
+    private int standard_width;
+    private int standard_height;
 
     public RecyclerAdapter(ArrayList<image> uri, Context context) {
 
         this.imagelist = uri;
         this.context = context;
+        this.displayMetrics = context.getResources().getDisplayMetrics();
+        this.standard_height = (int)(displayMetrics.heightPixels / 5);
+        this.standard_width = (int) (displayMetrics.widthPixels / 4);
     }
+
+    public void setSelectionMode(int mode){
+        this.selectionMode = mode;
+    }
+
 
     @NonNull
     @Override
@@ -38,17 +53,56 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Horizo
     @Override
     public void onBindViewHolder(@NonNull HorizontalViewHolder horizontalViewHolder, int position) {
         horizontalViewHolder.mImageRecyclerView.setImageURI(imagelist.get(position).getImage_URI());
-        horizontalViewHolder.mImageRecyclerView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        horizontalViewHolder.mImageRecyclerView.setScaleType(ImageView.ScaleType.FIT_XY);
+        horizontalViewHolder.mImageRecyclerView.getLayoutParams().height = standard_height;
+        horizontalViewHolder.mImageRecyclerView.getLayoutParams().width = standard_width;
+
+        if(!imagelist.get(position).getSelected()){
+            horizontalViewHolder.itemView.setBackgroundColor(Color.WHITE);
+        }
+        else{
+            horizontalViewHolder.itemView.setBackgroundColor(Color.BLUE);
+        }
 
         horizontalViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, viewImage.class);
-                intent.putExtra("IMAGE", imagelist.get(position).toJson());
-                intent.putExtra("POS", String.valueOf(position));
-                ((Activity) context).startActivityForResult(intent, SEND_IMAGE);;
+                switch (selectionMode){
+                    case 1:
+                        Intent intent = new Intent(context, viewImage.class);
+                        intent.putExtra("IMAGE", imagelist.get(position).toJson());
+                        intent.putExtra("POS", String.valueOf(position));
+                        ((Activity) context).startActivityForResult(intent, SEND_IMAGE);;
+                        break;
+
+                    case 2:
+                        break;
+
+                    case 3:
+                        if(!imagelist.get(position).getSelected()){
+                            horizontalViewHolder.itemView.setBackgroundColor(Color.BLUE);
+                            imagelist.get(position).setSelected(true);
+                        }
+                        else{
+                            horizontalViewHolder.itemView.setBackgroundColor(Color.WHITE);
+                            imagelist.get(position).setSelected(false);
+                        }
+
+                        break;
+
+                    default:break;
+                }
             }
         });
+    }
+
+    public void deSelectedAll(){
+        for(image img: imagelist){
+            if(img.getSelected()){
+                img.setSelected(false);
+            }
+        }
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -58,10 +112,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Horizo
 
     public class HorizontalViewHolder extends RecyclerView.ViewHolder {
         ImageView mImageRecyclerView;
+        View itemView;
 
         public HorizontalViewHolder(View itemView) {
             super(itemView);
-            mImageRecyclerView = itemView.findViewById(R.id.img);
+            this.itemView = itemView;
+            mImageRecyclerView = itemView.findViewById(R.id.albumIten_img);
         }
     }
 }
