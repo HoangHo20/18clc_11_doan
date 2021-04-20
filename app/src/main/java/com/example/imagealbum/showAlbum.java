@@ -108,14 +108,34 @@ public class showAlbum extends AppCompatActivity {
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String json = new Gson().toJson(imageList);
-                Intent intent = new Intent(showAlbum.this, slideShow.class);
-                intent.putExtra("IMAGE", json);
-                startActivity(intent);
+                ArrayList<image> selectedImgs = getSelectedImg();
+                if (selectedImgs.size() > 1){
+                    String json = new Gson().toJson(selectedImgs);
+                    Intent intent = new Intent(showAlbum.this, slideShow.class);
+                    intent.putExtra("IMAGE", json);
+                    startActivity(intent);
+                }
+                slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_blue);
+                addBtn.setVisibility(View.VISIBLE);
+                deleteBtn.setVisibility(View.VISIBLE);
+                doneBtn.setVisibility(View.INVISIBLE);
+                inSlideShow = !inSlideShow;
+                adapter.setSelectionMode(1);
                 adapter.deSelectedAll();
             }
         });
 
+    }
+
+
+    private ArrayList<image> getSelectedImg(){
+        ArrayList<image> res = new ArrayList<>();
+        for(image img: imageList){
+            if(img.getSelected()){
+                res.add(img);
+            }
+        }
+        return res;
     }
 
 

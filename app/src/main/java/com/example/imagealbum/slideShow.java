@@ -39,9 +39,8 @@ public class slideShow extends AppCompatActivity {
         adapter = new SliderAdapter(this, imageList);
         sliderView.setAutoCycleDirection(SliderView.LAYOUT_DIRECTION_LTR);
         sliderView.setSliderAdapter(adapter);
-        sliderView.setScrollTimeInSec(2);
         sliderView.setAutoCycle(true);
-
+        sliderView.setScrollTimeInMillis(1500);
         // to start autocycle below method is used.
         sliderView.startAutoCycle();
 
