@@ -2,6 +2,7 @@ package com.example.imagealbum;
 
 import android.net.Uri;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 
 public class image {
@@ -11,6 +12,7 @@ public class image {
     private String location;
     private String date;
     private String path;
+    private boolean isSelected = false;
 
     public image(Uri uri, long size, String name, String location, String date, String path){
         this.uri = uri.toString();
@@ -19,6 +21,9 @@ public class image {
         this.location = location;
         this.date = date;
         this.path = path;
+    }
+    public image(){
+
     }
 
     public Uri getImage_URI() {
@@ -34,6 +39,8 @@ public class image {
     public String getLocation(){return this.location;}
 
     public String getDate(){return this.date;}
+
+    public boolean getSelected(){return this.isSelected;}
 
     public void setImage_uri(Uri URI) {
         this.uri = URI.toString();
@@ -54,6 +61,8 @@ public class image {
     public void setDate(String date){
         this.date = date;
     }
+
+    public void setSelected(boolean selected){this.isSelected = selected;}
 
     public String toJson(){
         String json = new Gson().toJson(this);

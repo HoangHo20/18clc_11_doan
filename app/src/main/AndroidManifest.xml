@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ImageAlbum">
-        <activity android:name=".showImageInfo"></activity>
+        <activity android:name=".slideShow"></activity>
+        <activity android:name=".showImageInfo" />
         <activity android:name=".viewImage" />
         <activity android:name=".NewAlbum" />
         <activity android:name=".decrypt" />

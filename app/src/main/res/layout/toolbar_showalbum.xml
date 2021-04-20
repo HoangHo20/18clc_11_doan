@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark"
+    android:elevation="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:id="@+id/actionBar_showAlbum_slideShowBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/actionBar_showAlbum_deleteBtn"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_baseline_slideshow_24_blue"
+            android:clickable="true"/>
+
+        <ImageView
+            android:id="@+id/actionBar_showAlbum_deleteBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/actionBar_showAlbum_addBtn"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_baseline_delete_24_blue"
+            android:clickable="true"/>
+
+        <ImageView
+            android:id="@+id/actionBar_showAlbum_addBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_add_24_blue"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="20dp"
+            android:clickable="true"/>
+
+        <ImageView
+            android:id="@+id/actionBar_showAlbum_doneBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_done_24_blue"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="20dp"
+            android:clickable="true"
+            android:visibility="invisible"/>
+
+    </RelativeLayout>
+
+</androidx.appcompat.widget.Toolbar>
