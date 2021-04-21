@@ -22,8 +22,8 @@ public class image {
         this.date = date;
         this.path = path;
     }
-    public image(){
-
+    public image(Uri uri){
+        this.uri = uri.toString();
     }
 
     public Uri getImage_URI() {
