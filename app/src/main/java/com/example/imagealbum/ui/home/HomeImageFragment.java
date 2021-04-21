@@ -10,27 +10,24 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.imagealbum.R;
-import com.example.imagealbum.RecyclerAdapter;
 import com.example.imagealbum.image;
 
 import java.util.ArrayList;
 
-public class HomeFragment extends Fragment {
+public class HomeImageFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
-    private HomeFragment context;
+    private HomeImageViewModel homeImageViewModel;
+    private HomeImageFragment context;
 
     private RecyclerView recyclerView;
-    private HomeRecyclerView recyclerViewAdapter;
+    private HomeImageRecyclerView recyclerViewAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -47,18 +44,18 @@ public class HomeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         ViewModelProvider.AndroidViewModelFactory factory = new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication());
-        homeViewModel = new ViewModelProvider(this, factory).get(HomeViewModel.class);
+        homeImageViewModel = new ViewModelProvider(this, factory).get(HomeImageViewModel.class);
 
-        homeViewModel.getImageMutableLiveData().observe((LifecycleOwner) requireContext(), imageListUpdateObserver);
+        homeImageViewModel.getImageMutableLiveData().observe((LifecycleOwner) requireContext(), imageListUpdateObserver);
 
-        homeViewModel.loadImageFromDevice(requireContext());
+        homeImageViewModel.loadImageFromDevice(requireContext());
         // TODO: Use the ViewModel
     }
 
     Observer<ArrayList<image>> imageListUpdateObserver = new Observer<ArrayList<image>>() {
         @Override
         public void onChanged(ArrayList<image> images) {
-            recyclerViewAdapter = new HomeRecyclerView(getActivity(), images);
+            recyclerViewAdapter = new HomeImageRecyclerView(getActivity(), images);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
             recyclerView.setAdapter(recyclerViewAdapter);
         }

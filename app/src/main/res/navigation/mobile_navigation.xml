@@ -3,11 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/mainHomeFragment">
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.imagealbum.ui.home.HomeFragment"
+        android:name="com.example.imagealbum.ui.home.HomeImageFragment"
         android:label="home_fragment"
         tools:layout="@layout/home_fragment" />
+
+    <fragment
+        android:id="@+id/mainHomeFragment"
+        android:name="com.example.imagealbum.ui.homePages.MainHomeFragment"
+        android:label="MainHomeFragment"
+        tools:layout="@layout/tabs_fragment"/>
 </navigation>

@@ -12,13 +12,13 @@ import com.example.imagealbum.image;
 
 import java.util.ArrayList;
 
-public class HomeViewModel extends ViewModel {
+public class HomeImageViewModel extends ViewModel {
     String[] projection = {MediaStore.MediaColumns.DATA};
 
     private MutableLiveData<ArrayList<image>> imageLiveData;
     private ArrayList<image> images;
 
-    public HomeViewModel() {
+    public HomeImageViewModel() {
         imageLiveData = new MutableLiveData<>();
         images = new ArrayList<>();
     }

@@ -1,7 +1,6 @@
 package com.example.imagealbum.ui.home;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,32 +14,31 @@ import java.util.ArrayList;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.imagealbum.R;
-import com.example.imagealbum.RecyclerAdapter;
 import com.example.imagealbum.image;
 
-public class HomeRecyclerView extends RecyclerView.Adapter<HomeRecyclerView.ViewHolder> {
+public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecyclerView.ViewHolder> {
     ArrayList<image> images;
     Context context;
 
     // Constructor for initialization
-    public HomeRecyclerView(Context context, ArrayList<image> images) {
+    public HomeImageRecyclerView(Context context, ArrayList<image> images) {
         this.context = context;
         this.images = images;
     }
 
     @NonNull
     @Override
-    public HomeRecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HomeImageRecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflating the Layout(Instantiates list_item.xml layout file into View object)
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.show_album_item, parent, false);
 
         // Passing view to ViewHolder
-        return new HomeRecyclerView.ViewHolder(view);
+        return new HomeImageRecyclerView.ViewHolder(view);
     }
 
     // Binding data to the into specified position
     @Override
-    public void onBindViewHolder(@NonNull HomeRecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HomeImageRecyclerView.ViewHolder holder, int position) {
         // TypeCast Object to int type
         image image_res = images.get(position);
         try {
