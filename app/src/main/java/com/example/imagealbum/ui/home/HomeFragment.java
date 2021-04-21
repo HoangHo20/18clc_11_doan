@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -57,8 +58,8 @@ public class HomeFragment extends Fragment {
     Observer<ArrayList<image>> imageListUpdateObserver = new Observer<ArrayList<image>>() {
         @Override
         public void onChanged(ArrayList<image> images) {
-            recyclerViewAdapter = new HomeRecyclerView(requireContext(), images);
-            recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3, LinearLayoutManager.VERTICAL));
+            recyclerViewAdapter = new HomeRecyclerView(getActivity(), images);
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
             recyclerView.setAdapter(recyclerViewAdapter);
         }
     };

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.imagealbum.R;
 import com.example.imagealbum.RecyclerAdapter;
 import com.example.imagealbum.image;
@@ -42,10 +43,17 @@ public class HomeRecyclerView extends RecyclerView.Adapter<HomeRecyclerView.View
     public void onBindViewHolder(@NonNull HomeRecyclerView.ViewHolder holder, int position) {
         // TypeCast Object to int type
         image image_res = images.get(position);
-        Glide.with(context)
-                .load(image_res.getImage_URI())
-                .into(holder.mImageView);
+        try {
+            Glide.with(context)
+                    .load(images.get(position).getImage_URI().toString())
+                    .placeholder(R.drawable.ic_launcher_foreground)
+                    .centerCrop()
+                    .transition(DrawableTransitionOptions.withCrossFade(500))
+                    .into(holder.mImageView);
 //        holder.mImageView.setImageURI(image_res.getImage_URI());
+        } catch (Exception e) {
+            System.out.println("EEE: " + e.toString());
+        }
     }
 
     @Override

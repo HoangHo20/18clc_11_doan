@@ -26,6 +26,10 @@ public class image {
         this.uri = uri.toString();
     }
 
+    public String getImage_URI_String() {
+        return uri;
+    }
+
     public Uri getImage_URI() {
         return Uri.parse(uri);
     }
