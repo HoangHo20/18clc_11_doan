@@ -236,18 +236,15 @@ public class showAlbum extends AppCompatActivity {
 
         boolean isDuplicate = false;
 
-        image image = new image(URI, Long.parseLong(imageInfo.get(1)), imageInfo.get(0), "Unknow", date, path);
-
         for(image temp: imageList){
-            if (temp.getImage_URI().equals(URI)){
+            if (temp.getImage_name().equals(imageInfo.get(0))){
                 isDuplicate = true;
                 break;
             }
         }
 
         if(!isDuplicate){
-            imageList.add(image);
-            System.out.println(image.toJson());
+            imageList.add(new image(URI, Long.parseLong(imageInfo.get(1)), imageInfo.get(0), "Unknow", date, path));
             adapter.notifyDataSetChanged();
         }
     }
