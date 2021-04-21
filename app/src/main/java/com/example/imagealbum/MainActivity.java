@@ -30,6 +30,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private static int CREATE_ALBUM_CODE = 1;
     public static final int STORAGE_PERMISSION = 100;
+    public static final int WALLPAPER_PERMISSION = 101;
 
     private ImageButton imgBtn1, imgBtn2, imgBtn3, imgBtn4, imgBtn5, imgBtn6;
     private GridView gridView;
@@ -44,9 +45,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(!this.isStoragePermissionGranted()){
-            this.finish();
-        }
+        this.isStoragePermissionGranted();
+
 
 
         ActionBar actionBar = getSupportActionBar();
@@ -66,18 +66,37 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == STORAGE_PERMISSION && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == STORAGE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+            }
+            else{
+                finish();
+            }
+        }
+        else if(requestCode == WALLPAPER_PERMISSION){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+            }
+            else{
+                finish();
+            }
         }
     }
 
-    public boolean isStoragePermissionGranted() {
+    public void isStoragePermissionGranted() {
         int ACCESS_EXTERNAL_STORAGE = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int SET_WALLPAPER = ContextCompat.checkSelfPermission(this, Manifest.permission.SET_WALLPAPER);
         if ((ACCESS_EXTERNAL_STORAGE != PackageManager.PERMISSION_GRANTED)) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION);
-            return false;
         }
-        return true;
+        else if(SET_WALLPAPER != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SET_WALLPAPER}, WALLPAPER_PERMISSION);
+        }
     }
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
