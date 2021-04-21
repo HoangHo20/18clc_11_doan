@@ -29,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -45,6 +46,7 @@ public class showAlbum extends AppCompatActivity {
     private ImageView slideShowBtn;
     private ImageView doneBtn;
     private boolean inSlideShow = false;
+    private boolean inDeleteMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +79,20 @@ public class showAlbum extends AppCompatActivity {
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (!inDeleteMode){
+                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_gray);
+                    addBtn.setVisibility(View.INVISIBLE);
+                    slideShowBtn.setVisibility(View.INVISIBLE);
+                    inDeleteMode = !inDeleteMode;
+                    adapter.setSelectionMode(2);
+                }
+                else{
+                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_blue);
+                    addBtn.setVisibility(View.VISIBLE);
+                    slideShowBtn.setVisibility(View.VISIBLE);
+                    inDeleteMode = !inDeleteMode;
+                    adapter.setSelectionMode(1);
+                }
             }
         });
 
@@ -114,6 +129,9 @@ public class showAlbum extends AppCompatActivity {
                     Intent intent = new Intent(showAlbum.this, slideShow.class);
                     intent.putExtra("IMAGE", json);
                     startActivity(intent);
+                }
+                else{
+                    Toast.makeText(showAlbum.this, R.string.no_photo_selected_slideShow, Toast.LENGTH_SHORT).show();
                 }
                 slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_blue);
                 addBtn.setVisibility(View.VISIBLE);

@@ -8,4 +8,5 @@
     <string name="toolbar_imageView_title">Image Detail</string>
     <string name="showImageInfo_title"> Image Information</string>
     <string name="toolbar_showAlbum_title">Album</string>
+    <string name="no_photo_selected_slideShow">No photo selected for slideshow</string>
 </resources>
