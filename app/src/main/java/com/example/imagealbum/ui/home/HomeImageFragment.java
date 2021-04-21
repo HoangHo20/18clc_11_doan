@@ -43,8 +43,7 @@ public class HomeImageFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ViewModelProvider.AndroidViewModelFactory factory = new ViewModelProvider.AndroidViewModelFactory(requireActivity().getApplication());
-        homeImageViewModel = new ViewModelProvider(this, factory).get(HomeImageViewModel.class);
+        homeImageViewModel = new ViewModelProvider(this).get(HomeImageViewModel.class);
 
         homeImageViewModel.getImageMutableLiveData().observe((LifecycleOwner) requireContext(), imageListUpdateObserver);
 
