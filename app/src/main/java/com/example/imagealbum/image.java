@@ -46,6 +46,8 @@ public class image {
 
     public boolean getSelected(){return this.isSelected;}
 
+    public String getPath(){return this.path;}
+
     public void setImage_uri(Uri URI) {
         this.uri = URI.toString();
     }
@@ -67,6 +69,7 @@ public class image {
     }
 
     public void setSelected(boolean selected){this.isSelected = selected;}
+
 
     public String toJson(){
         String json = new Gson().toJson(this);
