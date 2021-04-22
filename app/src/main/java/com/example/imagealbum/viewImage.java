@@ -15,6 +15,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+
+import com.github.piasy.biv.BigImageViewer;
+import com.github.piasy.biv.loader.fresco.FrescoImageLoader;
+import com.github.piasy.biv.view.BigImageView;
+import com.github.piasy.biv.view.FrescoImageViewFactory;
 import com.google.gson.Gson;
 
 import java.io.FileNotFoundException;
@@ -34,41 +39,45 @@ public class viewImage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_image);
+//        setContentView(R.layout.view_image);
+
+        BigImageViewer.initialize(FrescoImageLoader.with(this));
+
+        setContentView(R.layout.photo_view);
 
         innit();
-
-        detailBtn = findViewById(R.id.toolBar_imageView_detailBtn);
-        setWallpaperBtn = findViewById(R.id.toolBar_imageView_setWallpaperlBtn);
-
-        detailBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent sendIntent = new Intent(viewImage.this, showImageInfo.class);
-                sendIntent.putExtra("IMAGE", image.toJson());
-                startActivityForResult(sendIntent, SEND_INFO);
-            }
-        });
-
-        setWallpaperBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bitmap selectedImage = getBitMap();
-                if (selectedImage == null){
-                    Toast.makeText(viewImage.this, R.string.viewImage_nullBitmap, Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    WallpaperManager wallpaperManager = WallpaperManager.getInstance(getApplicationContext());
-                    try{
-                        wallpaperManager.setBitmap(selectedImage);
-                        Toast.makeText(viewImage.this, R.string.set_wallpaper_success, Toast.LENGTH_SHORT).show();
-                    } catch (IOException e) {
-                        Toast.makeText(viewImage.this, R.string.set_wallpaper_fail, Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-            }
-        });
+//
+//        detailBtn = findViewById(R.id.toolBar_imageView_detailBtn);
+//        setWallpaperBtn = findViewById(R.id.toolBar_imageView_setWallpaperlBtn);
+//
+//        detailBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent sendIntent = new Intent(viewImage.this, showImageInfo.class);
+//                sendIntent.putExtra("IMAGE", image.toJson());
+//                startActivityForResult(sendIntent, SEND_INFO);
+//            }
+//        });
+//
+//        setWallpaperBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Bitmap selectedImage = getBitMap();
+//                if (selectedImage == null){
+//                    Toast.makeText(viewImage.this, R.string.viewImage_nullBitmap, Toast.LENGTH_SHORT).show();
+//                }
+//                else{
+//                    WallpaperManager wallpaperManager = WallpaperManager.getInstance(getApplicationContext());
+//                    try{
+//                        wallpaperManager.setBitmap(selectedImage);
+//                        Toast.makeText(viewImage.this, R.string.set_wallpaper_success, Toast.LENGTH_SHORT).show();
+//                    } catch (IOException e) {
+//                        Toast.makeText(viewImage.this, R.string.set_wallpaper_fail, Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//
+//            }
+//        });
     }
 
 
@@ -78,7 +87,7 @@ public class viewImage extends AppCompatActivity {
         pos = Integer.parseInt(intent.getStringExtra("POS"));
         image = new Gson().fromJson(data, image.class);
 
-        imgView = findViewById(R.id.viewImage_image);
+//        imgView = findViewById(R.id.viewImage_image);
 
 //        Bitmap selectedImage = this.getBitMap();
 //        if(selectedImage != null){
@@ -89,11 +98,15 @@ public class viewImage extends AppCompatActivity {
 //            Toast.makeText(viewImage.this, R.string.viewImage_nullBitmap, Toast.LENGTH_SHORT).show();
 //            finish();
 //        }
-        Glide.with(this)
-                .load(image.getImage_URI().toString())
-                .fitCenter()
-                .into(this.imgView);
+//        Glide.with(this)
+//                .load(image.getImage_URI().toString())
+//                .fitCenter()
+//                .into(this.imgView);
+        BigImageView bigImageView = (BigImageView) findViewById(R.id.mBigImage);
+        bigImageView.setImageViewFactory(new FrescoImageViewFactory());
+        bigImageView.showImage(image.getImage_URI());
 
+//        bigImageView.setInitScaleType(BigImageView.INIT_SCALE_TYPE_CUSTOM);
     }
 
     @Override

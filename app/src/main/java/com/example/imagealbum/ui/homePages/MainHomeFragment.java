@@ -10,6 +10,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.imagealbum.R;
 import com.example.imagealbum.ui.home.HomeImageFragment;
+import com.example.imagealbum.ui.home.HomeImageFragmentByDate;
 import com.example.imagealbum.ui.home.HomeVideoFragment;
 import com.google.android.material.tabs.TabLayout;
 
@@ -36,7 +37,8 @@ public class MainHomeFragment extends Fragment {
     // Add Fragments to Tabs
     private void setupViewPager(ViewPager viewPager) {
         TabsFragmentAdapter adapter = new TabsFragmentAdapter(getChildFragmentManager());
-        adapter.addFragment(new HomeImageFragment(), "Photos");
+//        adapter.addFragment(new HomeImageFragment(), "Photos");
+        adapter.addFragment(new HomeImageFragmentByDate(), "Photos");
         adapter.addFragment(new HomeVideoFragment(), "Videos");
         viewPager.setAdapter(adapter);
     }
