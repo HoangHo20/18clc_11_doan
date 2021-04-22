@@ -3,33 +3,25 @@ package com.example.imagealbum;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.HorizontalViewHolder> {
     private static int SEND_IMAGE = 1;
     private ArrayList<image> imagelist;
+    private ArrayList<Integer> selectedImages;
     private Context context;
-    private int selectionMode = 1;          // 1: to viewImage, 2: delete, 3: multiple select for slideshow
+    private boolean inSelectionMode = false;          // 1: to viewImage, 2: delete, 3: multiple select for slideshow
     private int standard_width;
     private int standard_height;
 
@@ -40,10 +32,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Horizo
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         this.standard_height = (int)(displayMetrics.heightPixels / 5);
         this.standard_width = (int) (displayMetrics.widthPixels / 4);
+        this.selectedImages = new ArrayList<Integer>();
     }
 
-    public void setSelectionMode(int mode){
-        this.selectionMode = mode;
+    public void setInSelectionMode(boolean mode){
+        this.inSelectionMode = mode;
     }
 
 
@@ -62,53 +55,46 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Horizo
         horizontalViewHolder.mImageRecyclerView.getLayoutParams().height = standard_height;
         horizontalViewHolder.mImageRecyclerView.getLayoutParams().width = standard_width;
 
-        if(!imagelist.get(position).getSelected()){
-            horizontalViewHolder.itemView.setBackgroundColor(Color.WHITE);
-        }
-        else{
+        if(selectedImages.contains(position)){
             horizontalViewHolder.itemView.setBackgroundColor(Color.BLUE);
         }
+        else {
+            horizontalViewHolder.itemView.setBackgroundColor(Color.WHITE);
+        }
+
+//        if(!imagelist.get(position).getSelected()){
+//            horizontalViewHolder.itemView.setBackgroundColor(Color.WHITE);
+//        }
+//        else{
+//            horizontalViewHolder.itemView.setBackgroundColor(Color.BLUE);
+//        }
 
         horizontalViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (selectionMode){
-                    case 1:
-                        Intent intent = new Intent(context, viewImage.class);
-                        intent.putExtra("IMAGE", imagelist.get(position).toJson());
-                        intent.putExtra("POS", String.valueOf(position));
-                        ((Activity) context).startActivityForResult(intent, SEND_IMAGE);;
-                        break;
-
-                    case 2:
-                        imagelist.remove(position);
-                        notifyDataSetChanged();
-                        break;
-
-                    case 3:
-                        if(!imagelist.get(position).getSelected()){
-                            horizontalViewHolder.itemView.setBackgroundColor(Color.BLUE);
-                            imagelist.get(position).setSelected(true);
-                        }
-                        else{
-                            horizontalViewHolder.itemView.setBackgroundColor(Color.WHITE);
-                            imagelist.get(position).setSelected(false);
-                        }
-                        break;
-
-                    default:break;
+                if(inSelectionMode){
+                    selectedImages.add(position);
+                    horizontalViewHolder.itemView.setBackgroundColor(Color.BLUE);
+                }
+                else{
+                    Intent intent = new Intent(context, viewImage.class);
+                    intent.putExtra("IMAGE", imagelist.get(position).toJson());
+                    intent.putExtra("POS", String.valueOf(position));
+                    ((Activity) context).startActivityForResult(intent, SEND_IMAGE);;
                 }
             }
         });
     }
 
     public void deSelectedAll(){
-        for(image img: imagelist){
-            if(img.getSelected()){
-                img.setSelected(false);
-            }
-        }
+        selectedImages.clear();
         this.notifyDataSetChanged();
+    }
+
+    public ArrayList<Integer> getSelectedImages(){
+        ArrayList<Integer> tmp = new ArrayList<>(this.selectedImages);
+        selectedImages.clear();
+        return tmp;
     }
 
     @Override

@@ -12,7 +12,6 @@ public class image {
     private String location;
     private String date;
     private String path;
-    private boolean isSelected = false;
 
     public image(Uri uri, long size, String name, String location, String date, String path){
         this.uri = uri.toString();
@@ -22,12 +21,8 @@ public class image {
         this.date = date;
         this.path = path;
     }
-    public image(String path){
-        this.uri = uri.toString();
-    }
+    public image(){
 
-    public String getImage_URI_String() {
-        return uri;
     }
 
     public Uri getImage_URI() {
@@ -44,7 +39,6 @@ public class image {
 
     public String getDate(){return this.date;}
 
-    public boolean getSelected(){return this.isSelected;}
 
     public String getPath(){return this.path;}
 
@@ -68,7 +62,6 @@ public class image {
         this.date = date;
     }
 
-    public void setSelected(boolean selected){this.isSelected = selected;}
 
 
     public String toJson(){

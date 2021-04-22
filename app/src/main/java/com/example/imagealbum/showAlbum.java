@@ -1,32 +1,20 @@
 package com.example.imagealbum;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -83,15 +71,18 @@ public class showAlbum extends AppCompatActivity {
                     deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_gray);
                     addBtn.setVisibility(View.INVISIBLE);
                     slideShowBtn.setVisibility(View.INVISIBLE);
+                    doneBtn.setVisibility(View.VISIBLE);
                     inDeleteMode = !inDeleteMode;
-                    adapter.setSelectionMode(2);
+                    adapter.setInSelectionMode(true);
                 }
                 else{
                     deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_blue);
                     addBtn.setVisibility(View.VISIBLE);
                     slideShowBtn.setVisibility(View.VISIBLE);
+                    doneBtn.setVisibility(View.INVISIBLE);
                     inDeleteMode = !inDeleteMode;
-                    adapter.setSelectionMode(1);
+                    adapter.setInSelectionMode(false);
+                    adapter.deSelectedAll();
                 }
             }
         });
@@ -105,7 +96,7 @@ public class showAlbum extends AppCompatActivity {
                     deleteBtn.setVisibility(View.INVISIBLE);
                     doneBtn.setVisibility(View.VISIBLE);
                     inSlideShow = !inSlideShow;
-                    adapter.setSelectionMode(3);
+                    adapter.setInSelectionMode(true);
                 }
                 else{
                     slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_blue);
@@ -113,7 +104,7 @@ public class showAlbum extends AppCompatActivity {
                     deleteBtn.setVisibility(View.VISIBLE);
                     doneBtn.setVisibility(View.INVISIBLE);
                     inSlideShow = !inSlideShow;
-                    adapter.setSelectionMode(1);
+                    adapter.setInSelectionMode(false);
                     adapter.deSelectedAll();
                 }
 
@@ -123,23 +114,41 @@ public class showAlbum extends AppCompatActivity {
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<image> selectedImgs = getSelectedImg();
-                if (selectedImgs.size() > 1){
-                    String json = new Gson().toJson(selectedImgs);
-                    Intent intent = new Intent(showAlbum.this, slideShow.class);
-                    intent.putExtra("IMAGE", json);
-                    startActivity(intent);
+                if(inSlideShow){
+                    ArrayList<image> selectedImgs = getSelectedImg();
+                    if (selectedImgs.size() > 1){
+                        String json = new Gson().toJson(selectedImgs);
+                        Intent intent = new Intent(showAlbum.this, slideShow.class);
+                        intent.putExtra("IMAGE", json);
+                        startActivity(intent);
+                    }
+                    else{
+                        Toast.makeText(showAlbum.this, R.string.no_photo_selected_slideShow, Toast.LENGTH_SHORT).show();
+                    }
                 }
-                else{
-                    Toast.makeText(showAlbum.this, R.string.no_photo_selected_slideShow, Toast.LENGTH_SHORT).show();
+                else if(inDeleteMode){
+                    ArrayList<Integer> selectedImagesIndex = adapter.getSelectedImages();
+                    if(!selectedImagesIndex.isEmpty()){
+                        for(int index: selectedImagesIndex){
+                            imageList.remove(index);
+                        }
+
+                    }
                 }
-                slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_blue);
+                adapter.notifyDataSetChanged();
+                if(inSlideShow){
+                    deleteBtn.setVisibility(View.VISIBLE);
+                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_blue);
+                    inSlideShow = !inSlideShow;
+                }
+                else if(inDeleteMode){
+                    slideShowBtn.setVisibility(View.VISIBLE);
+                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_blue);
+                    inDeleteMode = !inDeleteMode;
+                }
                 addBtn.setVisibility(View.VISIBLE);
-                deleteBtn.setVisibility(View.VISIBLE);
                 doneBtn.setVisibility(View.INVISIBLE);
-                inSlideShow = !inSlideShow;
-                adapter.setSelectionMode(1);
-                adapter.deSelectedAll();
+                adapter.setInSelectionMode(false);
             }
         });
 
@@ -148,11 +157,12 @@ public class showAlbum extends AppCompatActivity {
 
     private ArrayList<image> getSelectedImg(){
         ArrayList<image> res = new ArrayList<>();
-        for(image img: imageList){
-            if(img.getSelected()){
-                res.add(img);
-            }
+
+        ArrayList<Integer> selectedImagesIndex = adapter.getSelectedImages();
+        for(int index: selectedImagesIndex){
+            res.add(imageList.get(index));
         }
+
         return res;
     }
 
