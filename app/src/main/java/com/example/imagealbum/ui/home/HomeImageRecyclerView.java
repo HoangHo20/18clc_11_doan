@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.imagealbum.R;
 import com.example.imagealbum.image;
@@ -51,6 +52,7 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .centerCrop()
                     .transition(DrawableTransitionOptions.withCrossFade(500))
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .into(holder.mImageView);
             holder.mImageView.setOnClickListener(new View.OnClickListener() {
                 @Override

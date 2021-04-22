@@ -54,4 +54,28 @@ public class HomeImageViewModel extends ViewModel {
         //update live data
         imageLiveData.setValue(images);
     }
+
+    public void loadImageFromDevice_byDate(Context context) {
+        images.clear();
+        Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, "date_modified DESC");
+        while (cursor.moveToNext()) {
+            String absolutePathOfImage = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
+            Long size = new Long(0);
+            try {
+                size = Long.parseLong(cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.SIZE)));
+            } catch (Exception ignored) {}
+            String displayName = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
+            String date = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATE_MODIFIED));
+            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+            Uri uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, String.valueOf(id));
+            // TODO: load all properties to image
+            image imageFile = new image(uri, size, displayName, "Unknown", date, absolutePathOfImage);
+
+            images.add(imageFile);
+        }
+        cursor.close();
+
+        //update live data
+        imageLiveData.setValue(images);
+    }
 }
