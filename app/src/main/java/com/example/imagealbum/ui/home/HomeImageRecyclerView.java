@@ -1,6 +1,8 @@
 package com.example.imagealbum.ui.home;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +17,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.imagealbum.R;
 import com.example.imagealbum.image;
+import com.example.imagealbum.viewImage;
 
 public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecyclerView.ViewHolder> {
+    private static int SEND_IMAGE = 1;
     ArrayList<image> images;
     Context context;
 
@@ -43,11 +47,20 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
         image image_res = images.get(position);
         try {
             Glide.with(context)
-                    .load(images.get(position).getImage_URI().toString())
+                    .load(images.get(position).getImage_URI())
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .centerCrop()
                     .transition(DrawableTransitionOptions.withCrossFade(500))
                     .into(holder.mImageView);
+            holder.mImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, viewImage.class);
+                    intent.putExtra("IMAGE", images.get(position).toJson());
+                    intent.putExtra("POS", String.valueOf(position));
+                    ((Activity) context).startActivityForResult(intent, SEND_IMAGE);;
+                }
+            });
 //        holder.mImageView.setImageURI(image_res.getImage_URI());
         } catch (Exception e) {
             System.out.println("EEE: " + e.toString());

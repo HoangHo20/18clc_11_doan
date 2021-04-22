@@ -17,11 +17,18 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.Objects;
 
 public class MainActivityNavigation extends AppCompatActivity {
+    public static final int STORAGE_PERMISSION = 100;
+    public static final int WALLPAPER_PERMISSION = 101;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.getPermission();
 
+    }
+
+    private void innit(){
         try
         {
             Objects.requireNonNull(this.getSupportActionBar()).hide();
@@ -30,9 +37,6 @@ public class MainActivityNavigation extends AppCompatActivity {
 
         setContentView(R.layout.activity_main_navigation);
 
-        if(!this.isStoragePermissionGranted()){
-            this.finish();
-        }
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -45,12 +49,44 @@ public class MainActivityNavigation extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        int SET_WALLPAPER = ContextCompat.checkSelfPermission(this, Manifest.permission.SET_WALLPAPER);
+        if (requestCode == STORAGE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    innit();
+            }
+            else{
+                finish();
+            }
+
+            if(SET_WALLPAPER != 0){
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SET_WALLPAPER}, WALLPAPER_PERMISSION);
+            }
+        }
+        else if(requestCode == WALLPAPER_PERMISSION){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+            }
+            else{
+                finish();
+            }
+        }
+    }
+
     public boolean isStoragePermissionGranted() {
         int ACCESS_EXTERNAL_STORAGE = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if ((ACCESS_EXTERNAL_STORAGE != PackageManager.PERMISSION_GRANTED)) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, Global.STORAGE_PERMISSION);
-            return false;
+        int SET_WALLPAPER = ContextCompat.checkSelfPermission(this, Manifest.permission.SET_WALLPAPER);
+        if (ACCESS_EXTERNAL_STORAGE == 0 && SET_WALLPAPER == 0){
+            return true;
         }
-        return true;
+        return false;
+    }
+
+    public void getPermission(){
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION);
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SET_WALLPAPER}, WALLPAPER_PERMISSION);
     }
 }

@@ -22,7 +22,7 @@ public class image {
         this.date = date;
         this.path = path;
     }
-    public image(Uri uri){
+    public image(String path){
         this.uri = uri.toString();
     }
 

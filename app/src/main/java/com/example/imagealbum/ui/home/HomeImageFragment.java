@@ -55,8 +55,15 @@ public class HomeImageFragment extends Fragment {
         @Override
         public void onChanged(ArrayList<image> images) {
             recyclerViewAdapter = new HomeImageRecyclerView(getActivity(), images);
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
+            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 5));
             recyclerView.setAdapter(recyclerViewAdapter);
         }
     };
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        homeImageViewModel.loadImageFromDevice(requireContext());
+    }
 }

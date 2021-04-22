@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 
 import java.io.FileNotFoundException;
@@ -79,15 +80,19 @@ public class viewImage extends AppCompatActivity {
 
         imgView = findViewById(R.id.viewImage_image);
 
-        Bitmap selectedImage = this.getBitMap();
-        if(selectedImage != null){
-            imgView.setImageBitmap(selectedImage);
-            imgView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        }
-        else{
-            Toast.makeText(viewImage.this, R.string.viewImage_nullBitmap, Toast.LENGTH_SHORT).show();
-            finish();
-        }
+//        Bitmap selectedImage = this.getBitMap();
+//        if(selectedImage != null){
+//            imgView.setImageBitmap(selectedImage);
+//            imgView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//        }
+//        else{
+//            Toast.makeText(viewImage.this, R.string.viewImage_nullBitmap, Toast.LENGTH_SHORT).show();
+//            finish();
+//        }
+        Glide.with(this)
+                .load(image.getImage_URI().toString())
+                .fitCenter()
+                .into(this.imgView);
 
     }
 
