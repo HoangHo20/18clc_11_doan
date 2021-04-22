@@ -51,9 +51,9 @@ public class HomeImageFragmentByDate extends Fragment {
         // TODO: Use the ViewModel
     }
 
-    Observer< HashMap<String, ArrayList<image>> > dateListUpdateObserver = new Observer< HashMap<String, ArrayList<image>> >() {
+    Observer< ArrayList<ArrayList<image>> > dateListUpdateObserver = new Observer< ArrayList<ArrayList<image>> >() {
         @Override
-        public void onChanged(HashMap<String, ArrayList<image> > date_groups) {
+        public void onChanged(ArrayList<ArrayList<image> > date_groups) {
             recyclerViewAdapter = new HomeImageRecyclerViewByDate(getActivity(), date_groups);
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
             recyclerView.setAdapter(recyclerViewAdapter);

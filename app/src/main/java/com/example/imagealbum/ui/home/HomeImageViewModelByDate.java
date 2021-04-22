@@ -18,15 +18,15 @@ import java.util.HashMap;
 public class HomeImageViewModelByDate extends ViewModel {
     String[] projection = {MediaStore.MediaColumns._ID, MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.SIZE, MediaStore.MediaColumns.DISPLAY_NAME, MediaStore.MediaColumns.DATE_MODIFIED};
 
-    private MutableLiveData< HashMap<String, ArrayList<image>> > LiveData;
-    private HashMap<String, ArrayList<image>> date_groups;
+    private MutableLiveData< ArrayList<ArrayList<image>> > LiveData;
+    private ArrayList<ArrayList<image>> date_groups;
 
     public HomeImageViewModelByDate() {
         LiveData = new MutableLiveData<>();
-        date_groups = new HashMap<>();
+        date_groups = new ArrayList<>();
     }
 
-    public MutableLiveData<HashMap<String, ArrayList<image>>> getImageMutableLiveData() {
+    public MutableLiveData<ArrayList<ArrayList<image>>> getImageMutableLiveData() {
         return LiveData;
     }
 
@@ -36,6 +36,9 @@ public class HomeImageViewModelByDate extends ViewModel {
 
     public void loadImageFromDevice(Context context) {
         date_groups.clear();
+
+        String cur_date_string = "";
+        ArrayList<image> temp_images = new ArrayList<>();
 
         Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, "date_modified DESC");
         while (cursor.moveToNext()) {
@@ -49,25 +52,25 @@ public class HomeImageViewModelByDate extends ViewModel {
             int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
             Uri uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, String.valueOf(id));
             // TODO: load all properties to image
-            image imageFile = new image(uri, size, displayName, "Unknown", String.valueOf(date_second), absolutePathOfImage);
 
-            String date_time = "";
+            String date_String = "";
             try {
                 long date_milli = date_second * 1000L;
-                date_time = new SimpleDateFormat("dd/MM/yyyy").format(new Date(date_milli));
+                date_String = new SimpleDateFormat("dd/MM/yyyy").format(new Date(date_milli));
             } catch (Exception ex) {
                 System.out.println("EEE: " + ex);
             }
 
+            image imageFile = new image(uri, size, displayName, "Unknown", date_String, absolutePathOfImage);
+
            //Load to hasmap
-            if (date_groups.containsKey(date_time)) {
-                date_groups.get(date_time.toString()).add(imageFile);
+            if (!cur_date_string.equals(date_String)) {
+                temp_images = new ArrayList<>();
+                temp_images.add(imageFile);
+                date_groups.add(temp_images);
+                cur_date_string = date_String;
             } else {
-                ArrayList<image> images_temp = new ArrayList<>();
-
-                images_temp.add(imageFile);
-
-                date_groups.put(date_time.toString(), images_temp);
+                temp_images.add(imageFile);
             }
         }
         cursor.close();

@@ -18,15 +18,13 @@ import java.util.HashMap;
 
 public class HomeImageRecyclerViewByDate extends RecyclerView.Adapter<HomeImageRecyclerViewByDate.ViewHolder> {
     private static int SEND_IMAGE = 1;
-    HashMap<String, ArrayList<image> > date_groups;
-    ArrayList<String> dates_keydata;
+    ArrayList< ArrayList<image> > date_groups;
     Context context;
 
     // Constructor for initialization
-    public HomeImageRecyclerViewByDate(Context context, HashMap<String, ArrayList<image> > date_groups) {
+    public HomeImageRecyclerViewByDate(Context context, ArrayList<ArrayList<image> > date_groups) {
         this.context = context;
         this.date_groups = date_groups;
-        this.dates_keydata = new ArrayList<>(date_groups.keySet());
     }
 
     @NonNull
@@ -43,9 +41,9 @@ public class HomeImageRecyclerViewByDate extends RecyclerView.Adapter<HomeImageR
     @Override
     public void onBindViewHolder(@NonNull HomeImageRecyclerViewByDate.ViewHolder holder, int position) {
         // TypeCast Object to int type
-        String date_key = dates_keydata.get(position);
+        String date_key = date_groups.get(position).get(0).getDate();
         holder.mTextView.setText(date_key);
-        HomeImageRecyclerView recyclerViewAdapter = new HomeImageRecyclerView(context, date_groups.get(date_key));
+        HomeImageRecyclerView recyclerViewAdapter = new HomeImageRecyclerView(context, date_groups.get(position));
         holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, 5));
         holder.mRecyclerView.setAdapter(recyclerViewAdapter);
     }
