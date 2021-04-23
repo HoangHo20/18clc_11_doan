@@ -34,7 +34,6 @@ public class viewImage extends AppCompatActivity {
     private int pos;
     private ImageView detailBtn;
     private ImageView setWallpaperBtn;
-    private ImageView deleteBtn;
 
 
     @Override
@@ -50,7 +49,6 @@ public class viewImage extends AppCompatActivity {
 
         detailBtn = findViewById(R.id.toolBar_imageView_detailBtn);
         setWallpaperBtn = findViewById(R.id.toolBar_imageView_setWallpaperlBtn);
-        deleteBtn = findViewById(R.id.toolBar_imageView_deletelBtn);
 
         detailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,15 +79,6 @@ public class viewImage extends AppCompatActivity {
             }
         });
 
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                intent.putExtra("IMAGE", image.toJson());
-                intent.putExtra("POS", String.valueOf(pos));
-                setResult(Activity.RESULT_CANCELED, intent);
-                finish();
-            }
-        });
     }
 
 

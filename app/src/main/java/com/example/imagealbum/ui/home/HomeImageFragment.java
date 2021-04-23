@@ -7,10 +7,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
-<<<<<<< Updated upstream
-=======
 import android.app.Activity;
->>>>>>> Stashed changes
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Intent;
@@ -43,11 +40,8 @@ import com.gun0912.tedpermission.TedPermission;
 
 import java.util.ArrayList;
 import java.util.List;
-<<<<<<< Updated upstream
-=======
 
 import static android.app.Activity.RESULT_OK;
->>>>>>> Stashed changes
 
 public class HomeImageFragment extends Fragment {
 
@@ -63,11 +57,7 @@ public class HomeImageFragment extends Fragment {
     private ImageView doneBtn;
     private boolean inSlideShow = false;
     private boolean inDeleteMode = false;
-<<<<<<< Updated upstream
-    private static int WRITE_PERMISSION = 2;
-=======
     private static int SEND_IMAGE = 1;
->>>>>>> Stashed changes
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -199,24 +189,6 @@ public class HomeImageFragment extends Fragment {
             recyclerView.setAdapter(recyclerViewAdapter);
         }
     };
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == WRITE_PERMISSION){
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Toast.makeText(getContext(), R.string.permission_granted, Toast.LENGTH_SHORT).show();
-            }
-            else {
-                Toast.makeText(getContext(), R.string.permission_denied, Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    public void AskPermission(){
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERMISSION);
-    }
-
 
 
     @Override
