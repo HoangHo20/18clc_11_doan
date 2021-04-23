@@ -1,6 +1,7 @@
 package com.example.imagealbum;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -8,6 +9,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -21,14 +23,19 @@ import java.util.List;
 import java.util.Objects;
 
 public class MainActivityNavigation extends AppCompatActivity {
+<<<<<<< Updated upstream
     public static final int READ_STORAGE_PERMISSION = 100;
     public static final int WRITE_STORAGE_PERMISSION = 102;
     public static final int WALLPAPER_PERMISSION = 101;
+=======
+
+>>>>>>> Stashed changes
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< Updated upstream
         PermissionListener permissionlistener = new PermissionListener() {
             @Override
             public void onPermissionGranted() {
@@ -47,6 +54,36 @@ public class MainActivityNavigation extends AppCompatActivity {
                 .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
                 .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .check();
+=======
+
+        int read = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+        int write = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int set_wallpaper = checkSelfPermission(Manifest.permission.SET_WALLPAPER);
+
+        if (read + write + set_wallpaper != PackageManager.PERMISSION_GRANTED){
+            PermissionListener permissionlistener = new PermissionListener() {
+                @Override
+                public void onPermissionGranted() {
+                    Toast.makeText(MainActivityNavigation.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                    innit();
+                }
+
+                @Override
+                public void onPermissionDenied(List<String> deniedPermissions) {
+                    Toast.makeText(MainActivityNavigation.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                }
+            };
+
+            TedPermission.with(this)
+                    .setPermissionListener(permissionlistener)
+                    .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                    .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.SET_WALLPAPER)
+                    .check();
+        }
+        else{
+            innit();
+        }
+>>>>>>> Stashed changes
 
     }
 
@@ -70,6 +107,9 @@ public class MainActivityNavigation extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
     }
+<<<<<<< Updated upstream
 
 
+=======
+>>>>>>> Stashed changes
 }

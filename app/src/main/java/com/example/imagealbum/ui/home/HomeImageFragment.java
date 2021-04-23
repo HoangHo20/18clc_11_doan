@@ -7,6 +7,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
+<<<<<<< Updated upstream
+=======
+import android.app.Activity;
+>>>>>>> Stashed changes
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Intent;
@@ -39,6 +43,11 @@ import com.gun0912.tedpermission.TedPermission;
 
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< Updated upstream
+=======
+
+import static android.app.Activity.RESULT_OK;
+>>>>>>> Stashed changes
 
 public class HomeImageFragment extends Fragment {
 
@@ -54,7 +63,11 @@ public class HomeImageFragment extends Fragment {
     private ImageView doneBtn;
     private boolean inSlideShow = false;
     private boolean inDeleteMode = false;
+<<<<<<< Updated upstream
     private static int WRITE_PERMISSION = 2;
+=======
+    private static int SEND_IMAGE = 1;
+>>>>>>> Stashed changes
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -205,6 +218,27 @@ public class HomeImageFragment extends Fragment {
     }
 
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("Receive, HomeImageFragment");
+        if (requestCode == SEND_IMAGE){
+            if (resultCode == RESULT_OK){
+                String img = data.getStringExtra("IMAGE");
+                image new_img = new Gson().fromJson(img, image.class);
+                int pos = Integer.parseInt(data.getStringExtra("POS"));
+//                imageList.set(pos, new_img);
+//                adapter.notifyDataSetChanged();
+            }
+            else if(requestCode == Activity.RESULT_CANCELED){
+                String img = data.getStringExtra("IMAGE");
+                image new_img = new Gson().fromJson(img, image.class);
+                int pos = Integer.parseInt(data.getStringExtra("POS"));
+                homeImageViewModel.deleteImageInDevice(new_img, getContext());
+            }
+        }
+    }
 
     @Override
     public void onResume() {

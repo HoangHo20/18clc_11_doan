@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 28
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.example.imagealbum"
         minSdkVersion 24
-        targetSdkVersion 30
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
 
@@ -71,5 +71,7 @@ dependencies {
 
 // support thumbnail and gif with Glide
     implementation 'com.github.piasy:GlideImageViewFactory:1.8.0'
+
+    implementation 'gun0912.ted:tedpermission:2.2.3'
 
 }

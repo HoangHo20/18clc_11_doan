@@ -91,7 +91,7 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
                     Intent intent = new Intent(context, viewImage.class);
                     intent.putExtra("IMAGE", images.get(position).toJson());
                     intent.putExtra("POS", String.valueOf(position));
-                    ((Activity) context).startActivityForResult(intent, SEND_IMAGE);;
+                    ((Activity) context).startActivityForResult(intent, SEND_IMAGE);
                 }
             }
         });

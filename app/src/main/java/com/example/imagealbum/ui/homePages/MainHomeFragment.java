@@ -1,10 +1,12 @@
 package com.example.imagealbum.ui.homePages;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -42,4 +44,5 @@ public class MainHomeFragment extends Fragment {
         adapter.addFragment(new HomeVideoFragment(), "Videos");
         viewPager.setAdapter(adapter);
     }
+
 }
