@@ -3,6 +3,7 @@ package com.example.imagealbum.ui.home;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import com.example.imagealbum.viewImage;
 
 public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecyclerView.ViewHolder> {
     private static int SEND_IMAGE = 1;
+    private ArrayList<Integer> selectedImages;
+    private boolean inSelectionMode = false;
     ArrayList<image> images;
     Context context;
 
@@ -29,6 +32,11 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
     public HomeImageRecyclerView(Context context, ArrayList<image> images) {
         this.context = context;
         this.images = images;
+        this.selectedImages = new ArrayList<Integer>();
+    }
+
+    public void setInSelectionMode(boolean mode){
+        this.inSelectionMode = mode;
     }
 
     @NonNull
@@ -54,19 +62,61 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
                     .transition(DrawableTransitionOptions.withCrossFade(500))
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .into(holder.mImageView);
-            holder.mImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+//        holder.mImageView.setImageURI(image_res.getImage_URI());
+        } catch (Exception e) {
+            System.out.println("EEE: " + e.toString());
+        }
+
+        if(selectedImages.contains(position)){
+            holder.itemView.setBackgroundColor(Color.BLUE);
+        }
+        else {
+            holder.itemView.setBackgroundColor(Color.WHITE);
+        }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(inSelectionMode){
+                    if(selectedImages.contains(position)){
+                        selectedImages.remove(new Integer(position));
+                        holder.itemView.setBackgroundColor(Color.WHITE);
+                    }
+                    else{
+                        selectedImages.add(position);
+                        holder.itemView.setBackgroundColor(Color.BLUE);
+                    }
+                }
+                else{
                     Intent intent = new Intent(context, viewImage.class);
                     intent.putExtra("IMAGE", images.get(position).toJson());
                     intent.putExtra("POS", String.valueOf(position));
                     ((Activity) context).startActivityForResult(intent, SEND_IMAGE);;
                 }
-            });
-//        holder.mImageView.setImageURI(image_res.getImage_URI());
-        } catch (Exception e) {
-            System.out.println("EEE: " + e.toString());
+            }
+        });
+    }
+
+    public void deSelectedAll(){
+        selectedImages.clear();
+        this.notifyDataSetChanged();
+    }
+
+    public void deleteSelectedImages(){
+        for(int index: selectedImages){
+            images.remove(index);
         }
+        selectedImages.clear();
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<image> getSelectedImages(){
+        ArrayList<image> res = new ArrayList<>();
+        for(int index: selectedImages){
+            res.add(images.get(index));
+        }
+        deSelectedAll();
+        return res;
     }
 
     @Override
