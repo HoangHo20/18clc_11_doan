@@ -13,10 +13,15 @@ import com.example.imagealbum.image;
 import java.util.ArrayList;
 
 public class HomeVideoViewModel extends ViewModel {
-    String[] projection = {MediaStore.MediaColumns._ID, MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.SIZE, MediaStore.MediaColumns.DISPLAY_NAME, MediaStore.MediaColumns.DATE_MODIFIED};
+    String[] projection = {MediaStore.MediaColumns._ID,
+            MediaStore.MediaColumns.DATA,
+            MediaStore.MediaColumns.SIZE,
+            MediaStore.MediaColumns.DISPLAY_NAME,
+            MediaStore.MediaColumns.DATE_MODIFIED,
+            MediaStore.Video.Thumbnails.DATA};
 
-    private MutableLiveData<ArrayList<image>> imageLiveData;
-    private ArrayList<image> images;
+    private final MutableLiveData<ArrayList<image>> imageLiveData;
+    private final ArrayList<image> images;
 
     public HomeVideoViewModel() {
         imageLiveData = new MutableLiveData<>();
@@ -33,10 +38,14 @@ public class HomeVideoViewModel extends ViewModel {
 
     public void loadImageFromDevice(Context context) {
         images.clear();
-        Cursor cursor = context.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
+        Cursor cursor = context.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                projection,
+                null,
+                null,
+                null);
         while (cursor.moveToNext()) {
             String absolutePathOfImage = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
-            Long size = new Long(0);
+            long size = 0L;
             try {
                 size = Long.parseLong(cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.SIZE)));
             } catch (Exception ignored) {}

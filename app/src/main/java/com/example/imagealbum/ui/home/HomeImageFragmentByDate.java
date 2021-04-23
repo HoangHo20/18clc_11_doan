@@ -1,5 +1,6 @@
 package com.example.imagealbum.ui.home;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,20 +45,27 @@ public class HomeImageFragmentByDate extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        recyclerViewAdapter = null;
+
         homeImageViewModelByDate = new ViewModelProvider(this).get(HomeImageViewModelByDate.class);
+
+        homeImageViewModelByDate.loadImageFromDevice(requireContext());
 
         homeImageViewModelByDate.getImageMutableLiveData().observe((LifecycleOwner) requireContext(), dateListUpdateObserver);
 
-        homeImageViewModelByDate.loadImageFromDevice(requireContext());
         // TODO: Use the ViewModel
     }
 
     Observer< ArrayList<ArrayList<image>> > dateListUpdateObserver = new Observer< ArrayList<ArrayList<image>> >() {
         @Override
         public void onChanged(ArrayList<ArrayList<image> > date_groups) {
-            recyclerViewAdapter = new HomeImageRecyclerViewByDate(getActivity(), date_groups);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-            recyclerView.setAdapter(recyclerViewAdapter);
+            if (recyclerViewAdapter == null) {
+                recyclerViewAdapter = new HomeImageRecyclerViewByDate(getActivity(), date_groups);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+                recyclerView.setAdapter(recyclerViewAdapter);
+            } else {
+                recyclerViewAdapter.notifyDataSetChanged();
+            }
         }
     };
 
