@@ -1,10 +1,18 @@
 package com.example.imagealbum.ui.home;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,19 +21,24 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.imagealbum.MainActivityNavigation;
 import com.example.imagealbum.R;
 import com.example.imagealbum.image;
 import com.example.imagealbum.showAlbum;
 import com.example.imagealbum.slideShow;
 import com.google.gson.Gson;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeImageFragment extends Fragment {
 
@@ -35,14 +48,13 @@ public class HomeImageFragment extends Fragment {
     private RecyclerView recyclerView;
     private HomeImageRecyclerView recyclerViewAdapter;
 
-    private static int SEND_IMAGE = 1;
-    private static int SLIDE_SHOW = 3;
     private ImageView addBtn;
     private ImageView deleteBtn;
     private ImageView slideShowBtn;
     private ImageView doneBtn;
     private boolean inSlideShow = false;
     private boolean inDeleteMode = false;
+    private static int WRITE_PERMISSION = 2;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -56,7 +68,6 @@ public class HomeImageFragment extends Fragment {
         deleteBtn = root.findViewById(R.id.actionBar_showAlbum_deleteBtn);
         slideShowBtn = root.findViewById(R.id.actionBar_showAlbum_slideShowBtn);
         doneBtn = root.findViewById(R.id.actionBar_showAlbum_doneBtn);
-
 
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +141,11 @@ public class HomeImageFragment extends Fragment {
                     }
                 }
                 else if(inDeleteMode){
-                    recyclerViewAdapter.deleteSelectedImages();
+                    ArrayList<image> deleteImages = recyclerViewAdapter.deleteSelectedImages();
+
+                    for(image img: deleteImages) {
+                        homeImageViewModel.deleteImageInDevice(img, getContext());
+                    }
                 }
                 if(inSlideShow){
                     deleteBtn.setVisibility(View.VISIBLE);
@@ -171,6 +186,24 @@ public class HomeImageFragment extends Fragment {
             recyclerView.setAdapter(recyclerViewAdapter);
         }
     };
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == WRITE_PERMISSION){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Toast.makeText(getContext(), R.string.permission_granted, Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(getContext(), R.string.permission_denied, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public void AskPermission(){
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_PERMISSION);
+    }
+
 
 
     @Override

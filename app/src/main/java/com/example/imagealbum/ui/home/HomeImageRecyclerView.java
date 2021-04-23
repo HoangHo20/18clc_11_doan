@@ -102,12 +102,16 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
         this.notifyDataSetChanged();
     }
 
-    public void deleteSelectedImages(){
+    public ArrayList<image> deleteSelectedImages(){
+        ArrayList<image> res = new ArrayList<>();
         for(int index: selectedImages){
+            res.add(images.get(index));
             images.remove(index);
         }
+
         selectedImages.clear();
         notifyDataSetChanged();
+        return res;
     }
 
     public ArrayList<image> getSelectedImages(){

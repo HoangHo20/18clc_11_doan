@@ -38,7 +38,7 @@ public class MainHomeFragment extends Fragment {
     private void setupViewPager(ViewPager viewPager) {
         TabsFragmentAdapter adapter = new TabsFragmentAdapter(getChildFragmentManager());
 //        adapter.addFragment(new HomeImageFragment(), "Photos");
-        adapter.addFragment(new HomeImageFragmentByDate(), "Photos");
+        adapter.addFragment(new HomeImageFragment(), "Photos");
         adapter.addFragment(new HomeVideoFragment(), "Videos");
         viewPager.setAdapter(adapter);
     }
