@@ -113,9 +113,8 @@ public class HomeImageViewModel extends ViewModel {
 
     public void insertToDevice(Context context, Bitmap bitmap, String title, String description){
 //        MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, title , description);
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu/MM/dd");
-        LocalDate localDate = LocalDate.now();
-        String date = dtf.format(localDate);
+        int date_second = (int) (System.currentTimeMillis() / 1000);
+        String date = String.valueOf(date_second);
 
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, title);
@@ -137,7 +136,7 @@ public class HomeImageViewModel extends ViewModel {
             if (bitmap != null) {
                 OutputStream imageOut = contentResolver.openOutputStream(url);
                 try {
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, imageOut);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, imageOut);
                 } finally {
                     imageOut.close();
                 }

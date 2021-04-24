@@ -1,7 +1,10 @@
 package com.example.imagealbum.ui.home;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +26,15 @@ import com.example.imagealbum.image;
 import com.example.imagealbum.slideShow;
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
+import static android.app.Activity.RESULT_OK;
+
 public class HomeImageFragmentByDate extends Fragment {
+    private static final int REQUEST_IMAGE_CAPTURE = 2;
     private ImageView addBtn;
     private ImageView deleteBtn;
     private ImageView slideShowBtn;
@@ -54,7 +62,12 @@ public class HomeImageFragmentByDate extends Fragment {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                try {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -169,7 +182,18 @@ public class HomeImageFragmentByDate extends Fragment {
         }
     };
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_IMAGE_CAPTURE){
+            if(resultCode == RESULT_OK){
+                Bundle extras = data.getExtras();
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                homeImageViewModelByDate.insertToDevice(getContext(), imageBitmap, "Image_" + timeStamp, "");
+            }
+        }
+    }
 
     @Override
     public void onResume() {

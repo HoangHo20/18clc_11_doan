@@ -53,7 +53,6 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.Context.SYSTEM_HEALTH_SERVICE;
 
 public class HomeImageFragment extends Fragment {
-
     private static final int REQUEST_IMAGE_CAPTURE = 2;
     private HomeImageViewModel homeImageViewModel;
     private HomeImageFragment context;
@@ -231,7 +230,7 @@ public class HomeImageFragment extends Fragment {
                 Bundle extras = data.getExtras();
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
-                homeImageViewModel.insertToDevice(getContext(), imageBitmap, "Image", "Taken by camera on " + timeStamp);
+                homeImageViewModel.insertToDevice(getContext(), imageBitmap, "Image_" + timeStamp, "");
             }
         }
     }
