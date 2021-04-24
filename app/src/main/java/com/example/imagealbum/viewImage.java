@@ -43,41 +43,42 @@ public class viewImage extends AppCompatActivity {
 
         BigImageViewer.initialize(FrescoImageLoader.with(this));
 
-        setContentView(R.layout.photo_view);
+        setContentView(R.layout.view_image);
 
         innit();
-//
-//        detailBtn = findViewById(R.id.toolBar_imageView_detailBtn);
-//        setWallpaperBtn = findViewById(R.id.toolBar_imageView_setWallpaperlBtn);
-//
-//        detailBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent sendIntent = new Intent(viewImage.this, showImageInfo.class);
-//                sendIntent.putExtra("IMAGE", image.toJson());
-//                startActivityForResult(sendIntent, SEND_INFO);
-//            }
-//        });
-//
-//        setWallpaperBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Bitmap selectedImage = getBitMap();
-//                if (selectedImage == null){
-//                    Toast.makeText(viewImage.this, R.string.viewImage_nullBitmap, Toast.LENGTH_SHORT).show();
-//                }
-//                else{
-//                    WallpaperManager wallpaperManager = WallpaperManager.getInstance(getApplicationContext());
-//                    try{
-//                        wallpaperManager.setBitmap(selectedImage);
-//                        Toast.makeText(viewImage.this, R.string.set_wallpaper_success, Toast.LENGTH_SHORT).show();
-//                    } catch (IOException e) {
-//                        Toast.makeText(viewImage.this, R.string.set_wallpaper_fail, Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//
-//            }
-//        });
+
+        detailBtn = findViewById(R.id.toolBar_imageView_detailBtn);
+        setWallpaperBtn = findViewById(R.id.toolBar_imageView_setWallpaperlBtn);
+
+        detailBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendIntent = new Intent(viewImage.this, showImageInfo.class);
+                sendIntent.putExtra("IMAGE", image.toJson());
+                startActivityForResult(sendIntent, SEND_INFO);
+            }
+        });
+
+        setWallpaperBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bitmap selectedImage = getBitMap();
+                if (selectedImage == null){
+                    Toast.makeText(viewImage.this, R.string.viewImage_nullBitmap, Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    WallpaperManager wallpaperManager = WallpaperManager.getInstance(getApplicationContext());
+                    try{
+                        wallpaperManager.setBitmap(selectedImage);
+                        Toast.makeText(viewImage.this, R.string.set_wallpaper_success, Toast.LENGTH_SHORT).show();
+                    } catch (IOException e) {
+                        Toast.makeText(viewImage.this, R.string.set_wallpaper_fail, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+            }
+        });
+
     }
 
 
@@ -87,21 +88,6 @@ public class viewImage extends AppCompatActivity {
         pos = Integer.parseInt(intent.getStringExtra("POS"));
         image = new Gson().fromJson(data, image.class);
 
-//        imgView = findViewById(R.id.viewImage_image);
-
-//        Bitmap selectedImage = this.getBitMap();
-//        if(selectedImage != null){
-//            imgView.setImageBitmap(selectedImage);
-//            imgView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//        }
-//        else{
-//            Toast.makeText(viewImage.this, R.string.viewImage_nullBitmap, Toast.LENGTH_SHORT).show();
-//            finish();
-//        }
-//        Glide.with(this)
-//                .load(image.getImage_URI().toString())
-//                .fitCenter()
-//                .into(this.imgView);
         BigImageView bigImageView = (BigImageView) findViewById(R.id.mBigImage);
         bigImageView.setImageViewFactory(new FrescoImageViewFactory());
         bigImageView.showImage(image.getImage_URI());
@@ -134,8 +120,7 @@ public class viewImage extends AppCompatActivity {
             Uri uri = image.getImage_URI();
             InputStream imageStream = getContentResolver().openInputStream(uri);
             selectedImage = BitmapFactory.decodeStream(imageStream);
-            imgView.setImageBitmap(selectedImage);
-            imgView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
         }
         catch (FileNotFoundException e){
             e.printStackTrace();

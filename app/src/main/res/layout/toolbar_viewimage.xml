@@ -20,6 +20,7 @@
             android:fontFamily="sans-serif-medium"
             android:textSize="30sp" />
 
+
         <ImageView
             android:id="@+id/toolBar_imageView_setWallpaperlBtn"
             android:layout_width="wrap_content"

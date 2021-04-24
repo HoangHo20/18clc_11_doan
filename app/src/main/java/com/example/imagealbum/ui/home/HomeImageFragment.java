@@ -1,10 +1,22 @@
 package com.example.imagealbum.ui.home;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,36 +25,49 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.imagealbum.MainActivityNavigation;
 import com.example.imagealbum.R;
 import com.example.imagealbum.image;
 import com.example.imagealbum.showAlbum;
 import com.example.imagealbum.slideShow;
 import com.google.gson.Gson;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import static android.app.Activity.RESULT_OK;
+import static android.content.Context.SYSTEM_HEALTH_SERVICE;
 
 public class HomeImageFragment extends Fragment {
-
+    private static final int REQUEST_IMAGE_CAPTURE = 2;
     private HomeImageViewModel homeImageViewModel;
     private HomeImageFragment context;
 
     private RecyclerView recyclerView;
     private HomeImageRecyclerView recyclerViewAdapter;
 
-    private static int SEND_IMAGE = 1;
-    private static int SLIDE_SHOW = 3;
     private ImageView addBtn;
     private ImageView deleteBtn;
     private ImageView slideShowBtn;
     private ImageView doneBtn;
     private boolean inSlideShow = false;
     private boolean inDeleteMode = false;
+    private static int SEND_IMAGE = 1;
+    private String takenPhotoPath = "none";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -57,11 +82,15 @@ public class HomeImageFragment extends Fragment {
         slideShowBtn = root.findViewById(R.id.actionBar_showAlbum_slideShowBtn);
         doneBtn = root.findViewById(R.id.actionBar_showAlbum_doneBtn);
 
-
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                try {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                } catch (ActivityNotFoundException e) {
+                   e.printStackTrace();
+                }
             }
         });
 
@@ -130,7 +159,11 @@ public class HomeImageFragment extends Fragment {
                     }
                 }
                 else if(inDeleteMode){
-                    recyclerViewAdapter.deleteSelectedImages();
+                    ArrayList<image> deleteImages = recyclerViewAdapter.deleteSelectedImages();
+
+                    for(image img: deleteImages) {
+                        homeImageViewModel.deleteImageInDevice(img, getContext());
+                    }
                 }
                 if(inSlideShow){
                     deleteBtn.setVisibility(View.VISIBLE);
@@ -171,6 +204,38 @@ public class HomeImageFragment extends Fragment {
             recyclerView.setAdapter(recyclerViewAdapter);
         }
     };
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("Receive, HomeImageFragment");
+        if (requestCode == SEND_IMAGE){
+            if (resultCode == RESULT_OK){
+                String img = data.getStringExtra("IMAGE");
+                image new_img = new Gson().fromJson(img, image.class);
+                int pos = Integer.parseInt(data.getStringExtra("POS"));
+//                imageList.set(pos, new_img);
+//                adapter.notifyDataSetChanged();
+            }
+            else if(requestCode == Activity.RESULT_CANCELED){
+                String img = data.getStringExtra("IMAGE");
+                image new_img = new Gson().fromJson(img, image.class);
+                int pos = Integer.parseInt(data.getStringExtra("POS"));
+                homeImageViewModel.deleteImageInDevice(new_img, getContext());
+            }
+        }
+        else if(requestCode == REQUEST_IMAGE_CAPTURE){
+            if(resultCode == RESULT_OK){
+                Bundle extras = data.getExtras();
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                homeImageViewModel.insertToDevice(getContext(), imageBitmap, "Image_" + timeStamp, "");
+            }
+        }
+    }
+
+
 
 
     @Override

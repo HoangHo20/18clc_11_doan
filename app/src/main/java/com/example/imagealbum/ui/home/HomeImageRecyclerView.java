@@ -105,7 +105,7 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
                     Intent intent = new Intent(context, viewImage.class);
                     intent.putExtra("IMAGE", images.get(position).toJson());
                     intent.putExtra("POS", String.valueOf(position));
-                    ((Activity) context).startActivityForResult(intent, SEND_IMAGE);;
+                    ((Activity) context).startActivityForResult(intent, SEND_IMAGE);
                 }
             }
         });
@@ -116,12 +116,13 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
         this.notifyDataSetChanged();
     }
 
-    public void deleteSelectedImages(){
-        for(int index: selectedImages){
+    public ArrayList<image> deleteSelectedImages(){
+        ArrayList<image> res = getSelectedImages();
+        for(image index: res){
             images.remove(index);
         }
-        selectedImages.clear();
-        notifyDataSetChanged();
+
+        return res;
     }
 
     public ArrayList<image> getSelectedImages(){

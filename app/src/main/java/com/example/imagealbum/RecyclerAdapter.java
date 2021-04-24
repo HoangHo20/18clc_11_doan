@@ -21,7 +21,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Horizo
     private ArrayList<image> imagelist;
     private ArrayList<Integer> selectedImages;
     private Context context;
-    private boolean inSelectionMode = false;          // 1: to viewImage, 2: delete, 3: multiple select for slideshow
+    private boolean inSelectionMode = false;
     private int standard_width;
     private int standard_height;
 
@@ -62,13 +62,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Horizo
             horizontalViewHolder.itemView.setBackgroundColor(Color.WHITE);
         }
 
-//        if(!imagelist.get(position).getSelected()){
-//            horizontalViewHolder.itemView.setBackgroundColor(Color.WHITE);
-//        }
-//        else{
-//            horizontalViewHolder.itemView.setBackgroundColor(Color.BLUE);
-//        }
-
         horizontalViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +85,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Horizo
     }
 
     public ArrayList<Integer> getSelectedImages(){
-        ArrayList<Integer> tmp = new ArrayList<>(this.selectedImages);
+        ArrayList<Integer> tmp = new ArrayList<>();
         selectedImages.clear();
         return tmp;
     }

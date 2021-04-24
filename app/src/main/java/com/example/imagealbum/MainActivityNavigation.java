@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -15,18 +16,48 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
 
+import java.util.List;
 import java.util.Objects;
 
 public class MainActivityNavigation extends AppCompatActivity {
-    public static final int STORAGE_PERMISSION = 100;
-    public static final int WALLPAPER_PERMISSION = 101;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.getPermission();
+
+        int read = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+        int write = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int set_wallpaper = checkSelfPermission(Manifest.permission.SET_WALLPAPER);
+        int camera = checkSelfPermission(Manifest.permission.CAMERA);
+
+        if (read + write + set_wallpaper + camera != PackageManager.PERMISSION_GRANTED){
+            PermissionListener permissionlistener = new PermissionListener() {
+                @Override
+                public void onPermissionGranted() {
+                    Toast.makeText(MainActivityNavigation.this, "Permission Granted", Toast.LENGTH_SHORT).show();
+                    innit();
+                }
+
+                @Override
+                public void onPermissionDenied(List<String> deniedPermissions) {
+                    Toast.makeText(MainActivityNavigation.this, "Permission Denied\n" + deniedPermissions.toString(), Toast.LENGTH_SHORT).show();
+                }
+            };
+
+            TedPermission.with(this)
+                    .setPermissionListener(permissionlistener)
+                    .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
+                    .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.SET_WALLPAPER, Manifest.permission.CAMERA)
+                    .check();
+        }
+        else{
+            innit();
+        }
 
     }
 
@@ -49,46 +80,5 @@ public class MainActivityNavigation extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        int SET_WALLPAPER = ContextCompat.checkSelfPermission(this, Manifest.permission.SET_WALLPAPER);
-        if (requestCode == STORAGE_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    innit();
-            }
-            else{
-                finish();
-            }
-
-            if(SET_WALLPAPER != 0){
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SET_WALLPAPER}, WALLPAPER_PERMISSION);
-            }
-        }
-        else if(requestCode == WALLPAPER_PERMISSION){
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-
-            }
-            else{
-                finish();
-            }
-        }
-    }
-
-    public boolean isStoragePermissionGranted() {
-        int ACCESS_EXTERNAL_STORAGE = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        int SET_WALLPAPER = ContextCompat.checkSelfPermission(this, Manifest.permission.SET_WALLPAPER);
-        if (ACCESS_EXTERNAL_STORAGE == 0 && SET_WALLPAPER == 0){
-            return true;
-        }
-        return false;
-    }
-
-    public void getPermission(){
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION);
-//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SET_WALLPAPER}, WALLPAPER_PERMISSION);
     }
 }

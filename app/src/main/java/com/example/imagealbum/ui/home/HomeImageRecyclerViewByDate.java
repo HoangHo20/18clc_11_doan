@@ -16,16 +16,63 @@ import com.example.imagealbum.R;
 import com.example.imagealbum.image;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 public class HomeImageRecyclerViewByDate extends RecyclerView.Adapter<HomeImageRecyclerViewByDate.ViewHolder> {
     private static int SEND_IMAGE = 1;
     ArrayList< ArrayList<image> > date_groups;
     Context context;
+    ArrayList<HomeImageRecyclerView> adapterList;
 
     // Constructor for initialization
     public HomeImageRecyclerViewByDate(Context context, ArrayList<ArrayList<image> > date_groups) {
         this.context = context;
         this.date_groups = date_groups;
+        adapterList = new ArrayList<>();
+        for(ArrayList<image> images: date_groups){
+            adapterList.add(new HomeImageRecyclerView(context, images));
+        }
+    }
+    public void setInSelectionMode(boolean mode){
+        for(HomeImageRecyclerView adapter: adapterList){
+            adapter.setInSelectionMode(mode);
+        }
+    }
+
+    public void deSelectedAll(){
+        for(HomeImageRecyclerView adapter: adapterList){
+            adapter.deSelectedAll();
+        }
+    }
+
+    private ArrayList<image> mergeArrayList(ArrayList<image> listOne, ArrayList<image> listTwo){
+
+        Set<image> set = new LinkedHashSet<>(listOne);
+        set.addAll(listTwo);
+        List<image> combinedList = new ArrayList<>(set);
+        return new ArrayList<>(combinedList);
+    }
+
+    public ArrayList<image> getSelectedImages(){
+        ArrayList<image> res = new ArrayList<>();
+
+        for(HomeImageRecyclerView adapter: adapterList){
+            res = mergeArrayList(res, adapter.getSelectedImages());
+        }
+        return res;
+    }
+
+    public ArrayList<image> deleteSelectedImages(){
+        ArrayList<image> res = new ArrayList<>();
+
+        for(HomeImageRecyclerView adapter: adapterList){
+            res = mergeArrayList(res, adapter.deleteSelectedImages());
+        }
+
+        return res;
     }
 
     @NonNull
@@ -57,6 +104,10 @@ public class HomeImageRecyclerViewByDate extends RecyclerView.Adapter<HomeImageR
         else{
             holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, Global.ITEM_SIZE_GRID_LAYOUT_LANDSCAPE));
         }
+        // HomeImageRecyclerView recyclerViewAdapter = adapterList.get(position);
+        // holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, 5));
+        // holder.mRecyclerView.setAdapter(recyclerViewAdapter);
+
     }
 
     @Override

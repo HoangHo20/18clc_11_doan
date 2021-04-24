@@ -15,4 +15,6 @@
     <string name="viewImage_nullBitmap">Can not get bitmap</string>
     <string name="set_wallpaper_success">Wallpaper set!</string>
     <string name="set_wallpaper_fail">Can not set wallpaper</string>
+    <string name="permission_granted">Permission granted!</string>
+    <string name="permission_denied">Permission denied!</string>
 </resources>
