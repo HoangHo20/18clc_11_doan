@@ -2,16 +2,22 @@ package com.example.imagealbum.ui.home;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import androidx.core.graphics.BitmapCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.imagealbum.image;
 
+import java.io.OutputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class HomeImageViewModel extends ViewModel {
@@ -103,5 +109,48 @@ public class HomeImageViewModel extends ViewModel {
             // File not found in media store DB
         }
         c.close();
+    }
+
+    public void insertToDevice(Context context, Bitmap bitmap, String title, String description){
+//        MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, title , description);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("uuuu/MM/dd");
+        LocalDate localDate = LocalDate.now();
+        String date = dtf.format(localDate);
+
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, title);
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, title);
+        values.put(MediaStore.Images.Media.DESCRIPTION, description);
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        values.put(MediaStore.Images.Media.SIZE, BitmapCompat.getAllocationByteCount(bitmap));
+        // Add the date meta data to ensure the image is added at the front of the gallery
+        values.put(MediaStore.Images.Media.DATE_ADDED, date);
+        values.put(MediaStore.Images.Media.DATE_TAKEN, date);
+        values.put(MediaStore.Images.Media.DATE_MODIFIED, date);
+
+        ContentResolver contentResolver = context.getContentResolver();
+        Uri url = null;
+
+        try {
+            url = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+            if (bitmap != null) {
+                OutputStream imageOut = contentResolver.openOutputStream(url);
+                try {
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, imageOut);
+                } finally {
+                    imageOut.close();
+                }
+
+            } else {
+                contentResolver.delete(url, null, null);
+                url = null;
+            }
+        } catch (Exception e) {
+            if (url != null) {
+                contentResolver.delete(url, null, null);
+                url = null;
+            }
+        }
     }
 }

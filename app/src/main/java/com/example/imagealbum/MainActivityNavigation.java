@@ -33,8 +33,9 @@ public class MainActivityNavigation extends AppCompatActivity {
         int read = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
         int write = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int set_wallpaper = checkSelfPermission(Manifest.permission.SET_WALLPAPER);
+        int camera = checkSelfPermission(Manifest.permission.CAMERA);
 
-        if (read + write + set_wallpaper != PackageManager.PERMISSION_GRANTED){
+        if (read + write + set_wallpaper + camera != PackageManager.PERMISSION_GRANTED){
             PermissionListener permissionlistener = new PermissionListener() {
                 @Override
                 public void onPermissionGranted() {
@@ -51,7 +52,7 @@ public class MainActivityNavigation extends AppCompatActivity {
             TedPermission.with(this)
                     .setPermissionListener(permissionlistener)
                     .setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]")
-                    .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.SET_WALLPAPER)
+                    .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.SET_WALLPAPER, Manifest.permission.CAMERA)
                     .check();
         }
         else{

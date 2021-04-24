@@ -2,17 +2,20 @@ package com.example.imagealbum.ui.home;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -22,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,13 +42,19 @@ import com.google.gson.Gson;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.Context.SYSTEM_HEALTH_SERVICE;
 
 public class HomeImageFragment extends Fragment {
 
+    private static final int REQUEST_IMAGE_CAPTURE = 2;
     private HomeImageViewModel homeImageViewModel;
     private HomeImageFragment context;
 
@@ -58,6 +68,7 @@ public class HomeImageFragment extends Fragment {
     private boolean inSlideShow = false;
     private boolean inDeleteMode = false;
     private static int SEND_IMAGE = 1;
+    private String takenPhotoPath = "none";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -75,7 +86,12 @@ public class HomeImageFragment extends Fragment {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                try {
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                } catch (ActivityNotFoundException e) {
+                   e.printStackTrace();
+                }
             }
         });
 
@@ -210,7 +226,18 @@ public class HomeImageFragment extends Fragment {
                 homeImageViewModel.deleteImageInDevice(new_img, getContext());
             }
         }
+        else if(requestCode == REQUEST_IMAGE_CAPTURE){
+            if(resultCode == RESULT_OK){
+                Bundle extras = data.getExtras();
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                homeImageViewModel.insertToDevice(getContext(), imageBitmap, "Image", "Taken by camera on " + timeStamp);
+            }
+        }
     }
+
+
+
 
     @Override
     public void onResume() {
