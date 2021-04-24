@@ -16,6 +16,8 @@ import java.util.ArrayList;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
+import com.bumptech.glide.load.resource.bitmap.VideoBitmapDecoder;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.imagealbum.R;
 import com.example.imagealbum.image;
@@ -54,17 +56,29 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
     public void onBindViewHolder(@NonNull HomeImageRecyclerView.ViewHolder holder, int position) {
         // TypeCast Object to int type
         image image_res = images.get(position);
-        try {
+
+        if (image_res.isImage()) {
+            try {
+                Glide.with(context)
+                        .load(images.get(position).getPath())
+                        .placeholder(R.drawable.ic_launcher_foreground)
+                        .centerCrop()
+                        .transition(DrawableTransitionOptions.withCrossFade(500))
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .into(holder.mImageView);
+//        holder.mImageView.setImageURI(image_res.getImage_URI());
+            } catch (Exception e) {
+                System.out.println("EEE: " + e.toString());
+            }
+        } else {
+
             Glide.with(context)
-                    .load(images.get(position).getImage_URI())
+                    .load(images.get(position).getPath())
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .centerCrop()
-                    .transition(DrawableTransitionOptions.withCrossFade(500))
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                    .transition(DrawableTransitionOptions.withCrossFade(500))
                     .into(holder.mImageView);
-//        holder.mImageView.setImageURI(image_res.getImage_URI());
-        } catch (Exception e) {
-            System.out.println("EEE: " + e.toString());
         }
 
         if(selectedImages.contains(position)){

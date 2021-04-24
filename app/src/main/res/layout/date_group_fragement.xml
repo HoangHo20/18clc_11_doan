@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/date_group_fragment_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-</LinearLayout>
+    <com.example.kloadingspin.KLoadingSpin
+        android:id="@+id/KLoadingSpin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:backgroundColor="#55008DFF"
+        app:primarySpinnerColor="#ffffff"
+        app:rotationSpeedInMs="3000"
+        app:text="@string/loading"
+        app:secondarySpinnerColor="#FF9800"
+        app:textColor="#ffffff"
+        app:textSize="80" />
+
+</RelativeLayout>

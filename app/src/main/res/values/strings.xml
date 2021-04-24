@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">image Album</string>
+    <string name="loading">Loading …</string>
     <string name="title_activity_show_album">Gallery</string>
     <string name="newAlbum_activity_name">New album</string>
     <string name="textHint_name">Name</string>

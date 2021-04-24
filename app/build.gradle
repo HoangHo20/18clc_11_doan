@@ -72,4 +72,6 @@ dependencies {
 // support thumbnail and gif with Glide
     implementation 'com.github.piasy:GlideImageViewFactory:1.8.0'
 
+    //Loading animation
+    implementation 'com.github.Nikoloutsos:KLoadingSpin:1.1.0'
 }

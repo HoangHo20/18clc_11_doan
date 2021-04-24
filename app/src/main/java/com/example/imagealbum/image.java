@@ -12,6 +12,7 @@ public class image {
     private String location;
     private String date;
     private String path;
+    private int type;
 
     public image(Uri uri, long size, String name, String location, String date, String path){
         this.uri = uri.toString();
@@ -21,6 +22,17 @@ public class image {
         this.date = date;
         this.path = path;
     }
+
+    public image(Uri uri, long size, String name, String location, String date, String path, int type){
+        this.uri = uri.toString();
+        this.size = size;
+        this.name = name;
+        this.location = location;
+        this.date = date;
+        this.path = path;
+        this.type = type;
+    }
+
     public image(){
 
     }
@@ -62,7 +74,9 @@ public class image {
         this.date = date;
     }
 
-
+    public boolean isImage() {
+        return this.type == Global.IMAGE_TYPE;
+    }
 
     public String toJson(){
         String json = new Gson().toJson(this);
