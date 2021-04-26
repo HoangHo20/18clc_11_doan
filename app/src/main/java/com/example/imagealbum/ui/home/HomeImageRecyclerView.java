@@ -4,14 +4,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import com.bumptech.glide.Glide;
@@ -19,6 +23,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.VideoBitmapDecoder;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.example.imagealbum.Global;
 import com.example.imagealbum.R;
 import com.example.imagealbum.image;
 import com.example.imagealbum.viewImage;
@@ -26,15 +31,22 @@ import com.example.imagealbum.viewImage;
 public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecyclerView.ViewHolder> {
     private static int SEND_IMAGE = 1;
     private ArrayList<Integer> selectedImages;
-    private boolean inSelectionMode = false;
+    private boolean inSelectionMode;
     ArrayList<image> images;
     Context context;
 
-    // Constructor for initialization
+    // Constructor for initialization this class aways be reconstructed when the parent class notify changes
     public HomeImageRecyclerView(Context context, ArrayList<image> images) {
         this.context = context;
         this.images = images;
-        this.selectedImages = new ArrayList<Integer>();
+        //this.selectedImages = new ArrayList<Integer>();
+    }
+
+    public HomeImageRecyclerView(Context context, ArrayList<image> images, boolean selectedMode) {
+        this.context = context;
+        this.images = images;
+        //this.selectedImages = new ArrayList<Integer>();
+        this.inSelectionMode = selectedMode;
     }
 
     public void setInSelectionMode(boolean mode){
@@ -71,9 +83,17 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
                 System.out.println("EEE: " + e.toString());
             }
         } else {
+            //holder.duration_title.setText(images.get(position).getDurationTimeString());
+            image i = images.get(position);
+
+            //int duration = Global.getDuration(context, i.getPath());
+            holder.duration_title.setText(R.string.title_video);
+            holder.duration_title.setVisibility(View.VISIBLE);
+
+            holder.videoTag.setVisibility(View.VISIBLE);
 
             Glide.with(context)
-                    .load(images.get(position).getPath())
+                    .load(i.getPath())
                     .placeholder(R.drawable.ic_launcher_foreground)
                     .centerCrop()
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
@@ -81,7 +101,7 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
                     .into(holder.mImageView);
         }
 
-        if(selectedImages.contains(position)){
+        if(image_res.isSelected()){
             holder.itemView.setBackgroundColor(Color.BLUE);
         }
         else {
@@ -92,12 +112,12 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
             @Override
             public void onClick(View v) {
                 if(inSelectionMode){
-                    if(selectedImages.contains(position)){
-                        selectedImages.remove(new Integer(position));
+                    if(image_res.isSelected()){
+                        image_res.setSelectedMode(Global.SELECTED_MODE_OFF);
                         holder.itemView.setBackgroundColor(Color.WHITE);
                     }
                     else{
-                        selectedImages.add(position);
+                        image_res.setSelectedMode(Global.SELECTED_MODE_ON);
                         holder.itemView.setBackgroundColor(Color.BLUE);
                     }
                 }
@@ -137,18 +157,22 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
     @Override
     public int getItemCount() {
         // Returns number of items currently available in Adapter
-        return images.size();
+        return images != null ? images.size() : 0;
     }
 
     // Initializing the Views
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView mImageView;
+        TextView duration_title;
+        ImageView videoTag;
         View itemView;
 
         public ViewHolder(View view) {
             super(view);
             itemView = view;
             mImageView = (ImageView) view.findViewById(R.id.albumIten_img);
+            duration_title = (TextView) view.findViewById(R.id.albumItem_duration_title);
+            videoTag = (ImageView) view.findViewById(R.id.albumItem_video_tag);
         }
     }
 }

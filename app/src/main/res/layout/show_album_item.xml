@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="#FFFFFF"
     android:layout_width="match_parent"
@@ -8,10 +9,36 @@
     <ImageView
         android:id="@+id/albumIten_img"
         android:adjustViewBounds="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:paddingVertical="2dp"
         android:paddingHorizontal="2dp"/>
+
+    <TextView
+        android:id="@+id/albumItem_duration_title"
+        style="@style/ImageInfoOverlayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_photos"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:textStyle="bold|italic"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="5sp"
+        android:visibility="gone"
+        />
+
+    <ImageView
+        android:id="@+id/albumItem_video_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:srcCompat="@android:drawable/ic_media_play"
+        android:visibility="gone"/>
 
 </RelativeLayout>

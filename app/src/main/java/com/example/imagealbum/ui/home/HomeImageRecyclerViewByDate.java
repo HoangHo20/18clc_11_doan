@@ -96,8 +96,6 @@ public class HomeImageRecyclerViewByDate extends RecyclerView.Adapter<HomeImageR
         HomeImageRecyclerView recyclerViewAdapter = new HomeImageRecyclerView(context, date_groups.get(position));
         holder.setRecyclerViewAdapter(recyclerViewAdapter);
 
-
-
         if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, Global.ITEM_SIZE_GRID_LAYOUT_PORTRAIT));
         }
@@ -113,7 +111,7 @@ public class HomeImageRecyclerViewByDate extends RecyclerView.Adapter<HomeImageR
     @Override
     public int getItemCount() {
         // Returns number of items currently available in Adapter
-        return date_groups.size();
+        return date_groups != null ? date_groups.size() : 0;
     }
 
     public void ChangeLayout() {

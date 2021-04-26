@@ -23,13 +23,15 @@ import java.util.TreeMap;
 
 public class MainHomeRecyclerViewCombine extends RecyclerView.Adapter<MainHomeRecyclerViewCombine.ViewHolder> {
     private static int SEND_IMAGE = 1;
+    private boolean inSelectedMode;
     TreeMap<String, ArrayList<image>> date_groups;
     Context context;
 
     // Constructor for initialization
-    public MainHomeRecyclerViewCombine(Context context, TreeMap<String, ArrayList<image>> date_groups) {
+    public MainHomeRecyclerViewCombine(Context context, TreeMap<String, ArrayList<image>> date_groups, boolean inSelectedMode) {
         this.context = context;
         this.date_groups = date_groups;
+        this.inSelectedMode = inSelectedMode;
     }
 
     @NonNull
@@ -49,19 +51,23 @@ public class MainHomeRecyclerViewCombine extends RecyclerView.Adapter<MainHomeRe
         Set<String> date_set = date_groups.keySet();
         ArrayList<String> date_arr = new ArrayList<>(date_set) ;
         String date_key = date_arr.get(position);
-        //Log.d("onBindViewHolder.MainHomeRecyclerViewCombine", date_key);
-        holder.mTextView.setText(date_key);
 
-        HomeImageRecyclerView recyclerViewAdapter = new HomeImageRecyclerView(context, date_groups.get(date_key));
-        holder.setRecyclerViewAdapter(recyclerViewAdapter);
+        //if the images array of that date is not empty (images array of that date may be remove in realtime
+        int x = date_groups.get(date_key).size();
+        if (date_groups.get(date_key).size() > 0) {
+            //Log.d("onBindViewHolder.MainHomeRecyclerViewCombine", date_key);
+            holder.mTextView.setText(date_key);
 
+            HomeImageRecyclerView recyclerViewAdapter = new HomeImageRecyclerView(context, date_groups.get(date_key), this.inSelectedMode);
+            holder.setRecyclerViewAdapter(recyclerViewAdapter);
 
-
-        if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, Global.ITEM_SIZE_GRID_LAYOUT_PORTRAIT));
-        }
-        else{
-            holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, Global.ITEM_SIZE_GRID_LAYOUT_LANDSCAPE));
+            if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, Global.ITEM_SIZE_GRID_LAYOUT_PORTRAIT));
+            } else {
+                holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, Global.ITEM_SIZE_GRID_LAYOUT_LANDSCAPE));
+            }
+        } else  {
+            date_groups.remove(date_key);
         }
     }
 
@@ -96,5 +102,9 @@ public class MainHomeRecyclerViewCombine extends RecyclerView.Adapter<MainHomeRe
             this.mRecyclerView.setAdapter(adapter);
             this.isHaveAdapter = true;
         }
+    }
+
+    public void setInSelectedMode(boolean mode) {
+        this.inSelectedMode = mode;
     }
 }
