@@ -20,6 +20,17 @@
             android:fontFamily="sans-serif-medium"
             android:textSize="30sp" />
 
+        <ImageView
+            android:id="@+id/toolBar_imageView_encrypt_decryptBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/toolBar_imageView_setWallpaperlBtn"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_baseline_lock_24_blue"
+            android:clickable="true"/>
+
 
         <ImageView
             android:id="@+id/toolBar_imageView_setWallpaperlBtn"
