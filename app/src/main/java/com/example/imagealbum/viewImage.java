@@ -276,8 +276,40 @@ public class viewImage extends AppCompatActivity {
             }
         }
 
+        public byte[] decryptByteArray(byte[] encryptedData)
+                throws NoSuchPaddingException, NoSuchAlgorithmException,
+                NoSuchProviderException, InvalidKeyException,
+                BadPaddingException, IllegalBlockSizeException {
+
+            SecretKeySpec key = new SecretKeySpec(keyBytes, "AES");
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS7Padding", "BC");
+            cipher.init(Cipher.DECRYPT_MODE, key);
+
+            return cipher.doFinal(encryptedData);
+        }
 
 
+
+        public void decrypt(image img){
+            FileInputStream fis = null;
+            try{
+                File file = new File(img.getPath());
+                fis = new FileInputStream(file);
+                byte[] data = new byte[(int) file.length()];
+                fis.read(data);
+                saveFile(decryptByteArray(data), img.getPath());
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+            finally {
+                try {
+                    fis.close();
+                } catch (NullPointerException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 }
