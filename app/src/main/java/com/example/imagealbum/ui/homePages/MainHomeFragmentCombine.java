@@ -40,6 +40,7 @@ import java.util.TreeMap;
 
 import static android.app.Activity.RESULT_OK;
 
+// TODO: load delete, slideshow selected mode when reload fragment
 public class MainHomeFragmentCombine extends Fragment {
     private MainHomeViewModelCombine mainHomeViewModelCombine;
 

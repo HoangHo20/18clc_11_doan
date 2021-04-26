@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 public class viewImage extends AppCompatActivity {
     private static int SEND_INFO = 1;
@@ -40,6 +41,15 @@ public class viewImage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.view_image);
+
+        //Hide tool bar
+        try
+        {
+            Objects.requireNonNull(this.getSupportActionBar()).hide();
+        }
+        catch (NullPointerException ignored){}
+
+        setContentView(R.layout.activity_main_navigation);
 
         BigImageViewer.initialize(FrescoImageLoader.with(this));
 

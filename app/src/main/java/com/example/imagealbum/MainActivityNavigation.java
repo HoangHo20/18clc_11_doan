@@ -62,6 +62,7 @@ public class MainActivityNavigation extends AppCompatActivity {
     }
 
     private void innit(){
+        //Hide tool bar
         try
         {
             Objects.requireNonNull(this.getSupportActionBar()).hide();

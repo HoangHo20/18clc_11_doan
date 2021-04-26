@@ -3,10 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/black">
 
     <include layout="@layout/toolbar_viewimage"
-        android:id="@+id/toolBar"/>
+        android:id="@+id/toolBar" />
 
     <RelativeLayout
         android:layout_width="match_parent"

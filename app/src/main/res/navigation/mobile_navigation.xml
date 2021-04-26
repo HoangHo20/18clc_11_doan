@@ -5,17 +5,17 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@id/mainHomeFragmentCombine">
 
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.imagealbum.ui.home.HomeImageFragment"
-        android:label="home_fragment"
-        tools:layout="@layout/home_fragment" />
+<!--    <fragment-->
+<!--        android:id="@+id/homeFragment"-->
+<!--        android:name="com.example.imagealbum.ui.home.HomeImageFragment"-->
+<!--        android:label="home_fragment"-->
+<!--        tools:layout="@layout/home_fragment" />-->
 
-    <fragment
-        android:id="@+id/mainHomeFragment"
-        android:name="com.example.imagealbum.ui.homePages.MainHomeFragment"
-        android:label="MainHomeFragment"
-        tools:layout="@layout/tabs_fragment"/>
+<!--    <fragment-->
+<!--        android:id="@+id/mainHomeFragment"-->
+<!--        android:name="com.example.imagealbum.ui.homePages.MainHomeFragment"-->
+<!--        android:label="MainHomeFragment"-->
+<!--        tools:layout="@layout/tabs_fragment"/>-->
 
     <fragment
         android:id="@+id/mainHomeFragmentCombine"

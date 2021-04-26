@@ -4,4 +4,14 @@
         android:id="@+id/navigation_home"
         android:icon="@android:drawable/ic_menu_gallery"
         android:title="@string/title_photos" />
+
+    <item
+        android:id="@+id/navigation_camera"
+        android:icon="@android:drawable/ic_menu_camera"
+        android:title="@string/title_camera" />
+
+    <item
+        android:id="@+id/navigation_album"
+        android:icon="@drawable/ic_far_folder"
+        android:title="@string/title_albums" />
 </menu>
