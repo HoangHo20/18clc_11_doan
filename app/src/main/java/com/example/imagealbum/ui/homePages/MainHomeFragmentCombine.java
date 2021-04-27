@@ -89,7 +89,7 @@ public class MainHomeFragmentCombine extends Fragment {
             @Override
             public void onClick(View v) {
                 if (!mainHomeViewModelCombine.isInDeleteMode()){
-                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_gray);
+                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_selected);
                     addBtn.setVisibility(View.INVISIBLE);
                     slideShowBtn.setVisibility(View.INVISIBLE);
                     doneBtn.setVisibility(View.VISIBLE);
@@ -97,7 +97,7 @@ public class MainHomeFragmentCombine extends Fragment {
                     setInSelectedMode(Global.SELECTED_MODE_ON);
                 }
                 else{
-                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_blue);
+                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_unselect);
                     addBtn.setVisibility(View.VISIBLE);
                     slideShowBtn.setVisibility(View.VISIBLE);
                     doneBtn.setVisibility(View.INVISIBLE);
@@ -112,7 +112,7 @@ public class MainHomeFragmentCombine extends Fragment {
             @Override
             public void onClick(View v) {
                 if (!mainHomeViewModelCombine.isInSlideShow()){
-                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_gray);
+                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_selected);
                     addBtn.setVisibility(View.INVISIBLE);
                     deleteBtn.setVisibility(View.INVISIBLE);
                     doneBtn.setVisibility(View.VISIBLE);
@@ -120,7 +120,7 @@ public class MainHomeFragmentCombine extends Fragment {
                     setInSelectedMode(Global.SELECTED_MODE_ON);
                 }
                 else{
-                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_blue);
+                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_unselect);
                     addBtn.setVisibility(View.VISIBLE);
                     deleteBtn.setVisibility(View.VISIBLE);
                     doneBtn.setVisibility(View.INVISIBLE);
@@ -160,12 +160,12 @@ public class MainHomeFragmentCombine extends Fragment {
                 }
                 if(mainHomeViewModelCombine.isInSlideShow()){
                     deleteBtn.setVisibility(View.VISIBLE);
-                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_blue);
+                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_unselect);
                     mainHomeViewModelCombine.setInSlideShow(Global.SLIDE_SHOW_MODE_OFF);
                 }
                 else if(mainHomeViewModelCombine.isInDeleteMode()){
                     slideShowBtn.setVisibility(View.VISIBLE);
-                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_blue);
+                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_unselect);
                     mainHomeViewModelCombine.setInDeleteMode(Global.DELETE_MODE_OFF);
                 }
                 addBtn.setVisibility(View.VISIBLE);
@@ -193,14 +193,14 @@ public class MainHomeFragmentCombine extends Fragment {
         @Override
         public void onChanged(TreeMap<String, ArrayList<image>> date_groups) {
             if (recyclerViewAdapter == null) {
-                System.out.println("MainHomeFragmentCombine: " + "loaded data ...");
+//                System.out.println("MainHomeFragmentCombine: " + "loaded data ...");
                 recyclerViewAdapter = new MainHomeRecyclerViewCombine(getActivity(), date_groups, mainHomeViewModelCombine.isInSelectedMode());
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
                 recyclerView.setAdapter(recyclerViewAdapter);
                 KLoadingSpin a = requireView().findViewById(R.id.KLoadingSpin);
                 a.stopAnimation();
             } else {
-                recyclerViewAdapter.notifyDataSetChanged();
+                recyclerViewNotifyDataSetChanged();
             }
         }
     };
@@ -212,7 +212,7 @@ public class MainHomeFragmentCombine extends Fragment {
     }
 
     private void loadDataByThread() {
-        System.out.println("MainHomeFragmentCombine: " + "loading data..");
+//        System.out.println("MainHomeFragmentCombine: " + "loading data..");
         LoadDataThread loadDataThread = new LoadDataThread();
         loadDataThread.start();
     }
@@ -241,6 +241,27 @@ public class MainHomeFragmentCombine extends Fragment {
     private void setInSelectedMode(boolean mode) {
         mainHomeViewModelCombine.setInSelectedMode(mode);
         recyclerViewAdapter.setInSelectedMode(mode);
-        recyclerViewAdapter.notifyDataSetChanged();
+        recyclerViewNotifyDataSetChanged();
+
+
+    }
+
+    private void recyclerViewNotifyDataSetChanged() {
+//        Runnable runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                while (mainHomeViewModelCombine.isLoadingData());
+//                recyclerViewAdapter.notifyDataSetChanged();
+//            }
+//        };
+//        Thread thread = new Thread(runnable);
+//        thread.start();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                while (mainHomeViewModelCombine.isLoadingData());
+                recyclerViewAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }

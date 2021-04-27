@@ -50,6 +50,8 @@ public class MainHomeViewModelCombine extends ViewModel {
     private boolean isInSelectedMode;
     private boolean isInSlideShow;
     private boolean isInDeleteMode;
+    
+    private boolean isLoadingData;
 
     public MainHomeViewModelCombine() {
         LiveData = new MutableLiveData<>();
@@ -57,10 +59,15 @@ public class MainHomeViewModelCombine extends ViewModel {
         isInSelectedMode = false;
         isInSlideShow = false;
         isInDeleteMode = false;
+        isLoadingData = false;
     }
 
     public MutableLiveData<TreeMap<String, ArrayList<image>>> getImageMutableLiveData() {
         return LiveData;
+    }
+
+    public boolean isLoadingData() {
+        return this.isLoadingData;
     }
 
     public boolean isInSelectedMode() {
@@ -120,6 +127,11 @@ public class MainHomeViewModelCombine extends ViewModel {
     }
 
     public void loadImageFromDevice(Context context) {
+        while (this.isLoadingData);
+
+        this.isLoadingData = true;
+        System.out.println("MainHomeViewModelCombine: " + "loading data..");
+
         for (Iterator<Map.Entry<String, ArrayList<image>>> it = date_groups.entrySet().iterator(); it.hasNext(); ) {
             Map.Entry<String, ArrayList<image>> me = it.next();
             date_groups.get(me.getKey()).clear();
@@ -212,6 +224,9 @@ public class MainHomeViewModelCombine extends ViewModel {
 
         //update live data
         LiveData.postValue(date_groups);
+
+        this.isLoadingData = false;
+        System.out.println("MainHomeViewModelCombine: " + "loaded data..");
     }
 
     public void deleteImageInDevice(image img, Context context){
