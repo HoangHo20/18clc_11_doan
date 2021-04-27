@@ -1,22 +1,13 @@
 package com.example.imagealbum.ui.home;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,7 +16,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,24 +23,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.imagealbum.MainActivityNavigation;
 import com.example.imagealbum.R;
 import com.example.imagealbum.image;
-import com.example.imagealbum.showAlbum;
 import com.example.imagealbum.slideShow;
 import com.google.gson.Gson;
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.SYSTEM_HEALTH_SERVICE;
 
 public class HomeImageFragment extends Fragment {
     private static final int REQUEST_IMAGE_CAPTURE = 2;
@@ -98,7 +80,7 @@ public class HomeImageFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (!inDeleteMode){
-                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_gray);
+                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_selected);
                     addBtn.setVisibility(View.INVISIBLE);
                     slideShowBtn.setVisibility(View.INVISIBLE);
                     doneBtn.setVisibility(View.VISIBLE);
@@ -106,7 +88,7 @@ public class HomeImageFragment extends Fragment {
                     recyclerViewAdapter.setInSelectionMode(true);
                 }
                 else{
-                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_blue);
+                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_unselect);
                     addBtn.setVisibility(View.VISIBLE);
                     slideShowBtn.setVisibility(View.VISIBLE);
                     doneBtn.setVisibility(View.INVISIBLE);
@@ -121,7 +103,7 @@ public class HomeImageFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (!inSlideShow){
-                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_gray);
+                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_selected);
                     addBtn.setVisibility(View.INVISIBLE);
                     deleteBtn.setVisibility(View.INVISIBLE);
                     doneBtn.setVisibility(View.VISIBLE);
@@ -129,7 +111,7 @@ public class HomeImageFragment extends Fragment {
                     recyclerViewAdapter.setInSelectionMode(true);
                 }
                 else{
-                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_blue);
+                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_unselect);
                     addBtn.setVisibility(View.VISIBLE);
                     deleteBtn.setVisibility(View.VISIBLE);
                     doneBtn.setVisibility(View.INVISIBLE);
@@ -167,12 +149,12 @@ public class HomeImageFragment extends Fragment {
                 }
                 if(inSlideShow){
                     deleteBtn.setVisibility(View.VISIBLE);
-                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_blue);
+                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_unselect);
                     inSlideShow = !inSlideShow;
                 }
                 else if(inDeleteMode){
                     slideShowBtn.setVisibility(View.VISIBLE);
-                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_blue);
+                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_unselect);
                     inDeleteMode = !inDeleteMode;
                 }
                 addBtn.setVisibility(View.VISIBLE);

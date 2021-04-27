@@ -28,7 +28,7 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:src="@drawable/ic_baseline_lock_24_blue"
+            android:src="@drawable/ic_baseline_lock_24"
             android:clickable="true"/>
 
 
@@ -40,7 +40,7 @@
             android:layout_centerInParent="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:src="@drawable/ic_baseline_wallpaper_24_blue"
+            android:src="@drawable/ic_baseline_wallpaper_24"
             android:clickable="true"/>
 
         <ImageView

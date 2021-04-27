@@ -17,6 +17,6 @@
     <string name="permission_granted">Permission granted!</string>
     <string name="permission_denied">Permission denied!</string>
     <string name="copy_to_clipboard">Coppied to clipborad!</string>
-    <string name="Encrypt_success">Encrypted</string>
-    <string name="Decrypt_success">Decrypted</string>
+    <string name="encrypt_success">Encrypted</string>
+    <string name="decrypt_success">Decrypted</string>
 </resources>

@@ -2,30 +2,20 @@ package com.example.imagealbum;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.BitmapCompat;
 
 import android.app.Activity;
 import android.app.WallpaperManager;
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-
-import com.facebook.common.file.FileUtils;
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.fresco.FrescoImageLoader;
 import com.github.piasy.biv.view.BigImageView;
@@ -39,21 +29,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.nio.file.Files;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.Security;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
-import javax.crypto.CipherInputStream;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.ShortBufferException;
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class viewImage extends AppCompatActivity {
@@ -84,7 +68,7 @@ public class viewImage extends AppCompatActivity {
         encrypt_decryptBtn = findViewById(R.id.toolBar_imageView_encrypt_decryptBtn);
 
         if(isEncrypted){
-            encrypt_decryptBtn.setImageResource(R.drawable.ic_baseline_lock_open_24_blue);
+            encrypt_decryptBtn.setImageResource(R.drawable.ic_baseline_lock_open_24);
         }
 
 
@@ -127,25 +111,25 @@ public class viewImage extends AppCompatActivity {
                     if(bitmap != null){
                         Encryption encryption = new Encryption();
                         encryption.encrypt(image);
-                        Toast.makeText(viewImage.this, R.string.Encrypt_success, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(viewImage.this, R.string.encrypt_success, Toast.LENGTH_SHORT).show();
                         isEncrypted = true;
                         SharedPreferences sharedPref = getSharedPreferences("NOTE_DATA", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putBoolean(image.getImage_URI().toString(), true);
                         editor.commit();
-                        encrypt_decryptBtn.setImageResource(R.drawable.ic_baseline_lock_open_24_blue);
+                        encrypt_decryptBtn.setImageResource(R.drawable.ic_baseline_lock_open_24);
                     }
                 }
                 else{
                     Encryption encryption = new Encryption();
                     encryption.decrypt(image);
-                    Toast.makeText(viewImage.this, R.string.Decrypt_success, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(viewImage.this, R.string.decrypt_success, Toast.LENGTH_SHORT).show();
                     isEncrypted = false;
                     SharedPreferences sharedPref = getSharedPreferences("NOTE_DATA", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPref.edit();
                     editor.putBoolean(image.getImage_URI().toString(), false);
                     editor.commit();
-                    encrypt_decryptBtn.setImageResource(R.drawable.ic_baseline_lock_24_blue);
+                    encrypt_decryptBtn.setImageResource(R.drawable.ic_baseline_lock_24);
                 }
                 bigImageView.showImage(image.getImage_URI());
             }

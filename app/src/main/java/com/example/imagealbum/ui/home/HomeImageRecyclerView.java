@@ -77,10 +77,10 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
         }
 
         if(selectedImages.contains(position)){
-            holder.itemView.setBackgroundColor(Color.BLUE);
+            holder.itemView.setBackgroundColor(context.getColor(R.color.background_selected));
         }
         else {
-            holder.itemView.setBackgroundColor(Color.WHITE);
+            holder.itemView.setBackgroundColor(context.getColor(R.color.background_unselected));
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -89,11 +89,11 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
                 if(inSelectionMode){
                     if(selectedImages.contains(position)){
                         selectedImages.remove(new Integer(position));
-                        holder.itemView.setBackgroundColor(Color.WHITE);
+                        holder.itemView.setBackgroundColor(context.getColor(R.color.background_unselected));
                     }
                     else{
                         selectedImages.add(position);
-                        holder.itemView.setBackgroundColor(Color.BLUE);
+                        holder.itemView.setBackgroundColor(context.getColor(R.color.background_selected));
                     }
                 }
                 else{
