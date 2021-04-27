@@ -296,8 +296,10 @@ public class HomeImageFragment extends Fragment {
         }
 
         if(bitmap != null){
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            homeImageViewModel.insertToDevice(getContext(), bitmap, "Image_" + timeStamp, "");
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            String formatDateTime = now.format(format);
+            homeImageViewModel.insertToDevice(getContext(), bitmap, "Image_" + formatDateTime, "");
         }
 
     }
