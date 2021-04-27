@@ -1,24 +1,33 @@
 package com.example.imagealbum.ui.home;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.BitmapCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.imagealbum.R;
 import com.example.imagealbum.image;
 
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeImageViewModel extends ViewModel {
     String[] projection = {MediaStore.MediaColumns._ID, MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.SIZE, MediaStore.MediaColumns.DISPLAY_NAME, MediaStore.MediaColumns.DATE_MODIFIED};
@@ -47,7 +56,8 @@ public class HomeImageViewModel extends ViewModel {
             Long size = new Long(0);
             try {
                 size = Long.parseLong(cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.SIZE)));
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
             String displayName = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
             String date = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATE_MODIFIED));
             int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
@@ -71,7 +81,8 @@ public class HomeImageViewModel extends ViewModel {
             Long size = new Long(0);
             try {
                 size = Long.parseLong(cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.SIZE)));
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
             String displayName = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
             String date = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATE_MODIFIED));
             int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
@@ -88,7 +99,7 @@ public class HomeImageViewModel extends ViewModel {
     }
 
 
-    public void deleteImageInDevice(image img, Context context){
+    public void deleteImageInDevice(image img, Context context) {
         // Set up the projection (we only need the ID)
         String[] projection = {MediaStore.Images.Media._ID};
 
@@ -111,14 +122,41 @@ public class HomeImageViewModel extends ViewModel {
         c.close();
     }
 
-    public void insertToDevice(Context context, Bitmap bitmap, String title, String description){
+    private Location getLastKnownLocation(Context context) {
+        LocationManager mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        List<String> providers = mLocationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+
+            }
+            Location l = mLocationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                // Found best last known location: %s", l);
+                bestLocation = l;
+            }
+        }
+        return bestLocation;
+    }
+
+    public void insertToDevice(Context context, Bitmap bitmap, String title, String description) {
 //        MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, title , description);
         int date_second = (int) (System.currentTimeMillis() / 1000);
         String date = String.valueOf(date_second);
 
+        Location location = getLastKnownLocation(context);
+
+        double longitude = location.getLongitude();
+        double latitude = location.getLatitude();
+
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, title);
-        values.put(MediaStore.Images.Media.DISPLAY_NAME, title + ".png");
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, title);
         values.put(MediaStore.Images.Media.DESCRIPTION, description);
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
         values.put(MediaStore.Images.Media.SIZE, BitmapCompat.getAllocationByteCount(bitmap));
@@ -126,6 +164,8 @@ public class HomeImageViewModel extends ViewModel {
         values.put(MediaStore.Images.Media.DATE_ADDED, date);
         values.put(MediaStore.Images.Media.DATE_TAKEN, date);
         values.put(MediaStore.Images.Media.DATE_MODIFIED, date);
+        values.put(MediaStore.Images.Media.LONGITUDE, longitude);
+        values.put(MediaStore.Images.Media.LATITUDE, latitude);
 
         ContentResolver contentResolver = context.getContentResolver();
         Uri url = null;

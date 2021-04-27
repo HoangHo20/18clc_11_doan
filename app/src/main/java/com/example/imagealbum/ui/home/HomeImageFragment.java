@@ -1,13 +1,17 @@
 package com.example.imagealbum.ui.home;
 
+import androidx.core.content.FileProvider;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +33,10 @@ import com.example.imagealbum.image;
 import com.example.imagealbum.slideShow;
 import com.google.gson.Gson;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,7 +58,7 @@ public class HomeImageFragment extends Fragment {
     private boolean inSlideShow = false;
     private boolean inDeleteMode = false;
     private static int SEND_IMAGE = 1;
-    private String takenPhotoPath = "none";
+    private String currentPhotoPath = "none";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -67,12 +76,13 @@ public class HomeImageFragment extends Fragment {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                try {
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                } catch (ActivityNotFoundException e) {
-                   e.printStackTrace();
-                }
+//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                try {
+//                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//                } catch (ActivityNotFoundException e) {
+//                   e.printStackTrace();
+//                }
+                dispatchTakePictureIntent();
             }
         });
 
@@ -209,15 +219,14 @@ public class HomeImageFragment extends Fragment {
         }
         else if(requestCode == REQUEST_IMAGE_CAPTURE){
             if(resultCode == RESULT_OK){
-                Bundle extras = data.getExtras();
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                homeImageViewModel.insertToDevice(getContext(), imageBitmap, "Image_" + timeStamp, "");
+//                Bundle extras = data.getExtras();
+//                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//                Bitmap imageBitmap = (Bitmap) extras.get("data");
+//                homeImageViewModel.insertToDevice(getContext(), imageBitmap, "Image_" + timeStamp, "");
+                galleryAddPic();
             }
         }
     }
-
-
 
 
     @Override
@@ -225,4 +234,72 @@ public class HomeImageFragment extends Fragment {
         super.onResume();
         homeImageViewModel.loadImageFromDevice(requireContext());
     }
+
+    public File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir =getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    public void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(getContext(),
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+    public void galleryAddPic() {
+        File f = new File(currentPhotoPath);
+        FileInputStream fis = null;
+        byte[] data = null;
+        try{
+            fis = new FileInputStream(f);
+            data = new byte[(int) f.length()];
+            fis.read(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                fis.close();
+            } catch (NullPointerException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Bitmap bitmap = null;
+        if(data != null){
+            bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+        }
+
+        if(bitmap != null){
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            homeImageViewModel.insertToDevice(getContext(), bitmap, "Image_" + timeStamp, "");
+        }
+
+    }
+
 }

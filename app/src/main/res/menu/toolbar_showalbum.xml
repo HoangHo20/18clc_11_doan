@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/actionBar_showAlbum_slideShowBtn"
-        android:icon="@drawable/ic_baseline_slideshow_24_green"
+        android:icon="@drawable/ic_baseline_slideshow_24_unselect"
         android:title="New"
         app:showAsAction="always" />
 
