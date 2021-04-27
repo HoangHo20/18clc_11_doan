@@ -145,8 +145,8 @@ public class HomeImageViewModel extends ViewModel {
     }
 
     public void insertToDevice(Context context, Bitmap bitmap, String title, String description) {
-//        MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, title , description);
-        int date_second = (int) (System.currentTimeMillis() / 1000);
+//      MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, title , description);
+        long date_second = System.currentTimeMillis();
         String date = String.valueOf(date_second);
 
         Location location = getLastKnownLocation(context);
@@ -161,9 +161,9 @@ public class HomeImageViewModel extends ViewModel {
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
         values.put(MediaStore.Images.Media.SIZE, BitmapCompat.getAllocationByteCount(bitmap));
 
-        values.put(MediaStore.Images.Media.DATE_ADDED, date);
-        values.put(MediaStore.Images.Media.DATE_TAKEN, date);
-        values.put(MediaStore.Images.Media.DATE_MODIFIED, date);
+        values.put(MediaStore.Images.Media.DATE_ADDED, date_second);
+        values.put(MediaStore.Images.Media.DATE_TAKEN, date_second);
+        values.put(MediaStore.Images.Media.DATE_MODIFIED, date_second);
         values.put(MediaStore.Images.Media.LONGITUDE, longitude);
         values.put(MediaStore.Images.Media.LATITUDE, latitude);
 
@@ -172,7 +172,6 @@ public class HomeImageViewModel extends ViewModel {
 
         try {
             url = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
             if (bitmap != null) {
                 OutputStream imageOut = contentResolver.openOutputStream(url);
                 try {
