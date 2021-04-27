@@ -50,12 +50,11 @@
             android:id="@+id/toolBar_imageView_detailBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_read_more_24"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
-            android:clickable="true"
-
-            app:srcCompat="@drawable/ic_baseline_read_more_24" />
+            android:clickable="true"/>
 
     </RelativeLayout>
 
