@@ -225,6 +225,18 @@ public class MainHomeViewModelCombine extends ViewModel {
         //update live data
         LiveData.postValue(date_groups);
 
+        ArrayList<String> empty_list_key = new ArrayList<>();
+        for (Iterator<Map.Entry<String, ArrayList<image>>> it = date_groups.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<String, ArrayList<image>> me = it.next();
+            if (date_groups.get(me.getKey()).size() < 1) {
+                empty_list_key.add(me.getKey());
+            }
+        }
+
+        for (String key : empty_list_key) {
+            date_groups.remove(key);
+        }
+        //allow another thread load data
         this.isLoadingData = false;
         System.out.println("MainHomeViewModelCombine: " + "loaded data..");
     }

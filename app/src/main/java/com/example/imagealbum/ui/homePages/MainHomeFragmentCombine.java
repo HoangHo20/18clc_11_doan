@@ -260,6 +260,7 @@ public class MainHomeFragmentCombine extends Fragment {
             @Override
             public void run() {
                 while (mainHomeViewModelCombine.isLoadingData());
+                recyclerView.getRecycledViewPool().clear();
                 recyclerViewAdapter.notifyDataSetChanged();
             }
         });
