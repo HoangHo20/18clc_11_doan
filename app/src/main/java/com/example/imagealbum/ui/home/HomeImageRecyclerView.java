@@ -1,18 +1,25 @@
 package com.example.imagealbum.ui.home;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
@@ -103,9 +110,11 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
 
         if(image_res.isSelected()){
             holder.itemView.setBackgroundColor(Color.BLUE);
+        // if(selectedImages.contains(position)){
+        //     holder.itemView.setBackgroundColor(context.getColor(R.color.background_selected));
         }
         else {
-            holder.itemView.setBackgroundColor(Color.WHITE);
+            holder.itemView.setBackgroundColor(context.getColor(R.color.background_unselected));
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +129,14 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
                         image_res.setSelectedMode(Global.SELECTED_MODE_ON);
                         holder.itemView.setBackgroundColor(Color.BLUE);
                     }
+                    // if(selectedImages.contains(position)){
+                    //     selectedImages.remove(new Integer(position));
+                    //     holder.itemView.setBackgroundColor(context.getColor(R.color.background_unselected));
+                    // }
+                    // else{
+                    //     selectedImages.add(position);
+                    //     holder.itemView.setBackgroundColor(context.getColor(R.color.background_selected));
+                    // }
                 }
                 else{
                     Intent intent = new Intent(context, viewImage.class);
@@ -129,6 +146,7 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
                 }
             }
         });
+
     }
 
     public void deSelectedAll(){

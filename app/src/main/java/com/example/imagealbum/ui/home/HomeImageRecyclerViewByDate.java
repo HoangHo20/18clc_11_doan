@@ -130,8 +130,8 @@ public class HomeImageRecyclerViewByDate extends RecyclerView.Adapter<HomeImageR
             super(view);
             isHaveAdapter = false;
             itemView = view;
-            mTextView = (TextView) view.findViewById(R.id.date_group_item_title);
             mRecyclerView = (RecyclerView) view.findViewById(R.id.date_group_item_recycler);
+            mTextView = (TextView) view.findViewById(R.id.date_group_item_title);
         }
 
         public void setRecyclerViewAdapter(HomeImageRecyclerView adapter) {

@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,7 +30,6 @@ import com.google.gson.Gson;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -77,7 +75,7 @@ public class HomeImageFragmentByDate extends Fragment {
             @Override
             public void onClick(View v) {
                 if (!inDeleteMode){
-                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_gray);
+                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_selected);
                     addBtn.setVisibility(View.INVISIBLE);
                     slideShowBtn.setVisibility(View.INVISIBLE);
                     doneBtn.setVisibility(View.VISIBLE);
@@ -85,7 +83,7 @@ public class HomeImageFragmentByDate extends Fragment {
                     recyclerViewAdapter.setInSelectionMode(true);
                 }
                 else{
-                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_blue);
+                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_unselect);
                     addBtn.setVisibility(View.VISIBLE);
                     slideShowBtn.setVisibility(View.VISIBLE);
                     doneBtn.setVisibility(View.INVISIBLE);
@@ -100,7 +98,7 @@ public class HomeImageFragmentByDate extends Fragment {
             @Override
             public void onClick(View v) {
                 if (!inSlideShow){
-                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_gray);
+                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_selected);
                     addBtn.setVisibility(View.INVISIBLE);
                     deleteBtn.setVisibility(View.INVISIBLE);
                     doneBtn.setVisibility(View.VISIBLE);
@@ -108,7 +106,7 @@ public class HomeImageFragmentByDate extends Fragment {
                     recyclerViewAdapter.setInSelectionMode(true);
                 }
                 else{
-                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_blue);
+                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_unselect);
                     addBtn.setVisibility(View.VISIBLE);
                     deleteBtn.setVisibility(View.VISIBLE);
                     doneBtn.setVisibility(View.INVISIBLE);
@@ -146,12 +144,12 @@ public class HomeImageFragmentByDate extends Fragment {
                 }
                 if(inSlideShow){
                     deleteBtn.setVisibility(View.VISIBLE);
-                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_blue);
+                    slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_unselect);
                     inSlideShow = !inSlideShow;
                 }
                 else if(inDeleteMode){
                     slideShowBtn.setVisibility(View.VISIBLE);
-                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_blue);
+                    deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_unselect);
                     inDeleteMode = !inDeleteMode;
                 }
                 addBtn.setVisibility(View.VISIBLE);

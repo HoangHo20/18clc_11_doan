@@ -43,6 +43,8 @@ public class MainHomeFragment extends Fragment {
 //        adapter.addFragment(new HomeImageFragmentByDate(), "Photos");
 //        adapter.addFragment(new HomeVideoFragment(), "Videos");
         adapter.addFragment(new MainHomeFragmentCombine(), "All");
+        adapter.addFragment(new HomeImageFragment(), "Photos");
+        adapter.addFragment(new HomeVideoFragment(), "Videos");
         viewPager.setAdapter(adapter);
     }
 

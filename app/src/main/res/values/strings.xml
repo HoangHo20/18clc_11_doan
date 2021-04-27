@@ -20,4 +20,7 @@
     <string name="permission_denied">Permission denied!</string>
     <string name="title_camera">Camera</string>
     <string name="title_albums">Albums</string>
+    <string name="copy_to_clipboard">Coppied to clipborad!</string>
+    <string name="encrypt_success">Encrypted</string>
+    <string name="decrypt_success">Decrypted</string>
 </resources>
