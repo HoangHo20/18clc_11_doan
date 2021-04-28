@@ -3,13 +3,25 @@ package com.example.imagealbum;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class showImageInfo extends AppCompatActivity {
     private image image;
@@ -41,7 +53,14 @@ public class showImageInfo extends AppCompatActivity {
         name.setText("Name: " + image.getImage_name());
         size.setText("Size: " + String.valueOf(image.getImage_size()));
         date.setText("Date: " + image.getDate());
-        location.setText(image.getLocation());
+
+        String address = getAddress();
+        if(!address.equals("")){
+            location.setText("Location: " + address);
+        }
+        else{
+            location.setText("Location: Unknown");
+        }
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,6 +69,66 @@ public class showImageInfo extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    public String getAddress(){
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        ArrayList<Double> coord = getCoordinate(showImageInfo.this);
+
+        if(!coord.isEmpty()){
+            try{
+                addresses = geocoder.getFromLocation(coord.get(1), coord.get(0), 1);
+                String city = addresses.get(0).getLocality();
+                String country = addresses.get(0).getCountryName();
+                String res = "";
+                if(city != null){
+                    res += city;
+                }
+
+                if(country != null && city != null){
+                    res += ", " + country;
+                }
+                else if(country != null && city == null){
+                    res += country;
+                }
+                return res;
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        return "";
+    }
+
+    public ArrayList<Double> getCoordinate(Context context) {
+        String[] projection = {MediaStore.Images.Media.LONGITUDE, MediaStore.Images.Media.LATITUDE};
+        String selection = MediaStore.Images.Media.DATA + " = ?";
+        String[] selectionArgs = new String[]{image.getPath()};
+        double longitude = Double.MAX_VALUE;
+        double latitude = Double.MAX_VALUE;
+
+        // Query for the ID of the media matching the file path
+        Uri queryUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        ContentResolver contentResolver = context.getContentResolver();
+        Cursor c = contentResolver.query(queryUri, projection, selection, selectionArgs, null);
+        if (c.moveToFirst()) {
+            longitude = c.getDouble(c.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.LONGITUDE));
+            latitude = c.getDouble(c.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.LATITUDE));
+        } else {
+            // File not found in media store D
+        }
+        c.close();
+
+        ArrayList<Double> res = new ArrayList<>();
+        if (longitude != Double.MAX_VALUE && latitude != Double.MAX_VALUE){
+            res.add(longitude);
+            res.add(latitude);
+        }
+
+        return res;
     }
 
 
