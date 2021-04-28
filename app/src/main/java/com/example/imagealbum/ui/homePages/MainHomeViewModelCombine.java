@@ -132,10 +132,9 @@ public class MainHomeViewModelCombine extends ViewModel {
         this.isLoadingData = true;
         System.out.println("MainHomeViewModelCombine: " + "loading data..");
 
-        for (Iterator<Map.Entry<String, ArrayList<image>>> it = date_groups.entrySet().iterator(); it.hasNext(); ) {
-            Map.Entry<String, ArrayList<image>> me = it.next();
-            date_groups.get(me.getKey()).clear();
-        }
+        date_groups.forEach((key, value) -> {
+            value.clear();
+        });
 
         String cur_date_string = "";
         ArrayList<image> temp_images = new ArrayList<>();

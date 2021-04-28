@@ -1,5 +1,6 @@
 package com.example.imagealbum.ui.home;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
@@ -12,6 +13,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -38,6 +40,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -272,6 +276,7 @@ public class HomeImageFragment extends Fragment {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void galleryAddPic() {
         File f = new File(currentPhotoPath);
         FileInputStream fis = null;

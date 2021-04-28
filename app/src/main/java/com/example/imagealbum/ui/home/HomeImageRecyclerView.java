@@ -139,10 +139,14 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
                     // }
                 }
                 else{
-                    Intent intent = new Intent(context, viewImage.class);
-                    intent.putExtra("IMAGE", images.get(position).toJson());
-                    intent.putExtra("POS", String.valueOf(position));
-                    ((Activity) context).startActivityForResult(intent, SEND_IMAGE);
+                    try {
+                        Intent intent = new Intent(context, viewImage.class);
+                        intent.putExtra("IMAGE", images.get(position).toJson());
+                        intent.putExtra("POS", String.valueOf(position));
+                        ((Activity) context).startActivityForResult(intent, SEND_IMAGE);
+                    } catch (Exception e) {
+                        Toast.makeText(context, R.string.UnSynchronize_data, Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
