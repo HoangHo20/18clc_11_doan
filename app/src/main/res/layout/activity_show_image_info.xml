@@ -40,23 +40,13 @@
         android:editable="false"/>
 
 
-    <LinearLayout
+
+    <EditText
+        android:id="@+id/showImageInfo_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:editable="false"/>
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Location: "/>
-
-        <EditText
-            android:id="@+id/showImageInfo_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="5dp"/>
-
-    </LinearLayout>
 
     <Button
         android:id="@+id/showImageInfo_btnDone"
