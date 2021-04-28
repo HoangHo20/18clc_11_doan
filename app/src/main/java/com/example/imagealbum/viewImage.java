@@ -18,8 +18,10 @@ import android.widget.Toast;
 
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.fresco.FrescoImageLoader;
+import com.github.piasy.biv.loader.glide.GlideImageLoader;
 import com.github.piasy.biv.view.BigImageView;
 import com.github.piasy.biv.view.FrescoImageViewFactory;
+import com.github.piasy.biv.view.GlideImageViewFactory;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -67,7 +69,7 @@ public class viewImage extends AppCompatActivity {
 
         setContentView(R.layout.activity_main_navigation);
 
-        BigImageViewer.initialize(FrescoImageLoader.with(this));
+        BigImageViewer.initialize(GlideImageLoader.with(this));
 
         setContentView(R.layout.view_image);
 
@@ -157,7 +159,7 @@ public class viewImage extends AppCompatActivity {
         loadData();
 
         bigImageView = (BigImageView) findViewById(R.id.mBigImage);
-        bigImageView.setImageViewFactory(new FrescoImageViewFactory());
+        bigImageView.setImageViewFactory(new GlideImageViewFactory());
         bigImageView.showImage(image.getImage_URI());
 
 //        bigImageView.setInitScaleType(BigImageView.INIT_SCALE_TYPE_CUSTOM);

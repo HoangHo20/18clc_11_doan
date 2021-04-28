@@ -276,7 +276,7 @@ public class HomeImageFragment extends Fragment {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     public void galleryAddPic() {
         File f = new File(currentPhotoPath);
         FileInputStream fis = null;

@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 
 public class Global {
+    public static final int SEND_IMAGE = 1;
     public static final int STORAGE_PERMISSION = 100;
     public static final int REQUEST_IMAGE_CAPTURE = 2;
     public static final int ITEM_SIZE_GRID_LAYOUT_PORTRAIT = 4;

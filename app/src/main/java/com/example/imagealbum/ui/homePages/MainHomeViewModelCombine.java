@@ -1,17 +1,22 @@
 package com.example.imagealbum.ui.homePages;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.BitmapCompat;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -25,24 +30,27 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
 public class MainHomeViewModelCombine extends ViewModel {
-    String[] projection = {MediaStore.MediaColumns._ID,
+    String[] projection = 
+            {MediaStore.Images.ImageColumns._ID,
 
-            MediaStore.MediaColumns.DATA,
-            MediaStore.MediaColumns.SIZE,
-            MediaStore.MediaColumns.DISPLAY_NAME,
-            MediaStore.MediaColumns.DATE_MODIFIED};
+            MediaStore.Images.ImageColumns.DATA,
+            MediaStore.Images.ImageColumns.SIZE,
+            MediaStore.Images.ImageColumns.DISPLAY_NAME,
+            MediaStore.Images.ImageColumns.DATE_MODIFIED};
 
-    String[] projection_video = {MediaStore.MediaColumns._ID,
-
-            MediaStore.MediaColumns.DATA,
-            MediaStore.MediaColumns.SIZE,
-            MediaStore.MediaColumns.DISPLAY_NAME,
-            MediaStore.MediaColumns.DATE_MODIFIED};
+    String[] projection_video =
+            {MediaStore.Video.VideoColumns._ID,
+            MediaStore.Video.VideoColumns.DURATION,
+            MediaStore.Video.VideoColumns.DATA,
+            MediaStore.Video.VideoColumns.SIZE,
+            MediaStore.Video.VideoColumns.DISPLAY_NAME,
+            MediaStore.Video.VideoColumns.DATE_MODIFIED};
 
     private MutableLiveData< TreeMap<String, ArrayList<image>> > LiveData;
     private TreeMap<String, ArrayList<image>>  date_groups;
@@ -143,14 +151,14 @@ public class MainHomeViewModelCombine extends ViewModel {
         Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, "date_modified DESC");
         while (cursor.moveToNext()) {
             //Load data from column
-            String absolutePathOfImage = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
+            String absolutePathOfImage = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA));
             long size = 0L;
             try {
-                size = Long.parseLong(cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.SIZE)));
+                size = Long.parseLong(cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.SIZE)));
             } catch (Exception ignored) {}
-            String displayName = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
-            int date_second = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns.DATE_MODIFIED));
-            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+            String displayName = cursor.getString(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DISPLAY_NAME));
+            long date_second = cursor.getLong(cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATE_MODIFIED));
+            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Images.ImageColumns._ID));
             Uri uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, String.valueOf(id));
             // TODO: load all properties to image
 
@@ -181,20 +189,20 @@ public class MainHomeViewModelCombine extends ViewModel {
         cursor = context.getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, projection_video, null, null, "date_modified DESC");
         while (cursor.moveToNext()) {
             //Load data from column
-            String absolutePathOfImage = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA));
+            String absolutePathOfImage = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATA));
             long size = 0L;
             try {
-                size = Long.parseLong(cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.SIZE)));
+                size = Long.parseLong(cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.SIZE)));
             } catch (Exception ignored) {}
-            String displayName = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
-            int date_second = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns.DATE_MODIFIED));
-            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
-
-
-
-            Uri uri = Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, String.valueOf(id));
+            String displayName = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DISPLAY_NAME));
+            int date_second = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATE_MODIFIED));
+            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns._ID));
             int duration = 0;
-            //int duration = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns.DURATION));
+            duration = cursor.getInt(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DURATION));
+
+
+            Uri uri = Uri.withAppendedPath(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, String.valueOf(id));
+
 
             // TODO: load all properties to image
 
@@ -263,29 +271,56 @@ public class MainHomeViewModelCombine extends ViewModel {
         c.close();
     }
 
-    public void insertToDevice(Context context, Bitmap bitmap, String title, String description){
-//        MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, title , description);
+    private Location getLastKnownLocation(Context context) {
+        LocationManager mLocationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        List<String> providers = mLocationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
 
-        int date_second = (int) (System.currentTimeMillis() / 1000);
-        String date = String.valueOf(date_second);
+            }
+            Location l = mLocationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                // Found best last known location: %s", l);
+                bestLocation = l;
+            }
+        }
+        return bestLocation;
+    }
+
+    public void insertToDevice(Context context, Bitmap bitmap, String title, String description) {
+//      MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap, title , description);
+        long date_milli = System.currentTimeMillis() / 1000L;
+        String date = String.valueOf(date_milli);
+
+        Location location = getLastKnownLocation(context);
+
+        double longitude = location.getLongitude();
+        double latitude = location.getLatitude();
 
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, title);
         values.put(MediaStore.Images.Media.DISPLAY_NAME, title);
         values.put(MediaStore.Images.Media.DESCRIPTION, description);
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
         values.put(MediaStore.Images.Media.SIZE, BitmapCompat.getAllocationByteCount(bitmap));
-        // Add the date meta data to ensure the image is added at the front of the gallery
-        values.put(MediaStore.Images.Media.DATE_ADDED, date);
-        values.put(MediaStore.Images.Media.DATE_TAKEN, date);
-        values.put(MediaStore.Images.Media.DATE_MODIFIED, date);
+
+        values.put(MediaStore.Images.Media.DATE_ADDED, date_milli);
+        values.put(MediaStore.Images.Media.DATE_TAKEN, date_milli);
+        values.put(MediaStore.Images.Media.DATE_MODIFIED, date_milli);
+        values.put(MediaStore.Images.Media.LONGITUDE, longitude);
+        values.put(MediaStore.Images.Media.LATITUDE, latitude);
 
         ContentResolver contentResolver = context.getContentResolver();
         Uri url = null;
 
         try {
             url = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-
             if (bitmap != null) {
                 OutputStream imageOut = contentResolver.openOutputStream(url);
                 try {
@@ -301,6 +336,7 @@ public class MainHomeViewModelCombine extends ViewModel {
         } catch (Exception e) {
             if (url != null) {
                 contentResolver.delete(url, null, null);
+                url = null;
             }
         }
     }

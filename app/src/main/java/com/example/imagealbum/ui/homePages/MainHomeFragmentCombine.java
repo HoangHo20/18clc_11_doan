@@ -1,10 +1,14 @@
 package com.example.imagealbum.ui.homePages;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
@@ -31,7 +36,12 @@ import com.example.imagealbum.slideShow;
 import com.example.kloadingspin.KLoadingSpin;
 import com.google.gson.Gson;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
@@ -48,6 +58,8 @@ public class MainHomeFragmentCombine extends Fragment {
     private MainHomeRecyclerViewCombine recyclerViewAdapter;
 
     ImageView addBtn, deleteBtn, slideShowBtn, doneBtn;
+
+    private String currentPhotoPath = "none";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -76,12 +88,13 @@ public class MainHomeFragmentCombine extends Fragment {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                try {
-                    startActivityForResult(takePictureIntent, Global.REQUEST_IMAGE_CAPTURE);
-                } catch (ActivityNotFoundException e) {
-                    e.printStackTrace();
-                }
+//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                try {
+//                    startActivityForResult(takePictureIntent, Global.REQUEST_IMAGE_CAPTURE);
+//                } catch (ActivityNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+                dispatchTakePictureIntent();
             }
         });
 
@@ -148,6 +161,7 @@ public class MainHomeFragmentCombine extends Fragment {
                     else{
                         Toast.makeText(getContext(), R.string.no_photo_selected_slideShow, Toast.LENGTH_SHORT).show();
                     }
+                    mainHomeViewModelCombine.deSelectedAll();
                 }
                 else if(mainHomeViewModelCombine.isInDeleteMode()){
                     ArrayList<image> deleteImages = mainHomeViewModelCombine.getSelectedImages();
@@ -227,13 +241,29 @@ public class MainHomeFragmentCombine extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == Global.REQUEST_IMAGE_CAPTURE){
+        System.out.println("Receive, HomeImageFragment");
+        if (requestCode == Global.SEND_IMAGE){
+            if (resultCode == RESULT_OK){
+                String img = data.getStringExtra("IMAGE");
+                image new_img = new Gson().fromJson(img, image.class);
+                int pos = Integer.parseInt(data.getStringExtra("POS"));
+//                imageList.set(pos, new_img);
+//                adapter.notifyDataSetChanged();
+            }
+            else if(requestCode == Activity.RESULT_CANCELED){
+                String img = data.getStringExtra("IMAGE");
+                image new_img = new Gson().fromJson(img, image.class);
+                int pos = Integer.parseInt(data.getStringExtra("POS"));
+                mainHomeViewModelCombine.deleteImageInDevice(new_img, getContext());
+            }
+        }
+        else if(requestCode == Global.REQUEST_IMAGE_CAPTURE){
             if(resultCode == RESULT_OK){
-                assert data != null;
-                Bundle extras = data.getExtras();
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                mainHomeViewModelCombine.insertToDevice(requireContext(), imageBitmap, "Image_" + timeStamp, "");
+//                Bundle extras = data.getExtras();
+//                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//                Bitmap imageBitmap = (Bitmap) extras.get("data");
+//                homeImageViewModel.insertToDevice(getContext(), imageBitmap, "Image_" + timeStamp, "");
+                galleryAddPic();
             }
         }
     }
@@ -242,8 +272,6 @@ public class MainHomeFragmentCombine extends Fragment {
         mainHomeViewModelCombine.setInSelectedMode(mode);
         recyclerViewAdapter.setInSelectedMode(mode);
         recyclerViewNotifyDataSetChanged();
-
-
     }
 
     private void recyclerViewNotifyDataSetChanged() {
@@ -264,5 +292,75 @@ public class MainHomeFragmentCombine extends Fragment {
                 recyclerViewAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    public File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir =getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    public void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(getContext(),
+                        "com.example.android.fileproviderx",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, Global.REQUEST_IMAGE_CAPTURE);
+            }
+        }
+    }
+
+
+    public void galleryAddPic() {
+        File f = new File(currentPhotoPath);
+        FileInputStream fis = null;
+        byte[] data = null;
+        try{
+            fis = new FileInputStream(f);
+            data = new byte[(int) f.length()];
+            fis.read(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                fis.close();
+            } catch (NullPointerException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+        Bitmap bitmap = null;
+        if(data != null){
+            bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+        }
+
+        if(bitmap != null){
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            String formatDateTime = now.format(format);
+            mainHomeViewModelCombine.insertToDevice(getContext(), bitmap, "Image_" + formatDateTime, "");
+        }
+
     }
 }

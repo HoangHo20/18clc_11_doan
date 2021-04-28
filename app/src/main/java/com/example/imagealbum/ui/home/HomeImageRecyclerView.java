@@ -94,7 +94,7 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
             image i = images.get(position);
 
             //int duration = Global.getDuration(context, i.getPath());
-            holder.duration_title.setText(R.string.title_video);
+            holder.duration_title.setText(i.getDurationTimeString());
             holder.duration_title.setVisibility(View.VISIBLE);
 
             holder.videoTag.setVisibility(View.VISIBLE);
