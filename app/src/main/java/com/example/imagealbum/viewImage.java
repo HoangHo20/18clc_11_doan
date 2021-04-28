@@ -10,11 +10,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.fresco.FrescoImageLoader;
@@ -46,7 +51,15 @@ import javax.crypto.spec.SecretKeySpec;
 public class viewImage extends AppCompatActivity {
     private static int SEND_INFO = 1;
     private image image;
+
+    //Show image
     private BigImageView bigImageView;
+    //Show video
+    private int videoPosition;
+    private VideoView videoView;
+    private FrameLayout frameLayout;
+    private MediaController mediaController;
+
     private Intent intent;
     private int pos;
     private ImageView detailBtn;
@@ -67,8 +80,7 @@ public class viewImage extends AppCompatActivity {
         }
         catch (NullPointerException ignored){}
 
-        setContentView(R.layout.activity_main_navigation);
-
+        //setContentView(R.layout.activity_main_navigation);
         BigImageViewer.initialize(GlideImageLoader.with(this));
 
         setContentView(R.layout.view_image);
@@ -83,8 +95,11 @@ public class viewImage extends AppCompatActivity {
             encrypt_decryptBtn.setImageResource(R.drawable.ic_baseline_lock_open_24);
         }
 
+        setOnclickListenerBtns();
 
+    }
 
+    private void setOnclickListenerBtns() {
         detailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,7 +161,6 @@ public class viewImage extends AppCompatActivity {
                 bigImageView.showImage(image.getImage_URI());
             }
         });
-
     }
 
 
@@ -158,11 +172,85 @@ public class viewImage extends AppCompatActivity {
 
         loadData();
 
+        if (image.isImage()) {
+            loadImage();
+        } else  {
+            this.videoPosition = 0;
+            loadVideo();
+        }
+
+//        bigImageView.setInitScaleType(BigImageView.INIT_SCALE_TYPE_CUSTOM);
+    }
+
+    private void loadImage() {
         bigImageView = (BigImageView) findViewById(R.id.mBigImage);
         bigImageView.setImageViewFactory(new GlideImageViewFactory());
         bigImageView.showImage(image.getImage_URI());
+        bigImageView.setVisibility(View.VISIBLE);
+    }
 
-//        bigImageView.setInitScaleType(BigImageView.INIT_SCALE_TYPE_CUSTOM);
+    private void loadVideo() {
+        videoView = (VideoView) findViewById(R.id.video_view);
+        frameLayout = (FrameLayout) findViewById(R.id.view_image_video_frame);
+        frameLayout.setVisibility(View.VISIBLE);
+
+        videoView.setVideoURI(image.getImage_URI());
+
+        this.mediaController = new MediaController(this);
+
+        // Set MediaController for VideoView
+        this.videoView.setMediaController(mediaController);
+
+        // Set the videoView that acts as the anchor for the MediaController.
+        this.mediaController.setAnchorView(videoView);
+
+
+        // When the video file ready for playback.
+        this.videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+            public void onPrepared(MediaPlayer mediaPlayer) {
+
+                videoView.seekTo(videoPosition);
+                if (videoPosition == 0) {
+                    videoView.start();
+                }
+
+                // When video Screen change size.
+                mediaPlayer.setOnVideoSizeChangedListener(new MediaPlayer.OnVideoSizeChangedListener() {
+                    @Override
+                    public void onVideoSizeChanged(MediaPlayer mediaPlayer, int width, int height) {
+
+                        // Re-Set the videoView that acts as the anchor for the MediaController
+                        mediaController.setAnchorView(videoView);
+                    }
+                });
+            }
+        });
+    }
+
+    //Change phone direction -> save position of current video
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+
+        // Store current position.
+        outState.putInt(Global.VIDEO_CURRENT_POSITION_STRING_NAME,
+                videoView.getCurrentPosition());
+
+        videoView.pause();
+    }
+
+    //Restore the state when rotated phone -> get position of video
+
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        //Load position of video
+        videoPosition = savedInstanceState.getInt(Global.VIDEO_CURRENT_POSITION_STRING_NAME);
+        //videoView.seekTo(videoPosition);
     }
 
     public void loadData(){

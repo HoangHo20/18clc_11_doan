@@ -147,6 +147,7 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
                     } catch (Exception e) {
                         Toast.makeText(context, R.string.UnSynchronize_data, Toast.LENGTH_SHORT).show();
                     }
+
                 }
             }
         });

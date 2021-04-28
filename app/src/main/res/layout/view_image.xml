@@ -19,7 +19,20 @@
             android:layout_height="match_parent"
             app:failureImage="@drawable/ic_baseline_delete_24_unselect"
             app:failureImageInitScaleType="center"
-            app:optimizeDisplay="true" />
+            app:optimizeDisplay="true"
+            android:visibility="gone"/>
+
+        <FrameLayout
+            android:id="@+id/view_image_video_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+            <VideoView
+                android:id="@+id/video_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"/>
+        </FrameLayout>
 
     </RelativeLayout>
 

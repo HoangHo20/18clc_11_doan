@@ -18,6 +18,7 @@ public class Global {
     public static final boolean DELETE_MODE_OFF = false;
     public static final boolean SLIDE_SHOW_MODE_ON = true;
     public static final boolean SLIDE_SHOW_MODE_OFF = false;
+    public static final String VIDEO_CURRENT_POSITION_STRING_NAME = "VideoCurPos";
 
     /**
      * <p>Get video duration from file path</p>
