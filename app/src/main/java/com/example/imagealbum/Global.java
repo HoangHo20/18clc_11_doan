@@ -46,4 +46,9 @@ public class Global {
         }
         return duration;
     }
+
+    public static int getImageFromDrawable(Context context, String name) {
+
+        return context.getResources().getIdentifier(name, "drawable", context.getPackageName());
+    }
 }

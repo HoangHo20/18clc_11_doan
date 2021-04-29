@@ -15,4 +15,5 @@
     <color name="background">#FFFFFFFF</color>
     <color name="unselect_icon">#0000FF</color>
     <color name="selected_icon">#C0C0C0</color>
+    <color name="blur_gray">#99151515</color>
 </resources>
