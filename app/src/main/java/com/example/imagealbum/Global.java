@@ -8,6 +8,7 @@ public class Global {
     public static final int SEND_IMAGE = 1;
     public static final int STORAGE_PERMISSION = 100;
     public static final int REQUEST_IMAGE_CAPTURE = 2;
+    public static final int REQUEST_VIDEO_CAPTURE = 3;
     public static final int ITEM_SIZE_GRID_LAYOUT_PORTRAIT = 4;
     public static final int ITEM_SIZE_GRID_LAYOUT_LANDSCAPE = 6;
     public static final int IMAGE_TYPE = 1;
