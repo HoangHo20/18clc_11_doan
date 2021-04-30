@@ -49,6 +49,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class HomeImageFragment extends Fragment {
     private static final int REQUEST_IMAGE_CAPTURE = 2;
+    private static final int REQUEST_VIDEO_CAPTURE = 3;
     private HomeImageViewModel homeImageViewModel;
     private HomeImageFragment context;
 
@@ -80,13 +81,11 @@ public class HomeImageFragment extends Fragment {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                try {
-//                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-//                } catch (ActivityNotFoundException e) {
-//                   e.printStackTrace();
-//                }
-                dispatchTakePictureIntent();
+                // take picture
+//                dispatchTakePictureIntent();
+
+                // record video
+
             }
         });
 
@@ -223,11 +222,12 @@ public class HomeImageFragment extends Fragment {
         }
         else if(requestCode == REQUEST_IMAGE_CAPTURE){
             if(resultCode == RESULT_OK){
-//                Bundle extras = data.getExtras();
-//                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//                Bitmap imageBitmap = (Bitmap) extras.get("data");
-//                homeImageViewModel.insertToDevice(getContext(), imageBitmap, "Image_" + timeStamp, "");
                 galleryAddPic();
+            }
+        }
+        else if(resultCode == REQUEST_VIDEO_CAPTURE){
+            if(resultCode == RESULT_OK){
+                Toast.makeText(getContext(), R.string.video_capture_success, Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -253,6 +253,13 @@ public class HomeImageFragment extends Fragment {
         // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    public void dispatchTakeVideoIntent() {
+        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        if (takeVideoIntent.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
+        }
     }
 
     public void dispatchTakePictureIntent() {
