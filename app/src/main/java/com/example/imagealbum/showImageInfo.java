@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,7 +24,7 @@ import java.util.Locale;
 
 public class showImageInfo extends AppCompatActivity {
     private image image;
-    private EditText uri;
+    private EditText path;
     private EditText name;
     private EditText size;
     private EditText date;
@@ -42,14 +41,14 @@ public class showImageInfo extends AppCompatActivity {
         String data = intent.getStringExtra("IMAGE");
         image = new Gson().fromJson(data, image.class);
 
-        uri = findViewById(R.id.showImageInfo_uri);
+        path = findViewById(R.id.showImageInfo_path);
         name = findViewById(R.id.showImageInfo_name);
         size = findViewById(R.id.showImageInfo_size);
         date = findViewById(R.id.showImageInfo_date);
         location = findViewById(R.id.showImageInfo_location);
         btn = findViewById(R.id.showImageInfo_btnDone);
 
-        uri.setText("URI: " + image.getImage_URI());
+        path.setText("Path: " + image.getPath());
         name.setText("Name: " + image.getImage_name());
         size.setText("Size: " + String.valueOf(image.getImage_size()));
         date.setText("Date: " + image.getDate());
@@ -65,7 +64,6 @@ public class showImageInfo extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resturnResult();
                 finish();
             }
         });
@@ -131,16 +129,4 @@ public class showImageInfo extends AppCompatActivity {
         return res;
     }
 
-
-    private void resturnResult(){
-        image.setLocation(location.getText().toString());
-        intent.putExtra("IMAGE", image.toJson());
-        setResult(Activity.RESULT_OK, intent);
-    }
-
-    @Override
-    public void onBackPressed() {
-        resturnResult();
-        finish();
-    }
 }

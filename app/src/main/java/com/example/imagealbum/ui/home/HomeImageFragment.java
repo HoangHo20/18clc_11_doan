@@ -31,18 +31,15 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.imagealbum.R;
-import com.example.imagealbum.image;
-import com.example.imagealbum.slideShow;
 import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+
 import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
