@@ -16,7 +16,7 @@
         android:textSize="30sp" />
 
     <EditText
-        android:id="@+id/showImageInfo_uri"
+        android:id="@+id/showImageInfo_path"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:editable="false"/>

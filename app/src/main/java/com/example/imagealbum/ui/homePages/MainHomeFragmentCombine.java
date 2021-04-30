@@ -242,22 +242,7 @@ public class MainHomeFragmentCombine extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         System.out.println("Receive, HomeImageFragment");
-        if (requestCode == Global.SEND_IMAGE){
-            if (resultCode == RESULT_OK){
-                String img = data.getStringExtra("IMAGE");
-                image new_img = new Gson().fromJson(img, image.class);
-                int pos = Integer.parseInt(data.getStringExtra("POS"));
-//                imageList.set(pos, new_img);
-//                adapter.notifyDataSetChanged();
-            }
-            else if(requestCode == Activity.RESULT_CANCELED){
-                String img = data.getStringExtra("IMAGE");
-                image new_img = new Gson().fromJson(img, image.class);
-                int pos = Integer.parseInt(data.getStringExtra("POS"));
-                mainHomeViewModelCombine.deleteImageInDevice(new_img, getContext());
-            }
-        }
-        else if(requestCode == Global.REQUEST_IMAGE_CAPTURE){
+        if(requestCode == Global.REQUEST_IMAGE_CAPTURE){
             if(resultCode == RESULT_OK){
 //                Bundle extras = data.getExtras();
 //                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());

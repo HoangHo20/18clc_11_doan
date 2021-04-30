@@ -105,7 +105,7 @@ public class viewImage extends AppCompatActivity {
             public void onClick(View v) {
                 Intent sendIntent = new Intent(viewImage.this, showImageInfo.class);
                 sendIntent.putExtra("IMAGE", image.toJson());
-                startActivityForResult(sendIntent, SEND_INFO);
+                startActivity(sendIntent);
             }
         });
 
@@ -256,19 +256,6 @@ public class viewImage extends AppCompatActivity {
     public void loadData(){
         SharedPreferences sharedPref = this.getSharedPreferences("NOTE_DATA", Context.MODE_PRIVATE);
         this.isEncrypted = sharedPref.getBoolean(image.getImage_URI().toString(), false);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SEND_INFO){
-            if (resultCode == Activity.RESULT_OK){
-                String str = data.getStringExtra("IMAGE");
-                if (str != null){
-                    this.image = new Gson().fromJson(str, image.class);
-                }
-            }
-        }
     }
 
     private void response(){

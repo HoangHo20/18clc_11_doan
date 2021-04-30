@@ -26,4 +26,5 @@
     <string name="permission_location_denied">Please allow app to access location</string>
     <string name="UnSynchronize_data">Unsynchronize data and UI</string>
     <string name="Load_video_error">An error occur when loading video</string>
+    <string name="video_capture_success">Video added to gallery</string>
 </resources>
