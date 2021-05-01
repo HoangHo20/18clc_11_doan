@@ -12,31 +12,36 @@
         android:layout_height="wrap_content"
         android:background="#ff0000ff"
         android:text="@string/showImageInfo_title"
-        android:textColor="#ffffffff"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:paddingLeft="5dp"
+        android:textColor="?android:textColor"/>
 
     <EditText
         android:id="@+id/showImageInfo_path"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="?android:textColor"
         android:editable="false"/>
 
     <EditText
         android:id="@+id/showImageInfo_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="?android:textColor"
         android:editable="false"/>
 
     <EditText
         android:id="@+id/showImageInfo_size"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="?android:textColor"
         android:editable="false"/>
 
     <EditText
         android:id="@+id/showImageInfo_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="?android:textColor"
         android:editable="false"/>
 
 

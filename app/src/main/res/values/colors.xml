@@ -10,10 +10,20 @@
     <color name="grey">#BFBFBF</color>
     <color name="medium_grey">#5C5858</color>
     <color name="colorPrimary">#BF3A3A</color>
-    <color name="background_selected">#0000FF</color>
+
+    <color name="background_selected">@color/purple_500</color>
     <color name="background_unselected">#FFFFFFFF</color>
+
     <color name="background">#FFFFFFFF</color>
     <color name="unselect_icon">#0000FF</color>
     <color name="selected_icon">#C0C0C0</color>
     <color name="blur_gray">#99151515</color>
+    <color name="text_color">#000000</color>
+
+    <color name="background_dark">#000000</color>
+    <color name="unselect_icon_dark">#C0C0C0</color>
+    <color name="selected_icon_dark">@color/purple_500</color>
+    <color name="blur_gray_dark">#99151515</color>
+    <color name="text_color_dark">#FFFFFF</color>
+    <color name="bottomNavigationView_mainActivityNavigation_dark">#C0C0C0</color>
 </resources>
