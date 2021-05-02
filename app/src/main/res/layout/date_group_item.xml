@@ -9,7 +9,7 @@
         android:layout_margin="10dp"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:text="@string/title_photos"/>
+        android:text="@string/title_photos" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/date_group_item_recycler"

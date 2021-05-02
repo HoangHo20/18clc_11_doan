@@ -109,4 +109,9 @@ public class MediaEntity {
 
         return false;
     }
+
+    public void setPassword(String password){this.password = password;}
+
+    public String getPassword(){return this.password;}
+    public MediaEntity(){}
 }

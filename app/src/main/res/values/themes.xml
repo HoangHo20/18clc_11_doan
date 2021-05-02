@@ -13,7 +13,8 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="android:textColor">@color/text_color</item>
-        <item name="android:colorSecondary">@color/purple_500</item>
+        <item name="android:colorSecondary">@color/unselect_icon</item>
+        <item name="android:itemBackground">@color/blur_gray</item>
     </style>
 
 

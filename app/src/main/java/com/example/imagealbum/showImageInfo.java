@@ -29,12 +29,19 @@ public class showImageInfo extends AppCompatActivity {
     private EditText size;
     private EditText date;
     private EditText location;
-    private Button btn;
     private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        int theme_id = Global.loadLastTheme(showImageInfo.this);
+        if(theme_id == 0){
+            setTheme(R.style.Theme_ImageAlbum);
+        }
+        else{
+            setTheme(R.style.Theme_ImageAlbumDark);
+        }
         setContentView(R.layout.activity_show_image_info);
 
         intent = this.getIntent();
@@ -46,7 +53,6 @@ public class showImageInfo extends AppCompatActivity {
         size = findViewById(R.id.showImageInfo_size);
         date = findViewById(R.id.showImageInfo_date);
         location = findViewById(R.id.showImageInfo_location);
-        btn = findViewById(R.id.showImageInfo_btnDone);
 
         path.setText("Path: " + image.getPath());
         name.setText("Name: " + image.getImage_name());
@@ -61,12 +67,6 @@ public class showImageInfo extends AppCompatActivity {
             location.setText("Location: Unknown");
         }
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
     }
 
     public String getAddress(){

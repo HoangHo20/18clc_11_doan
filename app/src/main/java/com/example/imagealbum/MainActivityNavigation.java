@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +30,14 @@ public class MainActivityNavigation extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        int theme_id = Global.loadLastTheme(MainActivityNavigation.this);
+        if(theme_id == 0){
+            setTheme(R.style.Theme_ImageAlbum);
+        }
+        else{
+            setTheme(R.style.Theme_ImageAlbumDark);
+        }
 
         int read = checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
         int write = checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);

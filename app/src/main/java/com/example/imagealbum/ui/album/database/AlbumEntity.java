@@ -50,4 +50,10 @@ public class AlbumEntity {
 
         return false;
     }
+
+    public AlbumEntity(){}
+    public void setPassword(String password){this.password = password;}
+
+    public String getPassword(){
+        return this.password;}
 }

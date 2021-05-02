@@ -1,6 +1,7 @@
 package com.example.imagealbum;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 
@@ -72,6 +73,12 @@ public class Global {
             }
         }
         return duration;
+    }
+
+    public static int loadLastTheme(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("THEME", Context.MODE_PRIVATE);
+        int temp = sharedPreferences.getInt("ID", 0);
+        return temp;
     }
 
     public static int getImageFromDrawable(Context context, String name) {

@@ -7,15 +7,6 @@
     android:background="@android:color/transparent"
     android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ff0000ff"
-        android:text="@string/showImageInfo_title"
-        android:textSize="30sp"
-        android:paddingLeft="5dp"
-        android:textColor="?android:textColor"/>
-
     <EditText
         android:id="@+id/showImageInfo_path"
         android:layout_width="match_parent"
@@ -51,11 +42,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:editable="false"/>
-
-
-    <Button
-        android:id="@+id/showImageInfo_btnDone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Done - Callback" />
 </LinearLayout>

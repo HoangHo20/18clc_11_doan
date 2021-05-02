@@ -31,6 +31,15 @@ public class slideShow extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        int theme_id = Global.loadLastTheme(slideShow.this);
+        if(theme_id == 0){
+            setTheme(R.style.Theme_ImageAlbum);
+        }
+        else{
+            setTheme(R.style.Theme_ImageAlbumDark);
+        }
+
         setContentView(R.layout.activity_slide_show);
 
         innit();

@@ -2,7 +2,9 @@ package com.example.imagealbum.ui.homePages;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -11,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -57,14 +61,24 @@ public class MainHomeFragmentCombine extends Fragment {
     private RecyclerView recyclerView;
     private MainHomeRecyclerViewCombine recyclerViewAdapter;
 
-    ImageView addBtn, deleteBtn, slideShowBtn, doneBtn;
+    ImageView addBtn, deleteBtn, slideShowBtn, doneBtn, setThemeBtn;
 
     private String currentPhotoPath = "none";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        Context contextWrapper = null;
+        int theme_id = Global.loadLastTheme(getContext());
+        System.out.println(theme_id);
+        if(theme_id == 0){
+            contextWrapper = new ContextThemeWrapper(getActivity(), R.style.Theme_ImageAlbum);
+        }
+        else{
+            contextWrapper = new ContextThemeWrapper(getActivity(), R.style.Theme_ImageAlbumDark);
+        }
+        LayoutInflater localInflater = inflater.cloneInContext(contextWrapper);
 
-        View root = inflater.inflate(R.layout.date_group_fragement, container, false);
+        View root = localInflater.inflate(R.layout.date_group_fragement, container, false);
         recyclerView = root.findViewById(R.id.date_group_fragment_recycler);
 
         //if there is no data loaded yet
@@ -84,6 +98,7 @@ public class MainHomeFragmentCombine extends Fragment {
         deleteBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_deleteBtn);
         slideShowBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_slideShowBtn);
         doneBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_doneBtn);
+        setThemeBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_setThemeBtn);
 
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +122,7 @@ public class MainHomeFragmentCombine extends Fragment {
                     slideShowBtn.setVisibility(View.INVISIBLE);
                     doneBtn.setVisibility(View.VISIBLE);
                     mainHomeViewModelCombine.setInDeleteMode(Global.DELETE_MODE_ON);
+                    setThemeBtn.setVisibility(View.INVISIBLE);
                     setInSelectedMode(Global.SELECTED_MODE_ON);
                 }
                 else{
@@ -114,6 +130,7 @@ public class MainHomeFragmentCombine extends Fragment {
                     addBtn.setVisibility(View.VISIBLE);
                     slideShowBtn.setVisibility(View.VISIBLE);
                     doneBtn.setVisibility(View.INVISIBLE);
+                    setThemeBtn.setVisibility(View.VISIBLE);
                     mainHomeViewModelCombine.setInDeleteMode(Global.DELETE_MODE_OFF);
                     setInSelectedMode(Global.SELECTED_MODE_OFF);
                     mainHomeViewModelCombine.deSelectedAll();
@@ -130,6 +147,7 @@ public class MainHomeFragmentCombine extends Fragment {
                     deleteBtn.setVisibility(View.INVISIBLE);
                     doneBtn.setVisibility(View.VISIBLE);
                     mainHomeViewModelCombine.setInSlideShow(Global.SLIDE_SHOW_MODE_ON);
+                    setThemeBtn.setVisibility(View.INVISIBLE);
                     setInSelectedMode(Global.SELECTED_MODE_ON);
                 }
                 else{
@@ -137,6 +155,7 @@ public class MainHomeFragmentCombine extends Fragment {
                     addBtn.setVisibility(View.VISIBLE);
                     deleteBtn.setVisibility(View.VISIBLE);
                     doneBtn.setVisibility(View.INVISIBLE);
+                    setThemeBtn.setVisibility(View.VISIBLE);
                     mainHomeViewModelCombine.setInSlideShow(Global.SLIDE_SHOW_MODE_OFF);
                     setInSelectedMode(Global.SELECTED_MODE_OFF);
                     mainHomeViewModelCombine.deSelectedAll();
@@ -184,7 +203,23 @@ public class MainHomeFragmentCombine extends Fragment {
                 }
                 addBtn.setVisibility(View.VISIBLE);
                 doneBtn.setVisibility(View.INVISIBLE);
+                setThemeBtn.setVisibility(View.VISIBLE);
                 setInSelectedMode(Global.SELECTED_MODE_OFF);
+            }
+        });
+
+
+        setThemeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getContext().getSharedPreferences("THEME", Context.MODE_PRIVATE);
+                int temp = sharedPreferences.getInt("ID", 0);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("ID", (temp + 1) % 2);
+                editor.apply();
+
+                // Refresh fragment to apply new theme
+
             }
         });
     }

@@ -71,7 +71,14 @@ public class viewImage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.view_image);
+
+        int theme_id = Global.loadLastTheme(viewImage.this);
+        if(theme_id == 0){
+            setTheme(R.style.Theme_ImageAlbum);
+        }
+        else{
+            setTheme(R.style.Theme_ImageAlbumDark);
+        }
 
         //Hide tool bar
         try

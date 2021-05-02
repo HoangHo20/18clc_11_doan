@@ -1,7 +1,9 @@
 package com.example.imagealbum.ui.homePages;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.imagealbum.Global;
 import com.example.imagealbum.R;
 import com.example.imagealbum.ui.home.HomeImageFragment;
 import com.example.imagealbum.ui.home.HomeImageFragmentByDate;
@@ -25,7 +28,16 @@ public class MainHomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.tabs_fragment, container, false);
+        Context contextWrapper = null;
+        int theme_id = Global.loadLastTheme(getContext());
+        if(theme_id == 0){
+            contextWrapper = new ContextThemeWrapper(getActivity(), R.style.Theme_ImageAlbum);
+        }
+        else{
+            contextWrapper = new ContextThemeWrapper(getActivity(), R.style.Theme_ImageAlbumDark);
+        }
+        LayoutInflater localInflater = inflater.cloneInContext(contextWrapper);
+        View view = localInflater.inflate(R.layout.tabs_fragment, container, false);
         // Setting ViewPager for each Tabs
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         setupViewPager(viewPager);

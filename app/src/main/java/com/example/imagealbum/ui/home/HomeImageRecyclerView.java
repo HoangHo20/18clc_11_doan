@@ -114,7 +114,14 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
         //     holder.itemView.setBackgroundColor(context.getColor(R.color.background_selected));
         }
         else {
-            holder.itemView.setBackgroundColor(context.getColor(R.color.background_unselected));
+            if(Global.loadLastTheme(context) == 0)
+            {
+                holder.itemView.setBackgroundColor(context.getColor(R.color.background));
+            }
+            else{
+                holder.itemView.setBackgroundColor(context.getColor(R.color.background_dark));
+            }
+
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -123,7 +130,13 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
                 if(inSelectionMode){
                     if(image_res.isSelected()){
                         image_res.setSelectedMode(Global.SELECTED_MODE_OFF);
-                        holder.itemView.setBackgroundColor(context.getColor(R.color.background_unselected));
+                        if(Global.loadLastTheme(context) == 0)
+                        {
+                            holder.itemView.setBackgroundColor(context.getColor(R.color.background));
+                        }
+                        else{
+                            holder.itemView.setBackgroundColor(context.getColor(R.color.background_dark));
+                        }
                     }
                     else{
                         image_res.setSelectedMode(Global.SELECTED_MODE_ON);
