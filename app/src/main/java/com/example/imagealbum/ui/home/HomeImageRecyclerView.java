@@ -109,7 +109,7 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
         }
 
         if(image_res.isSelected()){
-            holder.itemView.setBackgroundColor(Color.BLUE);
+            holder.itemView.setBackgroundColor(context.getColor(R.color.background_selected));
         // if(selectedImages.contains(position)){
         //     holder.itemView.setBackgroundColor(context.getColor(R.color.background_selected));
         }
@@ -123,11 +123,11 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
                 if(inSelectionMode){
                     if(image_res.isSelected()){
                         image_res.setSelectedMode(Global.SELECTED_MODE_OFF);
-                        holder.itemView.setBackgroundColor(Color.WHITE);
+                        holder.itemView.setBackgroundColor(context.getColor(R.color.background_unselected));
                     }
                     else{
                         image_res.setSelectedMode(Global.SELECTED_MODE_ON);
-                        holder.itemView.setBackgroundColor(Color.BLUE);
+                        holder.itemView.setBackgroundColor(context.getColor(R.color.background_selected));
                     }
                     // if(selectedImages.contains(position)){
                     //     selectedImages.remove(new Integer(position));
