@@ -27,4 +27,6 @@
     <string name="UnSynchronize_data">Unsynchronize data and UI</string>
     <string name="Load_video_error">An error occur when loading video</string>
     <string name="video_capture_success">Video added to gallery</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="record_video">Record Video</string>
 </resources>

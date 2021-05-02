@@ -18,6 +18,10 @@ android {
 
     buildTypes {
         release {
+            buildConfigField "String", "DATABASE_NAME", "imageAlbumDB"
+            buildConfigField "String", "ALBUM_TABLE",   "albumTable"
+            buildConfigField "String", "MEDIA_TABLE",   "mediaTable"
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -76,4 +80,9 @@ dependencies {
     implementation 'com.github.Nikoloutsos:KLoadingSpin:1.1.0'
     implementation 'gun0912.ted:tedpermission:2.2.3'
 
+    //Database DAOs
+    def room_version = "2.3.0"
+
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
 }

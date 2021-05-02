@@ -11,14 +11,30 @@
         android:layout_marginEnd="2sp"
         >
 
-        <ImageView
-            android:id="@+id/camera_fragment_takePicture_imageView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/girl_taking_picture"
-            android:foreground="@color/blur_gray"
-            android:scaleType="centerCrop"
-            />
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/camera_fragment_takePicture_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/girl_taking_picture"
+                android:foreground="@color/blur_gray"
+                android:scaleType="centerCrop"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="50sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:text="@string/take_photo"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
 
@@ -28,14 +44,29 @@
         android:layout_weight="1"
         android:layout_marginStart="2sp"
         >
-
-        <ImageView
-            android:id="@+id/camera_fragment_recordVideo_imageView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/girl_taking_picture"
-            android:foreground="@color/blur_gray"
-            android:scaleType="centerCrop"/>
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/camera_fragment_recordVideo_imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/girl_taking_picture"
+                android:foreground="@color/blur_gray"
+                android:scaleType="centerCrop"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="50sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:text="@string/record_video"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
 </LinearLayout>
