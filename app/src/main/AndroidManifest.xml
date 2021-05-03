@@ -17,6 +17,7 @@
     <uses-feature android:name="android.hardware.camera"
         android:required="false" />
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -33,7 +34,8 @@
         <activity
             android:name=".showAlbum"
             android:label="@string/title_activity_show_album" />
-        <activity android:name=".MainActivityNavigation">
+        <activity android:name=".MainActivityNavigation"
+            android:configChanges="locale|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

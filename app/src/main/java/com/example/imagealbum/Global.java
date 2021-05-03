@@ -81,6 +81,12 @@ public class Global {
         return temp;
     }
 
+    public static int loadLastLanguage(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("LANG", Context.MODE_PRIVATE);
+        int temp = sharedPreferences.getInt("ID", 0);
+        return temp;
+    }
+
     public static int getImageFromDrawable(Context context, String name) {
 
         return context.getResources().getIdentifier(name, "drawable", context.getPackageName());

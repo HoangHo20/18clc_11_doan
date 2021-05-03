@@ -54,10 +54,10 @@ public class showImageInfo extends AppCompatActivity {
         date = findViewById(R.id.showImageInfo_date);
         location = findViewById(R.id.showImageInfo_location);
 
-        path.setText("Path: " + image.getPath());
-        name.setText("Name: " + image.getImage_name());
-        size.setText("Size: " + String.valueOf(image.getImage_size()));
-        date.setText("Date: " + image.getDate());
+        path.setText(image.getPath());
+        name.setText(image.getImage_name());
+        size.setText(String.valueOf(image.getImage_size()));
+        date.setText(image.getDate());
 
         String address = getAddress();
         if(!address.equals("")){

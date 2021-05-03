@@ -12,7 +12,7 @@
     <string name="title_home">Home</string>
     <string name="title_photos">Photos</string>
     <string name="title_video">Video</string>
-    <string name="no_photo_selected_slideShow">No photo selected for slideshow</string>
+    <string name="no_photo_selected_slideShow">Select at least 2 pictures for slide show</string>
     <string name="viewImage_nullBitmap">Can not get bitmap</string>
     <string name="set_wallpaper_success">Wallpaper set!</string>
     <string name="set_wallpaper_fail">Can not set wallpaper</string>

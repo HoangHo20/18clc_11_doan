@@ -1,10 +1,13 @@
 package com.example.imagealbum.ui.homePages;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -12,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -34,6 +38,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.imagealbum.Global;
+import com.example.imagealbum.LocaleHelper;
 import com.example.imagealbum.R;
 import com.example.imagealbum.image;
 import com.example.imagealbum.slideShow;
@@ -48,6 +53,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
@@ -61,7 +67,7 @@ public class MainHomeFragmentCombine extends Fragment {
     private RecyclerView recyclerView;
     private MainHomeRecyclerViewCombine recyclerViewAdapter;
 
-    ImageView addBtn, deleteBtn, slideShowBtn, doneBtn, setThemeBtn;
+    ImageView deleteBtn, slideShowBtn, doneBtn, setThemeBtn, setLangBtn;
 
     private String currentPhotoPath = "none";
 
@@ -94,43 +100,31 @@ public class MainHomeFragmentCombine extends Fragment {
     }
 
     private void init_button(View root) {
-        addBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_addBtn);
         deleteBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_deleteBtn);
         slideShowBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_slideShowBtn);
         doneBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_doneBtn);
         setThemeBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_setThemeBtn);
+        setLangBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_setLangBtn);
 
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                try {
-//                    startActivityForResult(takePictureIntent, Global.REQUEST_IMAGE_CAPTURE);
-//                } catch (ActivityNotFoundException e) {
-//                    e.printStackTrace();
-//                }
-                dispatchTakePictureIntent();
-            }
-        });
 
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!mainHomeViewModelCombine.isInDeleteMode()){
                     deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_selected);
-                    addBtn.setVisibility(View.INVISIBLE);
                     slideShowBtn.setVisibility(View.INVISIBLE);
                     doneBtn.setVisibility(View.VISIBLE);
                     mainHomeViewModelCombine.setInDeleteMode(Global.DELETE_MODE_ON);
                     setThemeBtn.setVisibility(View.INVISIBLE);
+                    setLangBtn.setVisibility(View.INVISIBLE);
                     setInSelectedMode(Global.SELECTED_MODE_ON);
                 }
                 else{
                     deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_unselect);
-                    addBtn.setVisibility(View.VISIBLE);
                     slideShowBtn.setVisibility(View.VISIBLE);
                     doneBtn.setVisibility(View.INVISIBLE);
                     setThemeBtn.setVisibility(View.VISIBLE);
+                    setLangBtn.setVisibility(View.VISIBLE);
                     mainHomeViewModelCombine.setInDeleteMode(Global.DELETE_MODE_OFF);
                     setInSelectedMode(Global.SELECTED_MODE_OFF);
                     mainHomeViewModelCombine.deSelectedAll();
@@ -143,19 +137,19 @@ public class MainHomeFragmentCombine extends Fragment {
             public void onClick(View v) {
                 if (!mainHomeViewModelCombine.isInSlideShow()){
                     slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_selected);
-                    addBtn.setVisibility(View.INVISIBLE);
                     deleteBtn.setVisibility(View.INVISIBLE);
                     doneBtn.setVisibility(View.VISIBLE);
                     mainHomeViewModelCombine.setInSlideShow(Global.SLIDE_SHOW_MODE_ON);
                     setThemeBtn.setVisibility(View.INVISIBLE);
+                    setLangBtn.setVisibility(View.INVISIBLE);
                     setInSelectedMode(Global.SELECTED_MODE_ON);
                 }
                 else{
                     slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_unselect);
-                    addBtn.setVisibility(View.VISIBLE);
                     deleteBtn.setVisibility(View.VISIBLE);
                     doneBtn.setVisibility(View.INVISIBLE);
                     setThemeBtn.setVisibility(View.VISIBLE);
+                    setLangBtn.setVisibility(View.VISIBLE);
                     mainHomeViewModelCombine.setInSlideShow(Global.SLIDE_SHOW_MODE_OFF);
                     setInSelectedMode(Global.SELECTED_MODE_OFF);
                     mainHomeViewModelCombine.deSelectedAll();
@@ -201,8 +195,8 @@ public class MainHomeFragmentCombine extends Fragment {
                     deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_unselect);
                     mainHomeViewModelCombine.setInDeleteMode(Global.DELETE_MODE_OFF);
                 }
-                addBtn.setVisibility(View.VISIBLE);
                 doneBtn.setVisibility(View.INVISIBLE);
+                setLangBtn.setVisibility(View.VISIBLE);
                 setThemeBtn.setVisibility(View.VISIBLE);
                 setInSelectedMode(Global.SELECTED_MODE_OFF);
             }
@@ -219,6 +213,39 @@ public class MainHomeFragmentCombine extends Fragment {
                 editor.apply();
 
                 // Refresh fragment to apply new theme
+
+            }
+        });
+
+
+        setLangBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getContext().getSharedPreferences("LANG", Context.MODE_PRIVATE);
+                int temp = sharedPreferences.getInt("ID", 0);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("ID", (temp + 1) % 2);
+                editor.apply();
+
+                String lang = "";
+                if((temp + 1) % 2 == 0){
+                    lang = "en";
+                }
+                else{
+                    lang = "vi";
+                }
+
+                // updating the language for devices above android nougat
+                Context context = LocaleHelper.setLocale(getContext(), lang);
+
+                if((temp + 1) % 2 == 0){
+                    Toast.makeText(getContext(), "Switch to English", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getContext(), "Tiếng Việt", Toast.LENGTH_SHORT).show();
+                }
+
+                // Refresh fragment to apply new language
 
             }
         });

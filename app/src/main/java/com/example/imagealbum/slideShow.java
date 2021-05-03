@@ -2,6 +2,7 @@ package com.example.imagealbum;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,6 +28,12 @@ public class slideShow extends AppCompatActivity {
     private SliderView sliderView;
     private SliderAdapter adapter;
     Intent intent;
+
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

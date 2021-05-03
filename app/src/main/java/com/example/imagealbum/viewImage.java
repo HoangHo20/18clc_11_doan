@@ -67,6 +67,10 @@ public class viewImage extends AppCompatActivity {
     private ImageView encrypt_decryptBtn;
     private boolean isEncrypted = false;
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LocaleHelper.onAttach(newBase));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Album anhr</string>
+    <string name="loading">Đang tải</string>
+    <string name="title_activity_show_album">Thư viện ảnh</string>
+    <string name="newAlbum_activity_name">Album mới</string>
+    <string name="textHint_name">Tên</string>
+    <string name="createBtn">Tạo</string>
+    <string name="action_settings">Cài đặt</string>
+    <string name="toolbar_imageView_title">Chi tiết ảnh</string>
+    <string name="showImageInfo_title">Thông tin ảnh</string>
+    <string name="toolbar_showAlbum_title">Album</string>
+    <string name="title_home">Trang chính</string>
+    <string name="title_photos">Ảnh</string>
+    <string name="title_video">Video</string>
+    <string name="no_photo_selected_slideShow">Chọn hai ảnh hoặc nhiều hơn để trình chiếu</string>
+    <string name="viewImage_nullBitmap">Lỗi: Không thể lấy bitmap</string>
+    <string name="set_wallpaper_success">Đã đặt hình nền</string>
+    <string name="set_wallpaper_fail">Không thể đặt hình nền</string>
+    <string name="permission_granted">Xin quyền thành công</string>
+    <string name="permission_denied">Xin quyền thất bại</string>
+    <string name="title_camera">Camera</string>
+    <string name="title_albums">Albums</string>
+    <string name="copy_to_clipboard">Đã lưu vô clipboard</string>
+    <string name="encrypt_success">Đã mã hóa</string>
+    <string name="decrypt_success">Đã giải mã</string>
+    <string name="permission_location_denied">Vui lòng cho phép dứng dụng truy cập vị trí</string>
+    <string name="UnSynchronize_data">Lỗi: Bất đồng bộ giữa dữ liệu và UI</string>
+    <string name="Load_video_error">Lỗi khi nạp video</string>
+    <string name="video_capture_success">Video đã thêm vào thư viện</string>
+    <string name="take_photo">Chụp hình</string>
+    <string name="record_video">Quay video</string>
+</resources>

@@ -9,6 +9,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
+        <ImageView
+            android:id="@+id/actionBar_showAlbum_setLangBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/actionBar_showAlbum_setThemeBtn"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_baseline_language_24"
+            android:clickable="true"/>
+
         <ImageView
             android:id="@+id/actionBar_showAlbum_setThemeBtn"
             android:layout_width="wrap_content"
@@ -36,21 +48,11 @@
             android:id="@+id/actionBar_showAlbum_deleteBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@+id/actionBar_showAlbum_addBtn"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="20dp"
             android:src="@drawable/ic_baseline_delete_24_unselect"
             android:clickable="true"/>
 
-        <ImageView
-            android:id="@+id/actionBar_showAlbum_addBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_add_24_unselected"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="20dp"
-            android:clickable="true"/>
 
         <ImageView
             android:id="@+id/actionBar_showAlbum_doneBtn"
