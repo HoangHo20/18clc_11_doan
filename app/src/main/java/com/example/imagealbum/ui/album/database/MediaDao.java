@@ -20,6 +20,11 @@ public interface MediaDao {
             + " WHERE " + Global.MEDIA_COLUMN.ALBUM_ID + " = :id")
     public List<MediaEntity> getItemByAlbumID(int id);
 
+    @Query("SELECT * FROM "
+            + Global.MEDIA_TABLE
+            + " WHERE " + Global.MEDIA_COLUMN.ALBUM_ID + " = :id LIMIT 1")
+    public MediaEntity getOneItemByAlbumID(int id);
+
     @Insert
     public void insert(MediaEntity media);
 

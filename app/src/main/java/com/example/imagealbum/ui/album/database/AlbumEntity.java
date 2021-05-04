@@ -24,6 +24,17 @@ public class AlbumEntity {
     private String password;
 
     @Ignore
+    public MediaEntity avatar = null;
+
+    @Ignore
+    public int size;
+
+    @Ignore
+    public boolean isPrivate() {
+        return this.password != null && !this.password.isEmpty();
+    }
+
+    @Ignore
     public AlbumEntity(String name) {
         this.name = name;
     }
@@ -33,12 +44,12 @@ public class AlbumEntity {
     }
 
     public boolean checkPassword(String Password) {
-        if (this.password == null | this.password.isEmpty()) {
+        if (this.password == null || this.password.isEmpty()) {
             return true;
         } else {
             return Password != null
-                    & !Password.isEmpty()
-                    & this.password.equals(Password);
+                    && !Password.isEmpty()
+                    && this.password.equals(Password);
         }
     }
 
@@ -51,9 +62,36 @@ public class AlbumEntity {
         return false;
     }
 
-    public AlbumEntity(){}
+    public AlbumEntity(String name, String password){
+        this.name = name;
+        this.password = password;
+    }
+
     public void setPassword(String password){this.password = password;}
 
-    public String getPassword(){
-        return this.password;}
+    public String getPassword() {
+        return this.password;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void changeName(String newName) {
+        if (newName != null && !newName.isEmpty()) {
+            this.name = newName;
+        }
+    }
+
+    public int getSize() {
+        return this.size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public void setAvatar(MediaEntity avatar) {
+        this.avatar = avatar;
+    }
 }

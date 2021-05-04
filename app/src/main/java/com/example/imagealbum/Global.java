@@ -8,7 +8,7 @@ import android.net.Uri;
 public class Global {
     // ------------------ Database connect ------------------
     public static final String DATABASE_NAME = "imageAlbumDB";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     // ALBUM_TABLE Columns names
     public static final String ALBUM_TABLE = "albumTable";
@@ -16,6 +16,10 @@ public class Global {
         public static final String _ID = "id";
         public static final String NAME = "name";
         public static final String PASSWORD = "password";
+    }
+    // -- Favorite album
+    public static final class FAVORITE_ALBUM {
+        public static final String name = "Favorite";
     }
 
     // MEDIA_TABLE Columns names
@@ -38,6 +42,8 @@ public class Global {
     public static final int STORAGE_PERMISSION = 100;
     public static final int REQUEST_IMAGE_CAPTURE = 2;
     public static final int REQUEST_VIDEO_CAPTURE = 3;
+    public static final int REQUEST_CREATE_ALBUM = 10;
+    public static final int REQUEST_GET_PICTURE = 123;
     public static final int ITEM_SIZE_GRID_LAYOUT_PORTRAIT = 4;
     public static final int ITEM_SIZE_GRID_LAYOUT_LANDSCAPE = 6;
     public static final boolean SELECTED_MODE_ON = true;
@@ -47,6 +53,8 @@ public class Global {
     public static final boolean SLIDE_SHOW_MODE_ON = true;
     public static final boolean SLIDE_SHOW_MODE_OFF = false;
     public static final String VIDEO_CURRENT_POSITION_STRING_NAME = "VideoCurPos";
+    public static final int ITEM_SIZE_GRID_LAYOUT_ALBUM = 2;
+    public static final String SHOW_ALBUM_EXTRA_SERIALIZE_NAME = "AlbumEntity";
     // ------------------------------------------------------
     /**
      * <p>Get video duration from file path</p>

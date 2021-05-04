@@ -35,7 +35,7 @@ public class MediaEntity {
     @ColumnInfo(name = Global.MEDIA_COLUMN.STATUS)
     public String status;
 
-    @ColumnInfo(name = Global.MEDIA_COLUMN.ALBUM_ID)
+    @ColumnInfo(name = Global.MEDIA_COLUMN.ALBUM_ID, index = true)
     public int albumID;
 
     @Ignore
@@ -92,12 +92,12 @@ public class MediaEntity {
     }
 
     public boolean checkPassword(String Password) {
-        if (this.password == null | this.password.isEmpty()) {
+        if (this.password == null || this.password.isEmpty()) {
             return true;
         } else {
             return Password != null
-                    & !Password.isEmpty()
-                    & this.password.equals(Password);
+                    && !Password.isEmpty()
+                    && this.password.equals(Password);
         }
     }
 

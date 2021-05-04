@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Album anhr</string>
+    <string name="app_name">Album ảnh</string>
     <string name="loading">Đang tải</string>
     <string name="title_activity_show_album">Thư viện ảnh</string>
     <string name="newAlbum_activity_name">Album mới</string>
@@ -30,4 +30,10 @@
     <string name="video_capture_success">Video đã thêm vào thư viện</string>
     <string name="take_photo">Chụp hình</string>
     <string name="record_video">Quay video</string>
+    <string name="name_title">Tên:</string>
+    <string name="title">Tiêu đề:</string>
+    <string name="album_name_title">Tên Album:</string>
+    <string name="password_title">Mật khẩu:</string>
+    <string name="confirm_password_title">Xác nhận mật khẩu:</string>
+    <string name="create_album_note">Lưu ý: vui lòng để trống Mật khẩu nếu để album ở chế độ public\nAlbum có Mật khẩu sẽ mã hóa các file bên trong nó và các file đó sẽ thể xem được ở ngoài nó.</string>
 </resources>

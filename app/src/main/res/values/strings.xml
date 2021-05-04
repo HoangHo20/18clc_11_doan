@@ -29,4 +29,17 @@
     <string name="video_capture_success">Video added to gallery</string>
     <string name="take_photo">Take Photo</string>
     <string name="record_video">Record Video</string>
+    <string name="name_title">Name:</string>
+    <string name="title">Title:</string>
+    <string name="album_name_title">Album name:</string>
+    <string name="password_title">Password:</string>
+    <string name="confirm_password_title">Confirm password:</string>
+    <string name="create_album_note">Note: lets the password fields empty to set album to public. \nAlbum has password will encrypt all media files in it and could not be seen from outside.</string>
+    <string name="create_album">Create Album</string>
+    <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
+    <string name="warning_album_name_exist">Album\'s name already exist!!</string>
+    <string name="warning_password_not_match">Passwords not match</string>
+    <string name="enter_password">Enter password</string>
+    <string name="please_enter_password">Please enter password</string>
 </resources>
