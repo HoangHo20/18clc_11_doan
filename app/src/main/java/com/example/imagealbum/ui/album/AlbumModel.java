@@ -8,6 +8,7 @@ import com.example.imagealbum.ui.album.database.MediaDao;
 import com.example.imagealbum.ui.album.database.MediaEntity;
 import com.example.imagealbum.ui.album.database.database;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AlbumModel {
@@ -34,6 +35,14 @@ public class AlbumModel {
         return database.getInstance(context)
                 .albumDao()
                 .getAlbumByName(name);
+    }
+
+    public AlbumEntity getAlbumByID(int id) {
+        if (context == null) return null;
+
+        return database.getInstance(context)
+                .albumDao()
+                .getAlbumByID(id);
     }
 
     public void insertAlbum(AlbumEntity album) {
@@ -87,6 +96,14 @@ public class AlbumModel {
             database.getInstance(context)
                     .mediaDao()
                     .insert(media);
+        }
+    }
+
+    public void insertMedia(ArrayList<MediaEntity> mediaEntities) {
+        if (context != null) {
+            database.getInstance(context)
+                    .mediaDao()
+                    .insertMany(mediaEntities);
         }
     }
 

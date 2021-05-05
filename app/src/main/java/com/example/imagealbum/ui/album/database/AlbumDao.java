@@ -19,7 +19,7 @@ public interface AlbumDao {
     @Query("SELECT * FROM "
             + Global.ALBUM_TABLE
             + " WHERE " + Global.ALBUM_COLUMN._ID + " = :id")
-    List<AlbumEntity> getAlbumByID(int id);
+    AlbumEntity getAlbumByID(int id);
 
     @Query("SELECT * FROM "
             + Global.ALBUM_TABLE

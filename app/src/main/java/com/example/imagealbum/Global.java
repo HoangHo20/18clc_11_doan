@@ -12,6 +12,7 @@ public class Global {
 
     // ALBUM_TABLE Columns names
     public static final String ALBUM_TABLE = "albumTable";
+
     public static final class ALBUM_COLUMN {
         public static final String _ID = "id";
         public static final String NAME = "name";
@@ -43,7 +44,9 @@ public class Global {
     public static final int REQUEST_IMAGE_CAPTURE = 2;
     public static final int REQUEST_VIDEO_CAPTURE = 3;
     public static final int REQUEST_CREATE_ALBUM = 10;
+    public static final int REQUEST_ENTER_PASSWORD = 23;
     public static final int REQUEST_GET_PICTURE = 123;
+    public static final int REQUEST_GET_VIDEO = 321;
     public static final int ITEM_SIZE_GRID_LAYOUT_PORTRAIT = 4;
     public static final int ITEM_SIZE_GRID_LAYOUT_LANDSCAPE = 6;
     public static final boolean SELECTED_MODE_ON = true;
@@ -55,6 +58,7 @@ public class Global {
     public static final String VIDEO_CURRENT_POSITION_STRING_NAME = "VideoCurPos";
     public static final int ITEM_SIZE_GRID_LAYOUT_ALBUM = 2;
     public static final String SHOW_ALBUM_EXTRA_SERIALIZE_NAME = "AlbumEntity";
+    public static final String SHOW_ALBUM_EXTRA_ALBUM_ID = "AlbumID";
     // ------------------------------------------------------
     /**
      * <p>Get video duration from file path</p>

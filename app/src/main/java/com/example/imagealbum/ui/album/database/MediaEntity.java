@@ -1,5 +1,6 @@
 package com.example.imagealbum.ui.album.database;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 import androidx.annotation.NonNull;
@@ -39,11 +40,22 @@ public class MediaEntity {
     public int albumID;
 
     @Ignore
+    public Bitmap bitmap;
+
+    @Ignore
     public MediaEntity(Uri uri, String path, int type, String status, int albumID) {
         this.uri = uri.toString();
         this.path = path;
         this.type = type;
         this.status = status;
+        this.albumID = albumID;
+    }
+
+    @Ignore
+    public MediaEntity(Uri uri, String path, int type, int albumID) {
+        this.uri = uri.toString();
+        this.path = path;
+        this.type = type;
         this.albumID = albumID;
     }
 
@@ -113,5 +125,18 @@ public class MediaEntity {
     public void setPassword(String password){this.password = password;}
 
     public String getPassword(){return this.password;}
+
     public MediaEntity(){}
+
+    public Bitmap getBitmap() {
+        return this.bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
+    public boolean isImage() {
+        return this.type == Global.IMAGE_TYPE;
+    }
 }

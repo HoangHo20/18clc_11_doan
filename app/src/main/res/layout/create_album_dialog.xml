@@ -25,7 +25,7 @@
             android:inputType="text"/>
     </LinearLayout>
 
-    <include layout="@layout/password_and_confirmPassword_form"/>
+    <include layout="@layout/password_and_confirm_password_form"/>
 
     <TextView
         android:id="@+id/album_dialog_warning"

@@ -36,4 +36,13 @@
     <string name="password_title">Mật khẩu:</string>
     <string name="confirm_password_title">Xác nhận mật khẩu:</string>
     <string name="create_album_note">Lưu ý: vui lòng để trống Mật khẩu nếu để album ở chế độ public\nAlbum có Mật khẩu sẽ mã hóa các file bên trong nó và các file đó sẽ thể xem được ở ngoài nó.</string>
+    <string name="create_album">Tạo Album</string>
+    <string name="cancel">Hủy</string>
+    <string name="done">Hoàn thành</string>
+    <string name="warning_album_name_exist">Album này đã tồn tại!!</string>
+    <string name="warning_password_not_match">Mật khẩu không trùng nhau</string>
+    <string name="enter_password">Nhập mật khẩu</string>
+    <string name="please_enter_password">Vui lòng nhập mật khẩu</string>
+    <string name="wrong_password">Sai mật khẩu</string>
+    <string name="error_load_album">Có lỗi sảy ra khi load ảnh của album</string>
 </resources>

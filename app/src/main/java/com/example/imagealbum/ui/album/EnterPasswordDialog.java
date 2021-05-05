@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -56,8 +57,10 @@ public class EnterPasswordDialog extends AppCompatDialogFragment {
                         String password = passwordInput.getText().toString();
 
                         if (listener.isPasswordCorrect(password)) {
-                            listener.openAlbum();
+                            listener.callBackAction();
                             requireDialog().dismiss();
+                        } else {
+                            Toast.makeText(requireContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -81,6 +84,6 @@ public class EnterPasswordDialog extends AppCompatDialogFragment {
 
     public interface EnterPasswordDialogListener {
         public boolean isPasswordCorrect(String password);
-        public void openAlbum();
+        public void callBackAction();
     }
 }

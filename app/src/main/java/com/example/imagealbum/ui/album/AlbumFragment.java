@@ -21,23 +21,28 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.imagealbum.Album;
 import com.example.imagealbum.Global;
 import com.example.imagealbum.R;
 import com.example.imagealbum.ui.album.database.AlbumEntity;
+import com.example.imagealbum.ui.album.showalbum.ShowAlbumActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class AlbumFragment extends Fragment
         implements CreateAlbumDialog.CreateAlbumDialogListener,
         EnterPasswordDialog.EnterPasswordDialogListener,
-        AlbumRecyclerAdapter.RecyclerViewAdapterListener {
+        AlbumRecyclerAdapter.RecyclerViewAdapterListener, Serializable {
     private AlbumViewModel albumViewModel;
+    private AlbumRecyclerAdapter.RecyclerViewAdapterListener adapterCallbackListener;
 
     private RecyclerView recyclerView;
     private AlbumRecyclerAdapter recyclerAdapter = null;
 
     private FloatingActionButton fab;
+    private AlbumEntity currentAlbum;
 
     Observer<List<AlbumEntity>> albumsUpdateObserver;
 
@@ -47,6 +52,7 @@ public class AlbumFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        adapterCallbackListener = this;
         Context contextWrapper = null;
         int theme_id = Global.loadLastTheme(requireContext());
         System.out.println(theme_id);
@@ -108,7 +114,7 @@ public class AlbumFragment extends Fragment
             @Override
             public void onChanged(List<AlbumEntity> albumEntities) {
                 if (recyclerAdapter == null) {
-                    recyclerAdapter = new AlbumRecyclerAdapter(requireContext(), albumEntities);
+                    recyclerAdapter = new AlbumRecyclerAdapter(requireContext(), adapterCallbackListener, albumEntities);
                     recyclerView.setLayoutManager(new GridLayoutManager(requireContext(), Global.ITEM_SIZE_GRID_LAYOUT_ALBUM));
                     recyclerView.setAdapter(recyclerAdapter);
                 } else {
@@ -160,20 +166,37 @@ public class AlbumFragment extends Fragment
     }
 
     // ----------------- Enter Album password dialog ------------------
-    @Override
-    public boolean isPasswordCorrect(String password) {
-        return false;
+    private void openEnterPasswordDialog() {
+        EnterPasswordDialog dialog = new EnterPasswordDialog();
+        dialog.setTargetFragment(AlbumFragment.this, Global.REQUEST_ENTER_PASSWORD);
+        dialog.show(getParentFragmentManager(), "Enter password dialog");
     }
 
     @Override
-    public void openAlbum() {
+    public boolean isPasswordCorrect(String password) {
+        return this.currentAlbum.checkPassword(password);
+    }
 
+    @Override
+    public void callBackAction() {
+        // TODO: open album
+        Toast.makeText(requireContext(), this.currentAlbum.getName() + "Opening ... ", Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(requireActivity(), ShowAlbumActivity.class);
+        intent.putExtra(Global.SHOW_ALBUM_EXTRA_ALBUM_ID, this.currentAlbum.getID());
+        startActivity(intent);
     }
 
     // ----------------- Recycler item click ------------------
     @Override
     public void onRecyclerAdapterClick(AlbumEntity album) {
-        // TODO: show album
         Toast.makeText(requireContext(), album.getName(), Toast.LENGTH_SHORT).show();
+        this.currentAlbum = album;
+
+        if (album.isPrivate()) {
+            openEnterPasswordDialog();
+        } else {
+            callBackAction();
+        }
     }
 }

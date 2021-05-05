@@ -68,7 +68,7 @@ public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdap
             //Load title and size (if has)
             holder.name_title.setText(album.getName());
 
-            holder.cardView.setOnClickListener(new View.OnClickListener() {
+            holder.linearlayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onRecyclerAdapterClick(album);
@@ -90,11 +90,12 @@ public class AlbumRecyclerAdapter extends RecyclerView.Adapter<AlbumRecyclerAdap
         CardView cardView;
         ImageView imageView;
         TextView name_title, size_title;
+        View linearlayout;
 
         public ViewHolder(View view) {
             super(view);
-
-            cardView = (CardView) view.findViewById(R.id.album_item_cardview);
+            linearlayout = view.findViewById(R.id.album_whole_item);
+            //cardView = (CardView) view.findViewById(R.id.album_item_cardview);
             imageView = (ImageView) view.findViewById(R.id.album_avatar);
             name_title = (TextView) view.findViewById(R.id.album_title);
             size_title = (TextView) view.findViewById(R.id.album_size);

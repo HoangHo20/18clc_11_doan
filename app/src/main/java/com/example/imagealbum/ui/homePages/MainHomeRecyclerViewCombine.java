@@ -61,13 +61,18 @@ public class MainHomeRecyclerViewCombine extends RecyclerView.Adapter<MainHomeRe
             HomeImageRecyclerView recyclerViewAdapter = new HomeImageRecyclerView(context, date_groups.get(date_key), this.inSelectedMode);
             holder.setRecyclerViewAdapter(recyclerViewAdapter);
 
-            if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, Global.ITEM_SIZE_GRID_LAYOUT_PORTRAIT));
-            } else {
-                holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, Global.ITEM_SIZE_GRID_LAYOUT_LANDSCAPE));
-            }
+            //setLayoutBaseOrientation(holder);
+            holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, Global.ITEM_SIZE_GRID_LAYOUT_PORTRAIT));
         } else  {
             date_groups.remove(date_key);
+        }
+    }
+
+    private void setLayoutBaseOrientation(@NonNull MainHomeRecyclerViewCombine.ViewHolder holder) {
+        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, Global.ITEM_SIZE_GRID_LAYOUT_PORTRAIT));
+        } else {
+            holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, Global.ITEM_SIZE_GRID_LAYOUT_LANDSCAPE));
         }
     }
 

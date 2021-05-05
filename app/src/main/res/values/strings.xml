@@ -42,4 +42,12 @@
     <string name="warning_password_not_match">Passwords not match</string>
     <string name="enter_password">Enter password</string>
     <string name="please_enter_password">Please enter password</string>
+    <string name="wrong_password">Wrong Password</string>
+    <string name="error_load_album">Error when loading media file of Album</string>
+    <string name="add_images">Add Images</string>
+    <string name="add_videos">Add videos</string>
+    <string name="set_or_change_pass">Set/ change password</string>
+    <string name="delete_album">Delete Album</string>
+    <string name="delete_media_out_of_album">Remove media out of album</string>
+    <string name="select_images">Select images</string>
 </resources>

@@ -28,6 +28,9 @@ public interface MediaDao {
     @Insert
     public void insert(MediaEntity media);
 
+    @Insert
+    public void insertMany(List<MediaEntity> mediaEntities);
+
     @Delete
     public void delete(MediaEntity media);
 
