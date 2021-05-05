@@ -8,6 +8,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
+import androidx.room.Insert;
 import androidx.room.PrimaryKey;
 
 import com.example.imagealbum.Global;
@@ -43,12 +44,16 @@ public class MediaEntity {
     public Bitmap bitmap;
 
     @Ignore
+    private boolean isSelected;
+
+    @Ignore
     public MediaEntity(Uri uri, String path, int type, String status, int albumID) {
         this.uri = uri.toString();
         this.path = path;
         this.type = type;
         this.status = status;
         this.albumID = albumID;
+        this.isSelected = Global.SELECTED_MODE_OFF;
     }
 
     @Ignore
@@ -57,6 +62,11 @@ public class MediaEntity {
         this.path = path;
         this.type = type;
         this.albumID = albumID;
+        this.isSelected = Global.SELECTED_MODE_OFF;
+    }
+
+    public MediaEntity() {
+        this.isSelected = Global.SELECTED_MODE_OFF;
     }
 
     public int getID() {
@@ -126,8 +136,6 @@ public class MediaEntity {
 
     public String getPassword(){return this.password;}
 
-    public MediaEntity(){}
-
     public Bitmap getBitmap() {
         return this.bitmap;
     }
@@ -138,5 +146,13 @@ public class MediaEntity {
 
     public boolean isImage() {
         return this.type == Global.IMAGE_TYPE;
+    }
+
+    public void setSelected(boolean mode) {
+        this.isSelected = mode;
+    }
+
+    public boolean isSelected() {
+        return this.isSelected;
     }
 }

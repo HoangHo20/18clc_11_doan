@@ -46,7 +46,6 @@ public class AlbumFragment extends Fragment
 
     Observer<List<AlbumEntity>> albumsUpdateObserver;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,

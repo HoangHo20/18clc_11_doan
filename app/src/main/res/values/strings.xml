@@ -52,5 +52,8 @@
     <string name="select_images">Select images</string>
     <string name="warning_cant_delete_favorite_album">Favorite album can not be deleted</string>
     <string name="dialog_confirm_message_delete_album">Are you sure to delete this album?</string>
+    <string name="dialog_confirm_delete_media">Are you sure to delete</string>
+    <string name="out_of_album">out of album</string>
     <string name="ok">OK</string>
+    <string name="item">item(s)</string>
 </resources>

@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.Toast;
 
@@ -41,7 +42,10 @@ public class ShowAlbumActivity extends AppCompatActivity {
     private ShowAlbumRecyclerAdapter recyclerAdapter;
     private List<MediaEntity> mediaList;
     private FloatingActionsMenu fab_menu;
+    private View toolbarView;
+    private Button cancel_button, done_button;
     private FloatingActionButton image_add_fab, video_add_fab, password_fab, album_delete_fab, media_delete_fab;
+
     String[] projection =
             {MediaStore.Images.ImageColumns._ID,
             MediaStore.Images.ImageColumns.DATA};
@@ -147,7 +151,33 @@ public class ShowAlbumActivity extends AppCompatActivity {
         }
     }
 
+    private void init_cancel_done_toolbar() {
+        toolbarView = findViewById(R.id.cancel_done_toolbar);
+        cancel_button = (Button) findViewById(R.id.cancel_button);
+        done_button = (Button) findViewById(R.id.done_button);
+
+        toolbarView.setVisibility(View.VISIBLE);
+
+        cancel_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerAdapter.setInSelectedMode(Global.SELECTED_MODE_OFF);
+                recyclerAdapter.deSelectedAll();
+                toolbarView.setVisibility(View.GONE);
+            }
+        });
+
+        done_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbarView.setVisibility(View.GONE);
+                askDeleteSelectedMedia();
+            }
+        });
+    }
+
     private void init_button() {
+        //Action buttons
         fab_menu = (FloatingActionsMenu) findViewById(R.id.multiple_actions);
         image_add_fab = (FloatingActionButton) findViewById(R.id.show_album_activity_add_image);
         video_add_fab = (FloatingActionButton) findViewById(R.id.show_album_activity_add_video);
@@ -184,6 +214,12 @@ public class ShowAlbumActivity extends AppCompatActivity {
 
         //Delete media out of album
         //TODO: delete media out of album
+        media_delete_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performDeleteMediaOutOfAlbum();
+            }
+        });
     }
 
     private void refreshRecyclerview() {
@@ -294,7 +330,40 @@ public class ShowAlbumActivity extends AppCompatActivity {
     }
 
     // ----------------------- Delete Media out of album ----------------------------------
+    private void performDeleteMediaOutOfAlbum() {
+        recyclerAdapter.setInSelectedMode(Global.SELECTED_MODE_ON);
 
+        init_cancel_done_toolbar();
+    }
+
+    private void askDeleteSelectedMedia() {
+        ArrayList<MediaEntity> selectedItems = recyclerAdapter.getSelectedMedia();
+
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(getString(R.string.delete_media_out_of_album))
+                .setMessage(getString(R.string.dialog_confirm_delete_media) + " " + selectedItems.size() + " " + getString(R.string.item) + " " + getString(R.string.out_of_album) + "?")
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteMedia(selectedItems);
+                    }
+
+                })
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show();
+    }
+
+    private void deleteMedia(ArrayList<MediaEntity> mediaEntities) {
+        for (MediaEntity m : mediaEntities) {
+            this.mediaList.remove(m);
+        }
+
+        model.deleteMedia(mediaEntities);
+
+        refreshRecyclerview();
+    }
 
     // --------------------------- On Activity Result ------------------------------------
     @Override

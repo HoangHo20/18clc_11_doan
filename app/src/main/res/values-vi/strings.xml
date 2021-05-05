@@ -45,4 +45,16 @@
     <string name="please_enter_password">Vui lòng nhập mật khẩu</string>
     <string name="wrong_password">Sai mật khẩu</string>
     <string name="error_load_album">Có lỗi sảy ra khi load ảnh của album</string>
+    <string name="add_images">Thêm ảnh</string>
+    <string name="add_videos">Thêm Video</string>
+    <string name="set_or_change_pass">Thiết lập Mật khẩu</string>
+    <string name="delete_album">Xóa Album</string>
+    <string name="delete_media_out_of_album">Xóa ảnh/ video khỏi album</string>
+    <string name="select_images">Chọn ảnh</string>
+    <string name="warning_cant_delete_favorite_album">Album Favorite không thể bị xóa</string>
+    <string name="dialog_confirm_message_delete_album">Bạn có chắc sẽ xóa album này chứ?</string>
+    <string name="dialog_confirm_delete_media">Bạn có chắc sẽ xóa</string>
+    <string name="out_of_album">ra khỏi album</string>
+    <string name="ok">Đồng ý</string>
+    <string name="item">mục</string>
 </resources>
