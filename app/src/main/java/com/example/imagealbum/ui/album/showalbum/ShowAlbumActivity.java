@@ -2,6 +2,7 @@ package com.example.imagealbum.ui.album.showalbum;
 
 import android.content.ClipData;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -153,7 +155,7 @@ public class ShowAlbumActivity extends AppCompatActivity {
         album_delete_fab = (FloatingActionButton) findViewById(R.id.show_album_activity_delete_album);
         media_delete_fab = (FloatingActionButton) findViewById(R.id.show_album_activity_delete_media);
 
-        //
+        //add image
         image_add_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,14 +163,34 @@ public class ShowAlbumActivity extends AppCompatActivity {
             }
         });
 
+        //add video
         video_add_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 launchGalleryIntent(Global.VIDEO_TYPE);
             }
         });
+
+        //put password
+        //TODO: put password album
+
+        //Delete album
+        album_delete_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performDeleteAlbum();
+            }
+        });
+
+        //Delete media out of album
+        //TODO: delete media out of album
     }
 
+    private void refreshRecyclerview() {
+        recyclerAdapter.notifyDataSetChanged();
+    }
+
+    // ------------------------- Add media to album ------------------------------------
     public void launchGalleryIntent(int type) {
         Uri imageUri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         Uri videoUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
@@ -187,6 +209,94 @@ public class ShowAlbumActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isExistInMediaList(MediaEntity media) {
+        for (MediaEntity m : mediaList) {
+            if (m.getPath().equals(media.getPath())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void add_media_to_database(ArrayList<MediaEntity> mediaTemp, int type) {
+        if (mediaList != null) {
+            for (MediaEntity m : mediaTemp) {
+                if (!isExistInMediaList(m)) {
+                    model.insertMedia(m);
+                    mediaList.add(m);
+                }
+            }
+        } else {
+            model.insertMedia(mediaTemp);
+        }
+
+        refreshRecyclerview();
+
+        //TODO: add media to private album
+    }
+
+    private void add_media_to_database (String mediaPath, int type) {
+        if (type == Global.IMAGE_TYPE) {
+
+        }
+
+        if (type == Global.VIDEO_TYPE) {
+
+        }
+    }
+
+    // ------------------------- Set/ change password ------------------------------------
+
+
+    // ----------------------------- Delete album ----------------------------------------
+    private void performDeleteAlbum() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(getString(R.string.delete_album))
+                .setMessage(getString(R.string.dialog_confirm_message_delete_album) + " (" + album.getName() + ")")
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteThisAlbum();
+                    }
+
+                })
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show();
+    }
+
+    private void deleteThisAlbum() {
+        //delete normal if album is public
+        if (!this.album.isPrivate()) {
+            if (this.mediaList != null) {
+                //Remove all media in it
+                model.deleteMedia(this.mediaList);
+                mediaList.clear();
+            }
+
+            if (this.album.getName().equals(Global.FAVORITE_ALBUM.name)) { //Favorite album can not be deleted
+                //Remove all media in it
+                Toast.makeText(this, R.string.warning_cant_delete_favorite_album, Toast.LENGTH_SHORT).show();
+
+                refreshRecyclerview();
+            } else {
+                if (this.album != null) {
+                    //Remove the album
+                    model.deleteAlbum(this.album);
+                    //Close the activity
+                    finish();
+                }
+            }
+        }
+        //TODO: delete private album
+    }
+
+    // ----------------------- Delete Media out of album ----------------------------------
+
+
+    // --------------------------- On Activity Result ------------------------------------
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -235,7 +345,6 @@ public class ShowAlbumActivity extends AppCompatActivity {
 
                     for(int i = 0; i < count; i++)
                         uriList.add(clipData.getItemAt(i).getUri());
-                    //TODO: do something; here is your selected images
 
                     ArrayList<MediaEntity> mediaTemp = new ArrayList<>();
                     for (Uri u : uriList) {
@@ -258,41 +367,6 @@ public class ShowAlbumActivity extends AppCompatActivity {
                     add_media_to_database(imagePath, Global.IMAGE_TYPE);
                 }
             }
-        }
-    }
-
-    private boolean isExistInMediaList(MediaEntity media) {
-        for (MediaEntity m : mediaList) {
-            if (m.getPath().equals(media.getPath())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private void add_media_to_database(ArrayList<MediaEntity> mediaTemp, int type) {
-        if (mediaList != null) {
-            for (MediaEntity m : mediaTemp) {
-                if (!isExistInMediaList(m)) {
-                    model.insertMedia(m);
-                    mediaList.add(m);
-                }
-            }
-        } else {
-            model.insertMedia(mediaTemp);
-        }
-
-        recyclerAdapter.notifyDataSetChanged();
-    }
-
-    private void add_media_to_database (String mediaPath, int type) {
-        if (type == Global.IMAGE_TYPE) {
-
-        }
-
-        if (type == Global.VIDEO_TYPE) {
-
         }
     }
 }

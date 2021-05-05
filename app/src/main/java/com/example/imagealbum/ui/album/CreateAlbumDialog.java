@@ -95,7 +95,8 @@ public class CreateAlbumDialog extends AppCompatDialogFragment {
             return pass1.equals(pass2);
         }
 
-        return false;
+        //both pass is empty
+        return pass1 != null && pass1.isEmpty() && pass2 != null && pass2.isEmpty();
     }
 
     @Override

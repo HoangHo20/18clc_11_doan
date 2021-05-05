@@ -103,7 +103,7 @@ public class AlbumModel {
         if (context != null) {
             database.getInstance(context)
                     .mediaDao()
-                    .insertMany(mediaEntities);
+                    .insert(mediaEntities);
         }
     }
 
@@ -112,6 +112,14 @@ public class AlbumModel {
             database.getInstance(context)
                     .mediaDao()
                     .delete(media);
+        }
+    }
+
+    public void deleteMedia(List<MediaEntity> mediaEntities) {
+        if (context != null) {
+            database.getInstance(context)
+                    .mediaDao()
+                    .delete(mediaEntities);
         }
     }
 

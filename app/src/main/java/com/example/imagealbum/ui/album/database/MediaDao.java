@@ -29,10 +29,13 @@ public interface MediaDao {
     public void insert(MediaEntity media);
 
     @Insert
-    public void insertMany(List<MediaEntity> mediaEntities);
+    public void insert(List<MediaEntity> mediaEntities);
 
     @Delete
     public void delete(MediaEntity media);
+
+    @Delete
+    public void delete(List<MediaEntity> mediaEntities);
 
     @Update
     public void update(MediaEntity media);

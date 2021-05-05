@@ -30,32 +30,38 @@
             android:id="@+id/show_album_activity_add_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            fab:fab_icon="@drawable/ic_baseline_image_24"
             fab:fab_title="@string/add_images" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/show_album_activity_add_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            fab:fab_icon="@drawable/ic_baseline_videocam_24"
             fab:fab_title="@string/add_videos" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/show_album_activity_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            fab:fab_icon="@drawable/ic_baseline_lock_24"
             fab:fab_title="@string/set_or_change_pass" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/show_album_activity_delete_album"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            fab:fab_icon="@drawable/ic_baseline_delete_24"
             fab:fab_title="@string/delete_album" />
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/show_album_activity_delete_media"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            fab:fab_icon="@drawable/ic_baseline_image_not_supported_24"
             fab:fab_title="@string/delete_media_out_of_album" />
 
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
