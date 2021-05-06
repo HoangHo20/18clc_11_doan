@@ -26,7 +26,7 @@ import com.example.imagealbum.Global;
 import com.example.imagealbum.R;
 import com.example.imagealbum.ui.album.database.AlbumEntity;
 import com.example.imagealbum.ui.album.showalbum.ShowAlbumActivity;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.AddFloatingActionButton;
 
 import java.io.Serializable;
 import java.util.List;
@@ -41,7 +41,7 @@ public class AlbumFragment extends Fragment
     private RecyclerView recyclerView;
     private AlbumRecyclerAdapter recyclerAdapter = null;
 
-    private FloatingActionButton fab;
+    private AddFloatingActionButton fab;
     private AlbumEntity currentAlbum;
 
     Observer<List<AlbumEntity>> albumsUpdateObserver;
@@ -91,7 +91,7 @@ public class AlbumFragment extends Fragment
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    fab.show();
+                    fab.setVisibility(View.VISIBLE);
                 }
                 super.onScrollStateChanged(recyclerView, newState);
             }
@@ -100,7 +100,7 @@ public class AlbumFragment extends Fragment
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0 || dy < 0 && fab.isShown()) {
-                    fab.hide();
+                    fab.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -161,6 +161,10 @@ public class AlbumFragment extends Fragment
 
     @Override
     public void createAlbum(String name, String password) {
+        if (password != null)  {
+            password = password.trim();
+        }
+
         albumViewModel.createAlbum(name, password);
     }
 

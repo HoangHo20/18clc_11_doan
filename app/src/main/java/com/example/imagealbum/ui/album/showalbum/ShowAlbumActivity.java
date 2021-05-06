@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,13 +19,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.imagealbum.Global;
 import com.example.imagealbum.LocaleHelper;
 import com.example.imagealbum.R;
+import com.example.imagealbum.ui.album.AlbumEncrypt;
+import com.example.imagealbum.ui.album.AlbumFragment;
 import com.example.imagealbum.ui.album.AlbumModel;
+import com.example.imagealbum.ui.album.EnterPasswordDialog;
+import com.example.imagealbum.ui.album.SetPasswordDialog;
 import com.example.imagealbum.ui.album.database.AlbumEntity;
 import com.example.imagealbum.ui.album.database.MediaEntity;
 import com.example.imagealbum.viewImage;
@@ -31,11 +38,14 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
-public class ShowAlbumActivity extends AppCompatActivity {
+public class ShowAlbumActivity extends AppCompatActivity implements EnterPasswordDialog.EnterPasswordDialogListener, SetPasswordDialog.SetPasswordDialogListener {
     private AlbumEntity album;
     private AlbumModel model;
     private RecyclerView recyclerView;
@@ -94,7 +104,7 @@ public class ShowAlbumActivity extends AppCompatActivity {
     private void init_recyclerview() {
         recyclerView = findViewById(R.id.show_album_activity_recyclerview);
 
-        recyclerAdapter = new ShowAlbumRecyclerAdapter(this, mediaList, album.isPrivate());
+        recyclerAdapter = new ShowAlbumRecyclerAdapter(this, mediaList, album);
         recyclerView.setAdapter(recyclerAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, Global.ITEM_SIZE_GRID_LAYOUT_PORTRAIT));
 
@@ -125,22 +135,22 @@ public class ShowAlbumActivity extends AppCompatActivity {
 
         if (album.isPrivate()) {
             //TODO: LOAD Bitmap
+            loadDecryptBitmapOfMedia(mediaList);
         }
     }
 
     //If each Image/ Video path does not exist -> delete from database and List
     private void validateMediaList(List<MediaEntity> mediaList) {
-        ArrayList<MediaEntity> list = new ArrayList<>();
+        ArrayList<MediaEntity> listUnavailable = new ArrayList<>();
 
         try {
             for (MediaEntity m : mediaList) {
-                File f = new File(m.getPath());
-                if (!f.exists()) {
-                    list.add(m);
+                if (!isFileExist(m.getPath())) {
+                    listUnavailable.add(m);
                 }
             }
 
-            for (MediaEntity m: list) {
+            for (MediaEntity m : listUnavailable) {
                 //delete from database
                 model.deleteMedia(m);
                 //delete from list
@@ -197,12 +207,22 @@ public class ShowAlbumActivity extends AppCompatActivity {
         video_add_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchGalleryIntent(Global.VIDEO_TYPE);
+                if (album.isPrivate()) {
+                    showWarningPrivateAlbumCannotContainVideo();
+                } else {
+                    launchGalleryIntent(Global.VIDEO_TYPE);
+                }
             }
         });
 
         //put password
         //TODO: put password album
+        password_fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performEnterPasswordDialog();
+            }
+        });
 
         //Delete album
         album_delete_fab.setOnClickListener(new View.OnClickListener() {
@@ -255,21 +275,34 @@ public class ShowAlbumActivity extends AppCompatActivity {
         return false;
     }
 
-    private void add_media_to_database(ArrayList<MediaEntity> mediaTemp, int type) {
-        if (mediaList != null) {
-            for (MediaEntity m : mediaTemp) {
+    private void add_media_to_database(ArrayList<MediaEntity> mediaEntities, int type) {
+        ArrayList<MediaEntity> tempList = new ArrayList<>();
+
+        if (this.mediaList != null) {
+            for (MediaEntity m : mediaEntities) {
                 if (!isExistInMediaList(m)) {
-                    model.insertMedia(m);
-                    mediaList.add(m);
+                    //model.insertMedia(m);
+                    tempList.add(m);
                 }
             }
         } else {
-            model.insertMedia(mediaTemp);
+            tempList.addAll(mediaEntities);
         }
 
-        refreshRecyclerview();
+        if (this.album.isPrivate()) {
+            encryptMediaListAndSetPassword(tempList, this.album.getPassword());
+        }
+
+        this.model.insertMedia(tempList);
+        load_media();
+
+        refreshRecyclerviewWithNewData(this.mediaList);
 
         //TODO: add media to private album
+    }
+
+    private void refreshRecyclerviewWithNewData(List<MediaEntity> mediaList) {
+        recyclerAdapter.setDataAndNotifyDataSetChange(mediaList);
     }
 
     private void add_media_to_database (String mediaPath, int type) {
@@ -283,7 +316,121 @@ public class ShowAlbumActivity extends AppCompatActivity {
     }
 
     // ------------------------- Set/ change password ------------------------------------
+    public void performEnterPasswordDialog() {
+        if (isMediaListContainVideo(this.mediaList)) {
+            Toast.makeText(this, R.string.warning_private_album_contain_video, Toast.LENGTH_SHORT).show();
+        } else {
+            if (this.album.getName().equals(Global.FAVORITE_ALBUM.name)) {
+                Toast.makeText(this, R.string.favorite_album_cannot_be_private, Toast.LENGTH_SHORT).show();
+            } else {
+                if (this.album.isPrivate()) {
+                    EnterPasswordDialog dialog = new EnterPasswordDialog();
+                    dialog.show(this.getSupportFragmentManager(), "Enter password dialog");
+                } else {
+                    performChangePassword();
+                }
+            }
+        }
+    }
 
+    @Override
+    public void onAttachFragment(@NonNull Fragment fragment) {
+        super.onAttachFragment(fragment);
+
+        if (fragment instanceof EnterPasswordDialog) {
+            EnterPasswordDialog dialog = (EnterPasswordDialog) fragment;
+            dialog.setOnEnterPasswordDialogListener(this);
+        }
+
+        if (fragment instanceof SetPasswordDialog) {
+            SetPasswordDialog dialog = (SetPasswordDialog) fragment;
+            dialog.setOnSetPasswordDialogListener(this);
+        }
+    }
+
+    @Override
+    public boolean isPasswordCorrect(String password) {
+        return this.album.checkPassword(password);
+    }
+
+    @Override
+    public void callBackAction() {
+        performChangePassword();
+    }
+
+    private void performChangePassword() {
+        SetPasswordDialog dialog = new SetPasswordDialog();
+        dialog.show(this.getSupportFragmentManager(), "Set password dialog");
+    }
+
+    @Override
+    public void setPassword(String password) {
+        boolean isAlbumPrivate = this.album.isPrivate();
+
+        if (password != null)  {
+            password = password.trim();
+        }
+
+        if (password == null || password.isEmpty()){
+            if (isAlbumPrivate) { //Make album become public
+                //Todo: perform decrypt all file
+                decryptMediaListAndSave(this.mediaList);
+            }
+        } else {
+            if (!isAlbumPrivate) { //Make album become private from public
+                //TODO: encrypt all media file
+                encryptMediaListAndSetPassword(this.mediaList, password);
+            }
+        }
+
+        this.album.setPassword(password);
+        model.updateAlbum(this.album);
+
+        finish();
+    }
+
+    private void encryptMediaListAndSetPassword(List<MediaEntity> mediaList, String password) {
+        AlbumEncrypt encrypt = new AlbumEncrypt();
+
+        for (MediaEntity m : mediaList) {
+            if (isFileExist(m.getPath()) && !m.isPrivate()) {
+                m.setPassword(password);
+                model.updateMedia(m);
+                model.deleteMediaSamePathExceptID(m.getPath(), m.getID());
+
+                Uri tempUri = Uri.parse(m.getUriString());
+                encrypt.encryptAndSave(m, getBitmapFromUri(tempUri));
+            }
+        }
+    }
+
+    private void decryptMediaListAndSave(List<MediaEntity> mediaList) {
+        AlbumEncrypt encrypt = new AlbumEncrypt();
+
+        for (MediaEntity m : mediaList) {
+            if (isFileExist(m.getPath())) {
+                m.setPassword(null);
+                model.updateMedia(m);
+
+                byte[]tempByteArray = encrypt.decrypt(m);
+
+                if (tempByteArray != null) {
+                    encrypt.saveFile(tempByteArray, m.getPath());
+                }
+            }
+        }
+    }
+
+    private void encryptMediaList(List<MediaEntity> mediaList) {
+        AlbumEncrypt encrypt = new AlbumEncrypt();
+
+        for (MediaEntity m : mediaList) {
+            if (isFileExist(m.getPath())) {
+                Uri tempUri = Uri.parse(m.getUriString());
+                encrypt.encryptAndSave(m, getBitmapFromUri(tempUri));
+            }
+        }
+    }
 
     // ----------------------------- Delete album ----------------------------------------
     private void performDeleteAlbum() {
@@ -325,8 +472,20 @@ public class ShowAlbumActivity extends AppCompatActivity {
                     finish();
                 }
             }
+        } else {
+            //TODO: delete private album
+            if (mediaList != null) {
+                decryptMediaListAndSave(this.mediaList);
+                model.deleteMedia(this.mediaList);
+            }
+
+            if (this.album != null) {
+                //Remove the album
+                model.deleteAlbum(this.album);
+                //Close the activity
+                finish();
+            }
         }
-        //TODO: delete private album
     }
 
     // ----------------------- Delete Media out of album ----------------------------------
@@ -356,6 +515,8 @@ public class ShowAlbumActivity extends AppCompatActivity {
     }
 
     private void deleteMedia(ArrayList<MediaEntity> mediaEntities) {
+        decryptMediaListAndSave(mediaEntities);
+
         for (MediaEntity m : mediaEntities) {
             this.mediaList.remove(m);
         }
@@ -435,6 +596,50 @@ public class ShowAlbumActivity extends AppCompatActivity {
                     //TODO: do something
                     add_media_to_database(imagePath, Global.IMAGE_TYPE);
                 }
+            }
+        }
+    }
+
+    // -------------------- Other Function --------------------------
+    private boolean isMediaListContainVideo(List<MediaEntity> mediaEntities) {
+        for (MediaEntity m : mediaEntities) {
+            if (!m.isImage()) return true;
+        }
+
+        return false;
+    }
+
+    private void showWarningPrivateAlbumCannotContainVideo() {
+        Toast.makeText(this, R.string.warning_private_album_contain_video, Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean isFileExist(String filePath) {
+        File f = new File(filePath);
+
+        return f.exists();
+    }
+
+    private Bitmap getBitmapFromUri(Uri uri) {
+        Bitmap selectedImage = null;
+        try{
+            InputStream imageStream = getContentResolver().openInputStream(uri);
+            selectedImage = BitmapFactory.decodeStream(imageStream);
+        }
+        catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
+        return selectedImage;
+    }
+
+    private void loadDecryptBitmapOfMedia(List<MediaEntity> mediaEntities) {
+        AlbumEncrypt encrypt = new AlbumEncrypt();
+
+        for (MediaEntity m : mediaEntities) {
+            if (isFileExist(m.getPath())) {
+                byte[] tempBytes = encrypt.decrypt(m);
+                Bitmap tempBitmap = BitmapFactory.decodeByteArray(tempBytes, 0, tempBytes.length);
+
+                m.setBitmap(tempBitmap);
             }
         }
     }

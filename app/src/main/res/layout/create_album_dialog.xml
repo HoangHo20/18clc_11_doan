@@ -15,6 +15,7 @@
             android:id="@+id/album_dialog_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="@string/album_name_title"
             />
 

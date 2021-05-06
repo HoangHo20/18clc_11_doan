@@ -123,6 +123,14 @@ public class AlbumModel {
         }
     }
 
+    public void deleteMediaSamePathExceptID(String path, int id) {
+        if (context != null) {
+            database.getInstance(context)
+                    .mediaDao()
+                    .deleteMediaSamePathExceptID(path, id);
+        }
+    }
+
     public void updateMedia(MediaEntity media) {
         if (context != null) {
             database.getInstance(context)

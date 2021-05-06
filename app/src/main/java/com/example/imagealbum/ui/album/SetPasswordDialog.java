@@ -14,14 +14,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
-import androidx.fragment.app.DialogFragment;
 
 import com.example.imagealbum.R;
-import com.example.imagealbum.viewImage;
 
-public class CreateAlbumDialog extends AppCompatDialogFragment {
+public class SetPasswordDialog extends AppCompatDialogFragment {
     private EditText name, password1, password2;
-    private CreateAlbumDialogListener listener;
+    private SetPasswordDialogListener listener;
 
     @NonNull
     @Override
@@ -29,18 +27,17 @@ public class CreateAlbumDialog extends AppCompatDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.create_album_dialog, null);
+        View view = inflater.inflate(R.layout.password_and_confirm_password_form, null);
 
         //init textview
 
         //init edit texts
-        name = (EditText) view.findViewById(R.id.album_dialog_name_input);
         password1 = (EditText) view.findViewById(R.id.album_dialog_pass_input1);
         password2 = (EditText) view.findViewById(R.id.album_dialog_pass_input2);
         //
 
         builder.setView(view)
-                .setTitle(R.string.create_album)
+                .setTitle(R.string.set_password)
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -59,12 +56,11 @@ public class CreateAlbumDialog extends AppCompatDialogFragment {
                 positiveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String albumName = name.getText().toString();
                         String pass1 = password1.getText().toString();
                         String pass2 = password2.getText().toString();
 
-                        if (checkValid(albumName, pass1, pass2)) {
-                            listener.createAlbum(albumName, pass1);
+                        if (checkValid(pass1, pass2)) {
+                            listener.setPassword(pass1);
                             requireDialog().dismiss();
                         }
                     }
@@ -75,13 +71,7 @@ public class CreateAlbumDialog extends AppCompatDialogFragment {
         return dialog;
     }
 
-    private boolean checkValid(String albumName, String pass1, String pass2) {
-        boolean isAlbumExist = listener.isAlbumNameExist(albumName);
-        if (isAlbumExist) {
-            Toast.makeText(requireContext(), R.string.warning_album_name_exist, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
+    private boolean checkValid(String pass1, String pass2) {
         boolean isPasswordMatch = checkPassword(pass1, pass2);
         if (!isPasswordMatch) {
             Toast.makeText(requireContext(), R.string.warning_password_not_match, Toast.LENGTH_SHORT).show();
@@ -101,20 +91,23 @@ public class CreateAlbumDialog extends AppCompatDialogFragment {
         return pass1 != null && pass1.isEmpty() && pass2 != null && pass2.isEmpty();
     }
 
+    public void setOnSetPasswordDialogListener(SetPasswordDialogListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
         try {
-            listener = (CreateAlbumDialogListener) getTargetFragment();
+            listener = (SetPasswordDialogListener) getTargetFragment();
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() +
-                    "must implement CreateAlbumDialogListener");
+                    "must implement SetPasswordDialogListener");
         }
     }
 
-    public interface CreateAlbumDialogListener {
-        boolean isAlbumNameExist(String albumName);
-        void createAlbum(String name, String password);
+    public interface SetPasswordDialogListener {
+        void setPassword(String password);
     }
 }

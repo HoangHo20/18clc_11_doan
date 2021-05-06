@@ -155,4 +155,8 @@ public class MediaEntity {
     public boolean isSelected() {
         return this.isSelected;
     }
+
+    public boolean isPrivate() {
+        return this.password != null && !this.password.isEmpty();
+    }
 }

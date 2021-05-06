@@ -56,4 +56,7 @@
     <string name="out_of_album">out of album</string>
     <string name="ok">OK</string>
     <string name="item">item(s)</string>
+    <string name="set_password">Set password</string>
+    <string name="warning_private_album_contain_video">Private album containing video is still developing</string>
+    <string name="favorite_album_cannot_be_private">Favorite album cannot be private</string>
 </resources>

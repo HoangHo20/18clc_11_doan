@@ -15,6 +15,7 @@
         <item name="android:textColor">@color/text_color</item>
         <item name="android:colorSecondary">@color/unselect_icon</item>
         <item name="android:itemBackground">@color/blur_gray</item>
+
     </style>
 
 
@@ -56,6 +57,16 @@
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">1</item>
+    </style>
+
+    <!-- Alert Dialog -->
+    <style name="MaterialAlertDialog_OK_color" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <!-- Style for positive button -->
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle.textColor</item>
+    </style>
+
+    <style name="PositiveButtonStyle.textColor" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/black</item>
     </style>
 
 </resources>

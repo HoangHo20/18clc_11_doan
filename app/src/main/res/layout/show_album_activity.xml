@@ -10,8 +10,11 @@
     <include
         android:id="@+id/cancel_done_toolbar"
         layout="@layout/cancel_done_toolbar"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/show_album_activity_recyclerview"
@@ -31,7 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         fab:fab_addButtonColorNormal="@color/pink"
         fab:fab_addButtonColorPressed="@color/pink_pressed"
-        fab:fab_addButtonPlusIconColor="@color/half_black"
+        fab:fab_addButtonPlusIconColor="@color/white"
         fab:fab_labelStyle="@style/menu_labels_style">
 
         <com.getbase.floatingactionbutton.FloatingActionButton

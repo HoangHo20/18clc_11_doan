@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:fab="http://schemas.android.com/apk/res-auto">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/albumRecyclerView"
@@ -12,15 +13,16 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="10sp"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.getbase.floatingactionbutton.AddFloatingActionButton
         android:id="@+id/album_fragment_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="50dp"
-        android:src="@drawable/ic_baseline_add_24_unselected"
-        app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/albumRecyclerView" />
+        app:layout_constraintEnd_toEndOf="parent"
+        fab:fab_plusIconColor="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

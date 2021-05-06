@@ -37,6 +37,12 @@ public interface MediaDao {
     @Delete
     public void delete(List<MediaEntity> mediaEntities);
 
+    @Query("DELETE FROM "
+            + Global.MEDIA_TABLE
+            + " WHERE " + Global.MEDIA_COLUMN.PATH + " LIKE :path "
+            + " AND " + Global.MEDIA_COLUMN._ID + " != :id")
+    public void deleteMediaSamePathExceptID(String path, int id);
+
     @Update
     public void update(MediaEntity media);
 }

@@ -14,6 +14,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.imagealbum.Global;
 import com.example.imagealbum.R;
+import com.example.imagealbum.ui.album.AlbumEncrypt;
+import com.example.imagealbum.ui.album.database.AlbumEntity;
 import com.example.imagealbum.ui.album.database.MediaEntity;
 
 import java.util.ArrayList;
@@ -22,14 +24,23 @@ import java.util.List;
 public class ShowAlbumRecyclerAdapter extends RecyclerView.Adapter<ShowAlbumRecyclerAdapter.ViewHolder> {
     private Context context;
     private List<MediaEntity> mediaList;
-    private boolean isPrivate;
+    private AlbumEntity album;
     private boolean isInSelectedMode;
 
-    public ShowAlbumRecyclerAdapter(Context context, List<MediaEntity> media, boolean isPrivate) {
+    public ShowAlbumRecyclerAdapter(Context context, List<MediaEntity> media, AlbumEntity album) {
         this.context = context;
         this.mediaList = media;
-        this.isPrivate = isPrivate;
+        this.album = album;
         this.isInSelectedMode = Global.SELECTED_MODE_OFF;
+    }
+
+    private boolean isPrivate() {
+        return this.album.isPrivate();
+    }
+
+    public void setDataAndNotifyDataSetChange(List<MediaEntity> newData) {
+        this.mediaList = newData;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -44,8 +55,10 @@ public class ShowAlbumRecyclerAdapter extends RecyclerView.Adapter<ShowAlbumRecy
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         MediaEntity media = mediaList.get(position);
 
-        if (isPrivate) {
+        if (isPrivate()) {
             //TODO: load bitmap
+            holder.imageView.setImageBitmap(media.getBitmap());
+            holder.imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         } else {
             Glide.with(context)
                     .load(media.getPath())

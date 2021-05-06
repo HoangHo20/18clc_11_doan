@@ -25,7 +25,7 @@ public class EnterPasswordDialog extends AppCompatDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.MaterialAlertDialog_OK_color);
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.password_input, null);
@@ -68,6 +68,10 @@ public class EnterPasswordDialog extends AppCompatDialogFragment {
         });
 
         return dialog;
+    }
+
+    public void setOnEnterPasswordDialogListener(EnterPasswordDialogListener listener) {
+        this.listener = listener;
     }
 
     @Override
