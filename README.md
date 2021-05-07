@@ -49,6 +49,13 @@ An android project of image and video gallery written in Java.
 
 <img src="readme_image/4.gif" >
 
+# Contributors
+
+- Ho Nguyen Huy Hoang (Student's ID: 18127006)
+- Pham Vu Duy (Student's ID: 18127092)
+
+VNU University of Science - CSC13009 - Developing android app course
+
 # Libraries used
 
 - [google/gson: A Java serialization/deserialization library to convert Java Objects into JSON and back (github.com)](https://github.com/google/gson)
