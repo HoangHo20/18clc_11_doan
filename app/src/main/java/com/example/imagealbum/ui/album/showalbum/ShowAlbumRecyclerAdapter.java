@@ -1,10 +1,15 @@
 package com.example.imagealbum.ui.album.showalbum;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,11 +19,17 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.imagealbum.Global;
 import com.example.imagealbum.R;
+import com.example.imagealbum.image;
 import com.example.imagealbum.ui.album.AlbumEncrypt;
 import com.example.imagealbum.ui.album.database.AlbumEntity;
 import com.example.imagealbum.ui.album.database.MediaEntity;
+import com.example.imagealbum.viewImage;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ShowAlbumRecyclerAdapter extends RecyclerView.Adapter<ShowAlbumRecyclerAdapter.ViewHolder> {
@@ -82,7 +93,7 @@ public class ShowAlbumRecyclerAdapter extends RecyclerView.Adapter<ShowAlbumRecy
                 holder.itemView.setBackgroundColor(context.getColor(R.color.background));
             }
             else{
-                holder.itemView.setBackgroundColor(context.getColor(R.color.background_dark));
+                holder.itemView.setBackgroundColor(context.getColor(R.color.dark_grey));
             }
         }
 
@@ -102,8 +113,26 @@ public class ShowAlbumRecyclerAdapter extends RecyclerView.Adapter<ShowAlbumRecy
                             holder.itemView.setBackgroundColor(context.getColor(R.color.background));
                         }
                         else{
-                            holder.itemView.setBackgroundColor(context.getColor(R.color.background_dark));
+                            holder.itemView.setBackgroundColor(context.getColor(R.color.dark_grey));
                         }
+                    }
+                } else {
+                    image imageNew = convertMediaEntityToimage(media);
+
+                    try {
+                        Intent intent = new Intent(context, viewImage.class);
+                        if (media.isPrivate()) {
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            media.getBitmap().compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                            byte[] byteArray = stream.toByteArray();
+
+                            intent.putExtra("BITMAP",byteArray);
+                        }
+                        intent.putExtra("IMAGE", imageNew.toJson());
+                        intent.putExtra("POS", String.valueOf(position));
+                        ((Activity) context).startActivity(intent);
+                    } catch (Exception e) {
+                        Toast.makeText(context, R.string.UnSynchronize_data, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -159,5 +188,21 @@ public class ShowAlbumRecyclerAdapter extends RecyclerView.Adapter<ShowAlbumRecy
             imageView = (ImageView) view.findViewById(R.id.albumIten_img);
             videoTag = (ImageView) view.findViewById(R.id.albumItem_video_tag);
         }
+    }
+
+    private image convertMediaEntityToimage(MediaEntity mediaEntity) {
+        Uri uri = Uri.parse(mediaEntity.getUriString());
+        String path = mediaEntity.getPath();
+        int type = mediaEntity.getType();
+
+        File file = new File(mediaEntity.getPath());
+        Date lastModDate = new Date(file.lastModified());
+        String date_String = new SimpleDateFormat("dd/MM/yyyy").format(lastModDate);
+
+        long size = file.length();
+
+        image imageNew = new image(uri, size, "", null, date_String, path, type);
+
+        return imageNew;
     }
 }

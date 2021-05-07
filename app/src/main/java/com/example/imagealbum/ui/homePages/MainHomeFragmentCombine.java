@@ -67,9 +67,11 @@ public class MainHomeFragmentCombine extends Fragment {
     private RecyclerView recyclerView;
     private MainHomeRecyclerViewCombine recyclerViewAdapter;
 
-    ImageView deleteBtn, slideShowBtn, doneBtn, setThemeBtn, setLangBtn;
+    ImageView deleteBtn, slideShowBtn, doneBtn;
 
     private String currentPhotoPath = "none";
+
+    KLoadingSpin spin;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -87,11 +89,12 @@ public class MainHomeFragmentCombine extends Fragment {
         View root = localInflater.inflate(R.layout.date_group_fragement, container, false);
         recyclerView = root.findViewById(R.id.date_group_fragment_recycler);
 
+        spin = root.findViewById(R.id.KLoadingSpin);
+
         //if there is no data loaded yet
         if (recyclerViewAdapter == null) {
-            KLoadingSpin a = root.findViewById(R.id.KLoadingSpin);
-            a.startAnimation();
-            a.setIsVisible(true);
+            spin.startAnimation();
+            spin.setIsVisible(true);
         }
 
         init_button(root);
@@ -103,9 +106,6 @@ public class MainHomeFragmentCombine extends Fragment {
         deleteBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_deleteBtn);
         slideShowBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_slideShowBtn);
         doneBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_doneBtn);
-        setThemeBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_setThemeBtn);
-        setLangBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_setLangBtn);
-
 
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,16 +115,12 @@ public class MainHomeFragmentCombine extends Fragment {
                     slideShowBtn.setVisibility(View.INVISIBLE);
                     doneBtn.setVisibility(View.VISIBLE);
                     mainHomeViewModelCombine.setInDeleteMode(Global.DELETE_MODE_ON);
-                    setThemeBtn.setVisibility(View.INVISIBLE);
-                    setLangBtn.setVisibility(View.INVISIBLE);
                     setInSelectedMode(Global.SELECTED_MODE_ON);
                 }
                 else{
                     deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_unselect);
                     slideShowBtn.setVisibility(View.VISIBLE);
                     doneBtn.setVisibility(View.INVISIBLE);
-                    setThemeBtn.setVisibility(View.VISIBLE);
-                    setLangBtn.setVisibility(View.VISIBLE);
                     mainHomeViewModelCombine.setInDeleteMode(Global.DELETE_MODE_OFF);
                     setInSelectedMode(Global.SELECTED_MODE_OFF);
                     mainHomeViewModelCombine.deSelectedAll();
@@ -140,16 +136,12 @@ public class MainHomeFragmentCombine extends Fragment {
                     deleteBtn.setVisibility(View.INVISIBLE);
                     doneBtn.setVisibility(View.VISIBLE);
                     mainHomeViewModelCombine.setInSlideShow(Global.SLIDE_SHOW_MODE_ON);
-                    setThemeBtn.setVisibility(View.INVISIBLE);
-                    setLangBtn.setVisibility(View.INVISIBLE);
                     setInSelectedMode(Global.SELECTED_MODE_ON);
                 }
                 else{
                     slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_unselect);
                     deleteBtn.setVisibility(View.VISIBLE);
                     doneBtn.setVisibility(View.INVISIBLE);
-                    setThemeBtn.setVisibility(View.VISIBLE);
-                    setLangBtn.setVisibility(View.VISIBLE);
                     mainHomeViewModelCombine.setInSlideShow(Global.SLIDE_SHOW_MODE_OFF);
                     setInSelectedMode(Global.SELECTED_MODE_OFF);
                     mainHomeViewModelCombine.deSelectedAll();
@@ -196,57 +188,7 @@ public class MainHomeFragmentCombine extends Fragment {
                     mainHomeViewModelCombine.setInDeleteMode(Global.DELETE_MODE_OFF);
                 }
                 doneBtn.setVisibility(View.INVISIBLE);
-                setLangBtn.setVisibility(View.VISIBLE);
-                setThemeBtn.setVisibility(View.VISIBLE);
                 setInSelectedMode(Global.SELECTED_MODE_OFF);
-            }
-        });
-
-
-        setThemeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences sharedPreferences = getContext().getSharedPreferences("THEME", Context.MODE_PRIVATE);
-                int temp = sharedPreferences.getInt("ID", 0);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("ID", (temp + 1) % 2);
-                editor.apply();
-
-                // Refresh fragment to apply new theme
-
-            }
-        });
-
-
-        setLangBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences sharedPreferences = getContext().getSharedPreferences("LANG", Context.MODE_PRIVATE);
-                int temp = sharedPreferences.getInt("ID", 0);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putInt("ID", (temp + 1) % 2);
-                editor.apply();
-
-                String lang = "";
-                if((temp + 1) % 2 == 0){
-                    lang = "en";
-                }
-                else{
-                    lang = "vi";
-                }
-
-                // updating the language for devices above android nougat
-                Context context = LocaleHelper.setLocale(getContext(), lang);
-
-                if((temp + 1) % 2 == 0){
-                    Toast.makeText(getContext(), "Switch to English", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(getContext(), "Tiếng Việt", Toast.LENGTH_SHORT).show();
-                }
-
-                // Refresh fragment to apply new language
-
             }
         });
     }
@@ -265,7 +207,7 @@ public class MainHomeFragmentCombine extends Fragment {
         // TODO: Use the ViewModel
     }
 
-    Observer<TreeMap<String, ArrayList<image>>> dateListUpdateObserver = new Observer< TreeMap<String, ArrayList<image>> >() {
+    Observer<TreeMap<String,    ArrayList<image>>> dateListUpdateObserver = new Observer< TreeMap<String, ArrayList<image>> >() {
         @Override
         public void onChanged(TreeMap<String, ArrayList<image>> date_groups) {
             if (recyclerViewAdapter == null) {
@@ -273,8 +215,10 @@ public class MainHomeFragmentCombine extends Fragment {
                 recyclerViewAdapter = new MainHomeRecyclerViewCombine(getActivity(), date_groups, mainHomeViewModelCombine.isInSelectedMode());
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
                 recyclerView.setAdapter(recyclerViewAdapter);
-                KLoadingSpin a = requireView().findViewById(R.id.KLoadingSpin);
-                a.stopAnimation();
+
+                if (spin != null) {
+                    spin.setVisibility(View.INVISIBLE);
+                }
             } else {
                 recyclerViewNotifyDataSetChanged();
             }

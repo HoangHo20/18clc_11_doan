@@ -119,7 +119,7 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
                 holder.itemView.setBackgroundColor(context.getColor(R.color.background));
             }
             else{
-                holder.itemView.setBackgroundColor(context.getColor(R.color.background_dark));
+                holder.itemView.setBackgroundColor(context.getColor(R.color.dark_grey));
             }
 
         }
@@ -135,7 +135,7 @@ public class HomeImageRecyclerView extends RecyclerView.Adapter<HomeImageRecycle
                             holder.itemView.setBackgroundColor(context.getColor(R.color.background));
                         }
                         else{
-                            holder.itemView.setBackgroundColor(context.getColor(R.color.background_dark));
+                            holder.itemView.setBackgroundColor(context.getColor(R.color.dark_grey));
                         }
                     }
                     else{

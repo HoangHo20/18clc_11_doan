@@ -67,4 +67,12 @@
     <string name="edit">Edit</string>
     <string name="add_to_favorite">Add to Favorite</string>
     <string name="editing_video_is_under_development">Editing video is under development</string>
+    <string name="setting">Setting</string>
+    <string name="theme_mode">Theme mode</string>
+    <string name="app_setting">App Setting</string>
+    <string name="language">Language</string>
+    <string name="vietnamese_language" translatable="false">Tiếng Việt</string>
+    <string name="english_language" translatable="false">English</string>
+    <string name="notify_reset_app_apply_change">You need to reset the app the apply these change</string>
+    <string name="choose_language">Choose Language</string>
 </resources>

@@ -67,6 +67,7 @@ public class viewImage extends AppCompatActivity {
     private Context context;
     private AlbumModel model;
     private boolean isFavorite;
+    private boolean isPrivate;
     private AlbumEntity favoriteAlbum;
 
     //Show image
@@ -76,6 +77,7 @@ public class viewImage extends AppCompatActivity {
     private VideoView videoView;
     private FrameLayout frameLayout;
     private MediaController mediaController;
+    private Bitmap imageBitmap;
 
     private Intent intent;
     private int pos;
@@ -88,6 +90,7 @@ public class viewImage extends AppCompatActivity {
             shareBtn,
             addFavoriteBtn,
             editBtn;
+    private ImageView imageView;
     //private ImageView encrypt_decryptBtn;
     //private boolean isEncrypted = false;
 
@@ -192,6 +195,10 @@ public class viewImage extends AppCompatActivity {
             }
         });
 
+        if (!image.isImage()) { //video type
+            setWallpaperBtn.setVisibility(View.INVISIBLE);
+        }
+
         setWallpaperBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -254,6 +261,13 @@ public class viewImage extends AppCompatActivity {
                 performEdit();
             }
         });
+
+        if (isPrivate) {
+            shareBtn.setVisibility(View.INVISIBLE);
+            addFavoriteBtn.setVisibility(View.INVISIBLE);
+            editBtn.setVisibility(View.INVISIBLE);
+            setWallpaperBtn.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void performEdit(){
@@ -303,6 +317,12 @@ public class viewImage extends AppCompatActivity {
         pos = Integer.parseInt(intent.getStringExtra("POS"));
         image = new Gson().fromJson(data, image.class);
 
+        byte[] bitmapBytes = intent.getByteArrayExtra("BITMAP");
+        if (bitmapBytes != null) {
+            this.isPrivate = true;
+            this.imageBitmap = BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
+        }
+
         loadData();
 
         if (image.isImage()) {
@@ -316,10 +336,16 @@ public class viewImage extends AppCompatActivity {
     }
 
     private void loadImage() {
-        bigImageView = (BigImageView) findViewById(R.id.mBigImage);
-        bigImageView.setImageViewFactory(new GlideImageViewFactory());
-        bigImageView.showImage(image.getImage_URI());
-        bigImageView.setVisibility(View.VISIBLE);
+        if (this.isPrivate) {
+            imageView = (ImageView) findViewById(R.id.view_image_imageView);
+            imageView.setImageBitmap(this.imageBitmap);
+            imageView.setVisibility(View.VISIBLE);
+        } else {
+            bigImageView = (BigImageView) findViewById(R.id.mBigImage);
+            bigImageView.setImageViewFactory(new GlideImageViewFactory());
+            bigImageView.showImage(image.getImage_URI());
+            bigImageView.setVisibility(View.VISIBLE);
+        }
     }
 
     private void loadVideo() {

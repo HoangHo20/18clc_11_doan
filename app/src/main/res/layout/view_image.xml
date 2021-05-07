@@ -20,6 +20,12 @@
         app:optimizeDisplay="true"
         android:visibility="gone"/>
 
+    <ImageView
+        android:id="@+id/view_image_imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
     <FrameLayout
         android:id="@+id/view_image_video_frame"
         android:layout_width="match_parent"

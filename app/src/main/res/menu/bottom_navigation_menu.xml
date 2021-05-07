@@ -8,11 +8,15 @@
     <item
         android:id="@+id/navigation_camera"
         android:icon="@android:drawable/ic_menu_camera"
-        android:iconTint="@color/black"
         android:title="@string/title_camera" />
 
     <item
         android:id="@+id/navigation_album"
-        android:icon="@drawable/ic_far_folder"
+        android:icon="@drawable/ic_twotone_folder_open_24"
         android:title="@string/title_albums" />
+
+    <item
+        android:id="@+id/navigation_setting"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="@string/setting"/>
 </menu>

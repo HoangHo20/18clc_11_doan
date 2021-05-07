@@ -182,6 +182,7 @@ public class ShowAlbumActivity extends AppCompatActivity implements EnterPasswor
             public void onClick(View v) {
                 toolbarView.setVisibility(View.GONE);
                 askDeleteSelectedMedia();
+                recyclerAdapter.setInSelectedMode(Global.SELECTED_MODE_OFF);
             }
         });
     }
@@ -490,9 +491,11 @@ public class ShowAlbumActivity extends AppCompatActivity implements EnterPasswor
 
     // ----------------------- Delete Media out of album ----------------------------------
     private void performDeleteMediaOutOfAlbum() {
-        recyclerAdapter.setInSelectedMode(Global.SELECTED_MODE_ON);
+        if (mediaList != null && !mediaList.isEmpty()) {
+            recyclerAdapter.setInSelectedMode(Global.SELECTED_MODE_ON);
 
-        init_cancel_done_toolbar();
+            init_cancel_done_toolbar();
+        }
     }
 
     private void askDeleteSelectedMedia() {
@@ -510,7 +513,13 @@ public class ShowAlbumActivity extends AppCompatActivity implements EnterPasswor
                     }
 
                 })
-                .setNegativeButton(getString(R.string.cancel), null)
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        recyclerAdapter.setInSelectedMode(Global.SELECTED_MODE_OFF);
+                        recyclerAdapter.deSelectedAll();
+                    }
+                })
                 .show();
     }
 
