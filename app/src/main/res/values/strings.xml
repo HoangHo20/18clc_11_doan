@@ -59,4 +59,12 @@
     <string name="set_password">Set password</string>
     <string name="warning_private_album_contain_video">Private album containing video is still developing</string>
     <string name="favorite_album_cannot_be_private">Favorite album cannot be private</string>
+    <string name="set_wallpaper">Set wallpaper</string>
+    <string name="set_this_image_as_home_wallpaper">Set this image as home wallpaper?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="share">Share</string>
+    <string name="edit">Edit</string>
+    <string name="add_to_favorite">Add to Favorite</string>
+    <string name="editing_video_is_under_development">Editing video is under development</string>
 </resources>

@@ -91,6 +91,22 @@ public class AlbumModel {
                 .getOneItemByAlbumID(id);
     }
 
+    public List<MediaEntity> getItemsByAlbumIDAndPath(String path, int albumID) {
+        if (context == null) return null;
+
+        return database.getInstance(context)
+                .mediaDao()
+                .getItemsByAlbumIDAndPath(path, albumID);
+    }
+
+    public MediaEntity getOneItemByAlbumIDAndPath(String path, int albumID) {
+        if (context == null) return null;
+
+        return database.getInstance(context)
+                .mediaDao()
+                .getOneItemByAlbumIDAndPath(path, albumID);
+    }
+
     public void insertMedia(MediaEntity media) {
         if (context != null) {
             database.getInstance(context)

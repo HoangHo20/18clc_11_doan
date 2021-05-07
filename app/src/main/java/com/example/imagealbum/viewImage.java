@@ -1,11 +1,15 @@
 package com.example.imagealbum;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.WallpaperManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -16,11 +20,18 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.example.imagealbum.customutil.FileUtils;
+import com.example.imagealbum.ui.album.AlbumModel;
+import com.example.imagealbum.ui.album.database.AlbumEntity;
+import com.example.imagealbum.ui.album.database.MediaEntity;
+import com.example.imagealbum.ui.album.database.database;
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.fresco.FrescoImageLoader;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
@@ -28,6 +39,7 @@ import com.github.piasy.biv.view.BigImageView;
 import com.github.piasy.biv.view.FrescoImageViewFactory;
 import com.github.piasy.biv.view.GlideImageViewFactory;
 import com.google.gson.Gson;
+import com.xinlan.imageeditlibrary.editimage.EditImageActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -36,6 +48,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Objects;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -51,6 +64,10 @@ import javax.crypto.spec.SecretKeySpec;
 public class viewImage extends AppCompatActivity {
     private static int SEND_INFO = 1;
     private image image;
+    private Context context;
+    private AlbumModel model;
+    private boolean isFavorite;
+    private AlbumEntity favoriteAlbum;
 
     //Show image
     private BigImageView bigImageView;
@@ -62,10 +79,17 @@ public class viewImage extends AppCompatActivity {
 
     private Intent intent;
     private int pos;
-    private ImageView detailBtn;
-    private ImageView setWallpaperBtn;
-    private ImageView encrypt_decryptBtn;
-    private boolean isEncrypted = false;
+
+    private FrameLayout imageViewLayout;
+    private RelativeLayout upperToobar;
+    private ImageButton backBtn,
+            detailBtn,
+            setWallpaperBtn,
+            shareBtn,
+            addFavoriteBtn,
+            editBtn;
+    //private ImageView encrypt_decryptBtn;
+    //private boolean isEncrypted = false;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -91,26 +115,74 @@ public class viewImage extends AppCompatActivity {
         }
         catch (NullPointerException ignored){}
 
+        context = this;
         //setContentView(R.layout.activity_main_navigation);
         BigImageViewer.initialize(GlideImageLoader.with(this));
 
         setContentView(R.layout.view_image);
 
+        model = new AlbumModel(this);
+
         innit();
 
-        detailBtn = findViewById(R.id.toolBar_imageView_detailBtn);
-        setWallpaperBtn = findViewById(R.id.toolBar_imageView_setWallpaperlBtn);
-        encrypt_decryptBtn = findViewById(R.id.toolBar_imageView_encrypt_decryptBtn);
+        backBtn = findViewById(R.id.toolBar_imageBtn_backBtn);
+        detailBtn = findViewById(R.id.toolBar_imageBtn_detailBtn);
+        setWallpaperBtn = findViewById(R.id.toolBar_imageBtn_setWallpaperlBtn);
 
-        if(isEncrypted){
-            encrypt_decryptBtn.setImageResource(R.drawable.ic_baseline_lock_open_24);
-        }
+        shareBtn = findViewById(R.id.toolBar_imageBtn_shareBtn);
+        addFavoriteBtn = findViewById(R.id.toolBar_imageBtn_addFavoriteBtn);
+        editBtn = findViewById(R.id.toolBar_imageBtn_editBtn);
+
+        checkFavoriteItem();
+        //encrypt_decryptBtn = findViewById(R.id.toolBar_imageView_encrypt_decryptBtn);
+
+//        if(isEncrypted){
+//            encrypt_decryptBtn.setImageResource(R.drawable.ic_baseline_lock_open_24);
+//        }
 
         setOnclickListenerBtns();
 
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void checkFavoriteItem() {
+        List<AlbumEntity> albumEntity = model.getAlbumByName(Global.FAVORITE_ALBUM.name);
+
+        if (albumEntity == null || albumEntity.isEmpty()) {
+            favoriteAlbum = new AlbumEntity(Global.FAVORITE_ALBUM.name);
+            model.insertAlbum(favoriteAlbum);
+        } else {
+            favoriteAlbum = albumEntity.get(0);
+        }
+
+        MediaEntity media= model.getOneItemByAlbumIDAndPath(image.getPath(), favoriteAlbum.getID());
+
+        if (media != null) {
+            this.isFavorite = true;
+        } else {
+            this.isFavorite = false;
+        }
+
+        setFavoriteBtnIcon(this.isFavorite);
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private void setFavoriteBtnIcon(boolean isFavoriteItem) {
+        if (isFavoriteItem) {
+            addFavoriteBtn.setImageDrawable(getDrawable(R.drawable.ic_baseline_star_gold_24));
+        } else {
+            addFavoriteBtn.setImageDrawable(getDrawable(R.drawable.ic_baseline_star_border_24));
+        }
+    }
+
     private void setOnclickListenerBtns() {
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         detailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,57 +195,107 @@ public class viewImage extends AppCompatActivity {
         setWallpaperBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bitmap selectedImage = getBitMap();
-                if (selectedImage == null || isEncrypted){
-                    Toast.makeText(viewImage.this, R.string.viewImage_nullBitmap, Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    WallpaperManager wallpaperManager = WallpaperManager.getInstance(getApplicationContext());
-                    try{
-                        wallpaperManager.setBitmap(selectedImage);
-                        Toast.makeText(viewImage.this, R.string.set_wallpaper_success, Toast.LENGTH_SHORT).show();
-                    } catch (IOException e) {
-                        Toast.makeText(viewImage.this, R.string.set_wallpaper_fail, Toast.LENGTH_SHORT).show();
-                    }
-                }
+//                new AlertDialog.Builder(context, R.style.Theme_AppCompat)
+//                        .setIcon(android.R.drawable.ic_dialog_alert)
+//                        .setTitle(R.string.set_wallpaper)
+//                        .setMessage(R.string.set_this_image_as_home_wallpaper)
+//                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
+//                        {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                setSetWallpaper();
+//                            }
+//
+//                        })
+//                        .setNegativeButton(R.string.no, null)
+//                        .show();
 
+                performSetWallpaper();
             }
         });
 
-
-        encrypt_decryptBtn.setOnClickListener(new View.OnClickListener() {
+        shareBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isEncrypted){
-                    Bitmap bitmap = getBitMap();
-                    if(bitmap != null){
-                        Encryption encryption = new Encryption();
-                        encryption.encrypt(image);
-                        Toast.makeText(viewImage.this, R.string.encrypt_success, Toast.LENGTH_SHORT).show();
-                        isEncrypted = true;
-                        SharedPreferences sharedPref = getSharedPreferences("NOTE_DATA", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putBoolean(image.getImage_URI().toString(), true);
-                        editor.commit();
-                        encrypt_decryptBtn.setImageResource(R.drawable.ic_baseline_lock_open_24);
-                    }
+                Intent share = new Intent(Intent.ACTION_SEND);
+                if (image.isImage()) {
+                    share.setType("image/jpg");
+                } else {
+                    share.setType("video/mp4");
                 }
-                else{
-                    Encryption encryption = new Encryption();
-                    encryption.decrypt(image);
-                    Toast.makeText(viewImage.this, R.string.decrypt_success, Toast.LENGTH_SHORT).show();
-                    isEncrypted = false;
-                    SharedPreferences sharedPref = getSharedPreferences("NOTE_DATA", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putBoolean(image.getImage_URI().toString(), false);
-                    editor.commit();
-                    encrypt_decryptBtn.setImageResource(R.drawable.ic_baseline_lock_24);
+
+                share.putExtra(Intent.EXTRA_STREAM, image.getImage_URI());
+                startActivity(Intent.createChooser(share, "Share Image"));
+            }
+        });
+
+        addFavoriteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFavorite) {
+                    //Remove out of favorite album
+                    MediaEntity mediaEntity = model.getOneItemByAlbumIDAndPath(image.getPath(), favoriteAlbum.getID());
+                    model.deleteMedia(mediaEntity);
+                } else {
+                    //Add to favorite album
+                    MediaEntity mediaEntity = new MediaEntity(image.getImage_URI(), image.getPath(), image.getType(), favoriteAlbum.getID());
+                    model.insertMedia(mediaEntity);
+
                 }
-                bigImageView.showImage(image.getImage_URI());
+
+                isFavorite = !isFavorite;
+                setFavoriteBtnIcon(isFavorite);
+            }
+        });
+
+        editBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                performEdit();
             }
         });
     }
 
+    private void performEdit(){
+        if (image.isImage()) {
+            //Perform edit image
+            File outputFile = FileUtils.genEditFile();
+            EditImageActivity.start((Activity) context, image.getPath(), outputFile.getAbsolutePath(), Global.INTENT_EDIT_IMAGE);
+        } else {
+            Toast.makeText(this, R.string.editing_video_is_under_development, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void performSetWallpaper() {
+        new AlertDialog.Builder(this)
+                .setIcon(R.drawable.ic_baseline_wallpaper_24)
+                .setTitle(getString(R.string.set_wallpaper))
+                .setMessage(getString(R.string.set_this_image_as_home_wallpaper))
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setSetWallpaper();
+                    }
+
+                })
+                .setNegativeButton(getString(R.string.no), null)
+                .show();
+    }
+
+    private void setSetWallpaper() {
+        Bitmap selectedImage = getBitMap();
+
+        WallpaperManager wallpaperManager = WallpaperManager.getInstance(getApplicationContext());
+        try{
+            wallpaperManager.setBitmap(selectedImage);
+            Toast.makeText(viewImage.this, R.string.set_wallpaper_success, Toast.LENGTH_SHORT).show();
+
+
+        } catch (Exception e) {
+            Toast.makeText(viewImage.this, R.string.set_wallpaper_fail, Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void innit(){
         intent = this.getIntent();
@@ -266,7 +388,7 @@ public class viewImage extends AppCompatActivity {
 
     public void loadData(){
         SharedPreferences sharedPref = this.getSharedPreferences("NOTE_DATA", Context.MODE_PRIVATE);
-        this.isEncrypted = sharedPref.getBoolean(image.getImage_URI().toString(), false);
+
     }
 
     private void response(){
@@ -394,4 +516,14 @@ public class viewImage extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == Global.INTENT_EDIT_IMAGE) {
+                finish();
+            }
+        }
+    }
 }

@@ -27,6 +27,8 @@
     <color name="text_color_dark">#FFFFFF</color>
     <color name="bottomNavigationView_mainActivityNavigation_dark">#C0C0C0</color>
 
+    <color name="gray_transparent">#4D272626</color>
+
     <color name="black_semi_transparent">#B2000000</color>
     <color name="half_black">#808080</color>
     <color name="white_pressed">#f1f1f1</color>

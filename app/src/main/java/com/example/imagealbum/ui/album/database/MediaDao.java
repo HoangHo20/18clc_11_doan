@@ -17,13 +17,25 @@ public interface MediaDao {
 
     @Query("SELECT * FROM "
             + Global.MEDIA_TABLE
-            + " WHERE " + Global.MEDIA_COLUMN.ALBUM_ID + " = :id")
-    public List<MediaEntity> getItemByAlbumID(int id);
+            + " WHERE " + Global.MEDIA_COLUMN.ALBUM_ID + " = :albumID")
+    public List<MediaEntity> getItemByAlbumID(int albumID);
 
     @Query("SELECT * FROM "
             + Global.MEDIA_TABLE
-            + " WHERE " + Global.MEDIA_COLUMN.ALBUM_ID + " = :id LIMIT 1")
-    public MediaEntity getOneItemByAlbumID(int id);
+            + " WHERE " + Global.MEDIA_COLUMN.ALBUM_ID + " = :albumID LIMIT 1")
+    public MediaEntity getOneItemByAlbumID(int albumID);
+
+    @Query("SELECT * FROM "
+            + Global.MEDIA_TABLE
+            + " WHERE " +Global.MEDIA_COLUMN.PATH + " LIKE :path "
+            + " AND " + Global.MEDIA_COLUMN.ALBUM_ID + " = :albumID")
+    public List<MediaEntity> getItemsByAlbumIDAndPath(String path, int albumID);
+
+    @Query("SELECT * FROM "
+            + Global.MEDIA_TABLE
+            + " WHERE " +Global.MEDIA_COLUMN.PATH + " LIKE :path "
+            + " AND " + Global.MEDIA_COLUMN.ALBUM_ID + " = :albumID LIMIT 1")
+    public MediaEntity getOneItemByAlbumIDAndPath(String path, int albumID);
 
     @Insert
     public void insert(MediaEntity media);

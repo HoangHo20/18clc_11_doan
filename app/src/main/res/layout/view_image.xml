@@ -1,40 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:orientation="vertical"
+
+    android:clickable="true">
 
     <include layout="@layout/toolbar_viewimage"
         android:id="@+id/toolBar" />
 
-    <RelativeLayout
+    <com.github.piasy.biv.view.BigImageView
+        android:id="@+id/mBigImage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:failureImage="@drawable/ic_baseline_delete_24_unselect"
+        app:failureImageInitScaleType="center"
+        app:optimizeDisplay="true"
+        android:visibility="gone"/>
 
-        <com.github.piasy.biv.view.BigImageView
-            android:id="@+id/mBigImage"
+    <FrameLayout
+        android:id="@+id/view_image_video_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/toolBar_bottom"
+        android:layout_marginBottom="0dp"
+        android:visibility="gone">
+
+        <VideoView
+            android:id="@+id/video_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:failureImage="@drawable/ic_baseline_delete_24_unselect"
-            app:failureImageInitScaleType="center"
-            app:optimizeDisplay="true"
-            android:visibility="gone"/>
+            android:layout_gravity="center" />
+    </FrameLayout>
 
-        <FrameLayout
-            android:id="@+id/view_image_video_frame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
-            <VideoView
-                android:id="@+id/video_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"/>
-        </FrameLayout>
+    <include layout="@layout/toolbar_showalbum_bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:id="@id/toolBar_bottom"/>
 
-    </RelativeLayout>
-
-
-
-</LinearLayout>
+</RelativeLayout>

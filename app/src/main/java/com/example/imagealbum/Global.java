@@ -47,6 +47,7 @@ public class Global {
     public static final int REQUEST_ENTER_PASSWORD = 23;
     public static final int REQUEST_GET_PICTURE = 123;
     public static final int REQUEST_GET_VIDEO = 321;
+    public static final int INTENT_EDIT_IMAGE = 343;
     public static final int ITEM_SIZE_GRID_LAYOUT_PORTRAIT = 4;
     public static final int ITEM_SIZE_GRID_LAYOUT_LANDSCAPE = 6;
     public static final boolean SELECTED_MODE_ON = true;

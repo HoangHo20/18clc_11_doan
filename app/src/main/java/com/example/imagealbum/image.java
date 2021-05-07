@@ -124,5 +124,9 @@ public class image {
     public boolean isSelected() {
         return this.isSelected;
     }
+
+    public int getType() {
+        return this.type;
+    }
 }
 
