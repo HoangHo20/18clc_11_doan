@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class slideShow extends AppCompatActivity {
     private ArrayList<image> imageList;
@@ -46,6 +47,13 @@ public class slideShow extends AppCompatActivity {
         else{
             setTheme(R.style.Theme_ImageAlbumDark);
         }
+
+        //Hide tool bar
+        try
+        {
+            Objects.requireNonNull(this.getSupportActionBar()).hide();
+        }
+        catch (NullPointerException ignored){}
 
         setContentView(R.layout.activity_slide_show);
 

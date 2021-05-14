@@ -49,7 +49,8 @@ public class Global {
     public static final int REQUEST_GET_VIDEO = 321;
     public static final int INTENT_EDIT_IMAGE = 343;
     public static final int ITEM_SIZE_GRID_LAYOUT_PORTRAIT = 4;
-    public static final int ITEM_SIZE_GRID_LAYOUT_LANDSCAPE = 6;
+    public static final int ITEM_SIZE_GRID_LAYOUT_LANDSCAPE = 1;
+    public static final int ITEM_SIZE_GRID_LAYOUT_LANDSCAPE_ONE = 1;
     public static final boolean SELECTED_MODE_ON = true;
     public static final boolean SELECTED_MODE_OFF = false;
     public static final boolean DELETE_MODE_ON = true;

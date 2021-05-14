@@ -20,7 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/girl_taking_picture"
-                android:foreground="@color/blur_gray"
+                android:foreground="@drawable/background_click_grey_red_blur"
                 android:scaleType="centerCrop"
                 />
 
@@ -53,7 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/girl_taking_picture"
-                android:foreground="@color/blur_gray"
+                android:foreground="@drawable/background_click_grey_red_blur"
                 android:scaleType="centerCrop"/>
 
             <TextView

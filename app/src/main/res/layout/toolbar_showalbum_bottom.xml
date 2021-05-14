@@ -17,9 +17,9 @@
             android:orientation="vertical">
             <ImageButton
                 android:id="@+id/toolBar_imageBtn_shareBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?android:selectableItemBackground"
+                android:layout_width="42sp"
+                android:layout_height="42sp"
+                android:background="@drawable/image_button_custom"
                 android:src="@drawable/ic_baseline_share_24"
                 android:layout_gravity="center"
                 />
@@ -30,7 +30,8 @@
                 android:layout_gravity="center"
                 android:textStyle="bold"
                 android:textColor="@color/white"
-                android:text="@string/share"/>
+                android:text="@string/share"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -40,10 +41,10 @@
             android:orientation="vertical">
             <ImageButton
                 android:id="@+id/toolBar_imageBtn_addFavoriteBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="42sp"
+                android:layout_height="42sp"
+                android:background="@drawable/image_button_custom"
                 android:src="@drawable/ic_baseline_star_border_24"
-                android:background="?android:selectableItemBackground"
                 android:clickable="true"
                 android:layout_gravity="center"/>
 
@@ -63,10 +64,10 @@
             android:orientation="vertical">
             <ImageButton
                 android:id="@+id/toolBar_imageBtn_editBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="42sp"
+                android:layout_height="42sp"
+                android:background="@drawable/image_button_custom"
                 android:src="@drawable/ic_baseline_tune_24"
-                android:background="?android:selectableItemBackground"
                 android:clickable="true"
                 android:layout_gravity="center"/>
 

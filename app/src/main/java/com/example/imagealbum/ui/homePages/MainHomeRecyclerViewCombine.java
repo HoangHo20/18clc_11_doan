@@ -5,11 +5,14 @@ import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.imagealbum.Global;
 import com.example.imagealbum.R;
@@ -26,12 +29,19 @@ public class MainHomeRecyclerViewCombine extends RecyclerView.Adapter<MainHomeRe
     private boolean inSelectedMode;
     TreeMap<String, ArrayList<image>> date_groups;
     Context context;
+    private boolean isLayoutDefault;
 
     // Constructor for initialization
     public MainHomeRecyclerViewCombine(Context context, TreeMap<String, ArrayList<image>> date_groups, boolean inSelectedMode) {
         this.context = context;
         this.date_groups = date_groups;
         this.inSelectedMode = inSelectedMode;
+        this.isLayoutDefault = true;
+    }
+
+    public void changeLayout() {
+        this.isLayoutDefault = !this.isLayoutDefault;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -42,6 +52,10 @@ public class MainHomeRecyclerViewCombine extends RecyclerView.Adapter<MainHomeRe
 
         // Passing view to ViewHolder
         return new MainHomeRecyclerViewCombine.ViewHolder(view);
+    }
+
+    public void setData(TreeMap<String, ArrayList<image>> array) {
+        date_groups = array;
     }
 
     // Binding data to the into specified position
@@ -62,17 +76,25 @@ public class MainHomeRecyclerViewCombine extends RecyclerView.Adapter<MainHomeRe
             holder.setRecyclerViewAdapter(recyclerViewAdapter);
 
             //setLayoutBaseOrientation(holder);
-            holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, Global.ITEM_SIZE_GRID_LAYOUT_PORTRAIT));
+            if (!isLayoutDefault) {
+                holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, Global.ITEM_SIZE_GRID_LAYOUT_PORTRAIT));
+            } else {
+                holder.mRecyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
+                //StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+            }
         } else  {
             date_groups.remove(date_key);
         }
     }
 
+    private void setLayout(@NonNull MainHomeRecyclerViewCombine.ViewHolder holder) {
+    }
+
     private void setLayoutBaseOrientation(@NonNull MainHomeRecyclerViewCombine.ViewHolder holder) {
         if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, Global.ITEM_SIZE_GRID_LAYOUT_PORTRAIT));
-        } else {
             holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, Global.ITEM_SIZE_GRID_LAYOUT_LANDSCAPE));
+        } else {
+            holder.mRecyclerView.setLayoutManager(new GridLayoutManager(context, 2));
         }
     }
 

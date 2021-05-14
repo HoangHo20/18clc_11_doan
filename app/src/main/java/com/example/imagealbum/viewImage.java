@@ -82,8 +82,6 @@ public class viewImage extends AppCompatActivity {
     private Intent intent;
     private int pos;
 
-    private FrameLayout imageViewLayout;
-    private RelativeLayout upperToobar;
     private ImageButton backBtn,
             detailBtn,
             setWallpaperBtn,
@@ -91,6 +89,7 @@ public class viewImage extends AppCompatActivity {
             addFavoriteBtn,
             editBtn;
     private ImageView imageView;
+    private View toolbar_upper, toolbar_bottom;
     //private ImageView encrypt_decryptBtn;
     //private boolean isEncrypted = false;
 
@@ -136,6 +135,9 @@ public class viewImage extends AppCompatActivity {
         addFavoriteBtn = findViewById(R.id.toolBar_imageBtn_addFavoriteBtn);
         editBtn = findViewById(R.id.toolBar_imageBtn_editBtn);
 
+        toolbar_bottom = findViewById(R.id.toolBar_bottom);
+        toolbar_upper = findViewById(R.id.toolBar);
+
         checkFavoriteItem();
         //encrypt_decryptBtn = findViewById(R.id.toolBar_imageView_encrypt_decryptBtn);
 
@@ -145,6 +147,20 @@ public class viewImage extends AppCompatActivity {
 
         setOnclickListenerBtns();
 
+    }
+
+    private void toolbar_set_visible(boolean setVisible) {
+        if (setVisible) {
+            toolbar_upper.setVisibility(View.VISIBLE);
+            if (!isPrivate) {
+                toolbar_bottom.setVisibility(View.VISIBLE);
+            }
+        } else {
+            toolbar_upper.setVisibility(View.INVISIBLE);
+            if (!isPrivate) {
+                toolbar_bottom.setVisibility(View.GONE  );
+            }
+        }
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -263,10 +279,11 @@ public class viewImage extends AppCompatActivity {
         });
 
         if (isPrivate) {
-            shareBtn.setVisibility(View.INVISIBLE);
-            addFavoriteBtn.setVisibility(View.INVISIBLE);
-            editBtn.setVisibility(View.INVISIBLE);
-            setWallpaperBtn.setVisibility(View.INVISIBLE);
+//            shareBtn.setVisibility(View.INVISIBLE);
+//            addFavoriteBtn.setVisibility(View.INVISIBLE);
+//            editBtn.setVisibility(View.INVISIBLE);
+//            setWallpaperBtn.setVisibility(View.INVISIBLE);
+            toolbar_bottom.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -340,16 +357,38 @@ public class viewImage extends AppCompatActivity {
             imageView = (ImageView) findViewById(R.id.view_image_imageView);
             imageView.setImageBitmap(this.imageBitmap);
             imageView.setVisibility(View.VISIBLE);
+
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toolbar_set_visible(toolbar_upper.getVisibility() != View.VISIBLE);
+                }
+            });
         } else {
             bigImageView = (BigImageView) findViewById(R.id.mBigImage);
             bigImageView.setImageViewFactory(new GlideImageViewFactory());
             bigImageView.showImage(image.getImage_URI());
             bigImageView.setVisibility(View.VISIBLE);
+
+            bigImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toolbar_set_visible(toolbar_upper.getVisibility() != View.VISIBLE);
+                }
+            });
         }
     }
 
     private void loadVideo() {
         videoView = (VideoView) findViewById(R.id.video_view);
+
+        videoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toolbar_set_visible(toolbar_upper.getVisibility() != View.VISIBLE);
+            }
+        });
+
         frameLayout = (FrameLayout) findViewById(R.id.view_image_video_frame);
         frameLayout.setVisibility(View.VISIBLE);
 

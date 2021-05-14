@@ -18,6 +18,7 @@
     <color name="unselect_icon">#4285F4</color>
     <color name="selected_icon">#C0C0C0</color>
     <color name="blur_gray">#99151515</color>
+    <color name="blur_purple">#99301934</color>
     <color name="text_color">#000000</color>
 
     <color name="background_dark">#000000</color>
@@ -29,7 +30,7 @@
 
     <color name="gray_transparent">#4D272626</color>
 
-    <color name="black_semi_transparent">#B2000000</color>
+    <color name="black_semi_transparent">#33000000</color>
     <color name="half_black">#808080</color>
     <color name="white_pressed">#f1f1f1</color>
     <color name="pink">#e91e63</color>

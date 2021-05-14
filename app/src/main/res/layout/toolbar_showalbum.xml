@@ -9,37 +9,52 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageButton
+            android:id="@+id/actionBar_showAlbum_layoutBtn"
+            android:layout_width="42sp"
+            android:layout_height="42sp"
+            android:background="@drawable/image_button_custom"
+            android:layout_toStartOf="@+id/actionBar_showAlbum_slideShowBtn"
+            android:layout_alignWithParentIfMissing="true"
+            android:src="@drawable/ic_baseline_view_module_24"
+            android:clickable="true"/>
 
-        <ImageView
+        <ImageButton
             android:id="@+id/actionBar_showAlbum_slideShowBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="42sp"
+            android:layout_height="42sp"
+            android:background="@drawable/image_button_custom"
             android:layout_toStartOf="@+id/actionBar_showAlbum_deleteBtn"
-            android:layout_centerInParent="true"
+            android:layout_alignWithParentIfMissing="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:src="@drawable/ic_baseline_slideshow_24_unselect"
             android:clickable="true"/>
 
-        <ImageView
+        <ImageButton
             android:id="@+id/actionBar_showAlbum_deleteBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_width="42sp"
+            android:layout_height="42sp"
+            android:background="@drawable/image_button_custom"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toStartOf="@+id/actionBar_showAlbum_doneBtn"
             android:layout_marginEnd="20dp"
             android:src="@drawable/ic_baseline_delete_24_unselect"
-            android:clickable="true"/>
+            android:clickable="true"
+            android:visibility="visible"/>
 
 
-        <ImageView
+        <ImageButton
             android:id="@+id/actionBar_showAlbum_doneBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="42sp"
+            android:layout_height="42sp"
+            android:background="@drawable/image_button_custom"
             android:src="@drawable/ic_baseline_done_24"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="20dp"
             android:clickable="true"
-            android:visibility="invisible"/>
+            android:visibility="gone"
+            />
 
     </RelativeLayout>
 

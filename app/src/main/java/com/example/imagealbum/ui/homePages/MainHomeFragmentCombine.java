@@ -22,7 +22,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -66,8 +68,9 @@ public class MainHomeFragmentCombine extends Fragment {
 
     private RecyclerView recyclerView;
     private MainHomeRecyclerViewCombine recyclerViewAdapter;
+    private boolean isNestedLayoutDefault;
 
-    ImageView deleteBtn, slideShowBtn, doneBtn;
+    ImageButton deleteBtn, slideShowBtn, layoutBtn, doneBtn;
 
     private String currentPhotoPath = "none";
 
@@ -88,6 +91,7 @@ public class MainHomeFragmentCombine extends Fragment {
 
         View root = localInflater.inflate(R.layout.date_group_fragement, container, false);
         recyclerView = root.findViewById(R.id.date_group_fragment_recycler);
+        isNestedLayoutDefault = true;
 
         spin = root.findViewById(R.id.KLoadingSpin);
 
@@ -102,25 +106,64 @@ public class MainHomeFragmentCombine extends Fragment {
         return root;
     }
 
+    private void setImageButtonVisibleOrGone(ImageButton imageButton, boolean setVisible) {
+        android.view.ViewGroup.LayoutParams params = imageButton.getLayoutParams();
+        float scale = requireContext().getResources().getDisplayMetrics().density;
+
+        if (setVisible) {
+            imageButton.setVisibility(View.VISIBLE);
+        } else {
+            imageButton.setVisibility(View.GONE);
+        }
+
+        imageButton.setLayoutParams(params);
+    }
+
+    private void changeNestedLayout() {
+        recyclerViewAdapter.changeLayout();
+
+        if (this.isNestedLayoutDefault) {
+            layoutBtn.setImageResource(R.drawable.ic_baseline_view_list_24);
+        } else {
+            layoutBtn.setImageResource(R.drawable.ic_baseline_view_module_24);
+        }
+
+        this.isNestedLayoutDefault = !this.isNestedLayoutDefault;
+    }
+
     private void init_button(View root) {
-        deleteBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_deleteBtn);
-        slideShowBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_slideShowBtn);
-        doneBtn = (ImageView) root.findViewById(R.id.actionBar_showAlbum_doneBtn);
+        layoutBtn = (ImageButton) root.findViewById(R.id.actionBar_showAlbum_layoutBtn);
+        deleteBtn = (ImageButton) root.findViewById(R.id.actionBar_showAlbum_deleteBtn);
+        slideShowBtn = (ImageButton) root.findViewById(R.id.actionBar_showAlbum_slideShowBtn);
+        doneBtn = (ImageButton) root.findViewById(R.id.actionBar_showAlbum_doneBtn);
+
+        layoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeNestedLayout();
+            }
+        });
 
         deleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!mainHomeViewModelCombine.isInDeleteMode()){
                     deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_selected);
-                    slideShowBtn.setVisibility(View.INVISIBLE);
-                    doneBtn.setVisibility(View.VISIBLE);
+                    setImageButtonVisibleOrGone(layoutBtn, false);
+                    //slideShowBtn.setVisibility(View.INVISIBLE);
+                    setImageButtonVisibleOrGone(slideShowBtn, false);
+                    //doneBtn.setVisibility(View.VISIBLE);
+                    setImageButtonVisibleOrGone(doneBtn, true);
                     mainHomeViewModelCombine.setInDeleteMode(Global.DELETE_MODE_ON);
                     setInSelectedMode(Global.SELECTED_MODE_ON);
                 }
                 else{
                     deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_unselect);
-                    slideShowBtn.setVisibility(View.VISIBLE);
-                    doneBtn.setVisibility(View.INVISIBLE);
+                    setImageButtonVisibleOrGone(layoutBtn, true);
+                    //slideShowBtn.setVisibility(View.VISIBLE);
+                    setImageButtonVisibleOrGone(slideShowBtn, true);
+                    //doneBtn.setVisibility(View.INVISIBLE);
+                    setImageButtonVisibleOrGone(doneBtn, false);
                     mainHomeViewModelCombine.setInDeleteMode(Global.DELETE_MODE_OFF);
                     setInSelectedMode(Global.SELECTED_MODE_OFF);
                     mainHomeViewModelCombine.deSelectedAll();
@@ -133,15 +176,21 @@ public class MainHomeFragmentCombine extends Fragment {
             public void onClick(View v) {
                 if (!mainHomeViewModelCombine.isInSlideShow()){
                     slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_selected);
-                    deleteBtn.setVisibility(View.INVISIBLE);
-                    doneBtn.setVisibility(View.VISIBLE);
+                    setImageButtonVisibleOrGone(layoutBtn, false);
+                    //deleteBtn.setVisibility(View.INVISIBLE);
+                    setImageButtonVisibleOrGone(deleteBtn, false);
+                    //doneBtn.setVisibility(View.VISIBLE);
+                    setImageButtonVisibleOrGone(doneBtn, true);
                     mainHomeViewModelCombine.setInSlideShow(Global.SLIDE_SHOW_MODE_ON);
                     setInSelectedMode(Global.SELECTED_MODE_ON);
                 }
                 else{
                     slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_unselect);
-                    deleteBtn.setVisibility(View.VISIBLE);
-                    doneBtn.setVisibility(View.INVISIBLE);
+                    setImageButtonVisibleOrGone(layoutBtn, true);
+                    //deleteBtn.setVisibility(View.VISIBLE);
+                    setImageButtonVisibleOrGone(deleteBtn, true);
+                    //doneBtn.setVisibility(View.INVISIBLE);
+                    setImageButtonVisibleOrGone(doneBtn, false);
                     mainHomeViewModelCombine.setInSlideShow(Global.SLIDE_SHOW_MODE_OFF);
                     setInSelectedMode(Global.SELECTED_MODE_OFF);
                     mainHomeViewModelCombine.deSelectedAll();
@@ -178,16 +227,20 @@ public class MainHomeFragmentCombine extends Fragment {
                     loadDataByThread();
                 }
                 if(mainHomeViewModelCombine.isInSlideShow()){
-                    deleteBtn.setVisibility(View.VISIBLE);
+                    //deleteBtn.setVisibility(View.VISIBLE);
+                    setImageButtonVisibleOrGone(deleteBtn, true);
                     slideShowBtn.setImageResource(R.drawable.ic_baseline_slideshow_24_unselect);
                     mainHomeViewModelCombine.setInSlideShow(Global.SLIDE_SHOW_MODE_OFF);
                 }
                 else if(mainHomeViewModelCombine.isInDeleteMode()){
-                    slideShowBtn.setVisibility(View.VISIBLE);
+                    //slideShowBtn.setVisibility(View.VISIBLE);
+                    setImageButtonVisibleOrGone(slideShowBtn, true);
                     deleteBtn.setImageResource(R.drawable.ic_baseline_delete_24_unselect);
                     mainHomeViewModelCombine.setInDeleteMode(Global.DELETE_MODE_OFF);
                 }
-                doneBtn.setVisibility(View.INVISIBLE);
+                setImageButtonVisibleOrGone(layoutBtn, true);
+                //doneBtn.setVisibility(View.INVISIBLE);
+                setImageButtonVisibleOrGone(doneBtn, false);
                 setInSelectedMode(Global.SELECTED_MODE_OFF);
             }
         });
@@ -220,6 +273,7 @@ public class MainHomeFragmentCombine extends Fragment {
                     spin.setVisibility(View.INVISIBLE);
                 }
             } else {
+                recyclerViewAdapter.setData(date_groups);
                 recyclerViewNotifyDataSetChanged();
             }
         }
